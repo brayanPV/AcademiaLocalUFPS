@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Modulo extends Model
 {
-    use HasFactory;
+    //use HasFactory;
+    protected $table = 'modulo';
+    public $timestamps = false;
 }

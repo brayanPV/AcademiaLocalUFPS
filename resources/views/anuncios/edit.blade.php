@@ -7,6 +7,5 @@
             @csrf
             @method('PATCH')
             @include('anuncios.formanuncio', ['Modo'=>'Editar'])
-
-        </form>
+ </form>
 @endsection

@@ -34,7 +34,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         <li>
-                            <a class="navbar-brand" href="{{ url('/anuncios') }}">Academia Cisco </a>
+                            <a class="navbar-brand" href="{{ url('') }}">Academia Cisco </a>
                         </li>
                         <li>
                             <a class="navbar-brand" href="{{ url('/cursos') }}">Curscos y Certificaciones </a>

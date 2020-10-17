@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cohorte extends Model
 {
-    use HasFactory;
+    //use HasFactory;
+    protected $table = 'cohorte';
+    public $timestamps = false;
 }

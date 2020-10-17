@@ -19,7 +19,7 @@
     {!! $errors->first('url', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
-    <label class="control-label" for="img1"> Imagen</label>
+    <label class="control-label" for="img1"> Imagen</label> </br>
     @if (isset($anuncio->img1))
         <img class="img-thumbnail img-fluid" src="{{ asset('storage') . '/' . $anuncio->img1 }}" alt="" width="250">
     @endif
