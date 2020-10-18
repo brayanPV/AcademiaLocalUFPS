@@ -180,5 +180,10 @@ class CursoController extends Controller
     public function destroy($id)
     {
         //
+        $curso = Curso::findOrFail($id);
+        if (Storage::delete('public/' . $curso->imagen)) {
+            Anuncio::destroy($id);
+        }
+        return redirect('cursos/listcursos')->with('Mensaje', 'Curso eliminado con exito');
     }
 }

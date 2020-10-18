@@ -4,6 +4,8 @@ use App\Http\Controllers\AnuncioController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\TipoNotaController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,8 +23,11 @@ Route::get('/cursos/carouselcursos', [App\Http\Controllers\CursoController::clas
 Route::get('/cursos/listcursos', [App\Http\Controllers\CursoController::class, 'listCursos'])->name("listcursos");
 Route::get('/anuncios/carouselanuncios', [App\Http\Controllers\AnuncioController::class, 'index'])->name("carouselanuncios");
 Route::get('/anuncios/listanuncio', [App\Http\Controllers\AnuncioController::class, 'anunciosprincipales']); //->middleware('auth');
+Route::get('/tiponotas/listtiponotas', [App\Http\Controllers\TipoNotaController::class, 'listTipoNotas'])->name('listtiponotas');
 Route::resource('anuncios', AnuncioController::class);
 Route::resource('cursos', CursoController::class); //->middleware('auth'); activar esto cuando tenga login
+Route::resource('tiponotas', TipoNotaController::class);
+
 //Route::get('anuncios/listanuncio', [AnuncioController::class, 'anunciosprincipales'])->name('listanuncios');
 //Route::get('anuncios/listanuncio', 'AnuncioController@anunciosprincipales');
 

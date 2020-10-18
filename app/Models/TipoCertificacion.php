@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoCertificacion extends Model
 {
-    use HasFactory;
+    //use HasFactory;
+    protected $table = 'tipo_certificacion';
+    public $timestamps = false;
 }

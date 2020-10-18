@@ -7,5 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TipoNota extends Model
 {
-    use HasFactory;
+    //use HasFactory;
+    protected $table = 'tipo_nota';
+    public $timestamps = false;
+
 }

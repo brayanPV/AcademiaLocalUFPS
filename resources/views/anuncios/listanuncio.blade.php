@@ -1,6 +1,11 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
+        @if (Session::has('Mensaje'))
+        <div class="alert alert-success" role="alert">
+            {{ Session::get('Mensaje') }}
+        </div>
+        @endif
         <div class="alert alert-primary" role="alert">
             <h2>Gestion de anuncios</h2>
         </div>
