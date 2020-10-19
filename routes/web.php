@@ -4,6 +4,7 @@ use App\Http\Controllers\AnuncioController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\GrupoInvestigacionController;
 use App\Http\Controllers\TipoNotaController;
 
 /*
@@ -24,9 +25,11 @@ Route::get('/cursos/listcursos', [App\Http\Controllers\CursoController::class, '
 Route::get('/anuncios/carouselanuncios', [App\Http\Controllers\AnuncioController::class, 'index'])->name("carouselanuncios");
 Route::get('/anuncios/listanuncio', [App\Http\Controllers\AnuncioController::class, 'anunciosprincipales']); //->middleware('auth');
 Route::get('/tiponotas/listtiponotas', [App\Http\Controllers\TipoNotaController::class, 'listTipoNotas'])->name('listtiponotas');
+Route::get('/gruposinvestigacion/listgruposinvestigacion', [App\Http\Controllers\GrupoInvestigacionController::class, 'listGrupoInvestigacion'])->name('listgruposinvestigacion');
 Route::resource('anuncios', AnuncioController::class);
 Route::resource('cursos', CursoController::class); //->middleware('auth'); activar esto cuando tenga login
 Route::resource('tiponotas', TipoNotaController::class);
+Route::resource('gruposinvestigacion', GrupoInvestigacionController::class);
 
 //Route::get('anuncios/listanuncio', [AnuncioController::class, 'anunciosprincipales'])->name('listanuncios');
 //Route::get('anuncios/listanuncio', 'AnuncioController@anunciosprincipales');

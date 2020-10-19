@@ -8,9 +8,9 @@
             </div>
         @endif
         <div class="alert alert-primary" role="alert">
-            <h2>Gestion de tipo de notas</h2>
+            <h2>Gestion de grupos de investigacion</h2>
         </div>
-        <a class="btn btn-success" href="{{ url('/tiponotas/create') }}"> Agregar Tipo de nota</a>
+        <a class="btn btn-success" href="{{ url('/gruposinvestigacion/create') }}"> Agregar grupo de investigacion</a>
 
     </div>
     <div class="container">
@@ -18,22 +18,24 @@
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Certificacion</th>
+                    <th>Descripcion</th>
+                    <th>Profesor</th>
                     <th>Accion</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($tipoNotas as $tipo)
+                @forelse ($grupoInvestigacion as $grupo)
                     <tr>
-                        <td class="col"> {{ $tipo->nombre }}</td>
-                        <td class="col">{{ $tipo->tc_nombre }}</td>
+                        <td class="col"> {{ $grupo->nombre }}</td>
+                        <td class="col">{{ $grupo->descripcion }}</td>
+                        <td class="col">{{ $grupo->nombre_pro }}</td>
                         <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                href="{{ url('/tiponotas/' . $tipo->id . '/edit') }}"> Editar </a>
-                            <form method="post" action="{{ url('/tiponotas/' . $tipo->id) }}" style="display: inline">
+                                href="{{ url('/gruposinvestigacion/' . $grupo->id . '/edit') }}"> Editar </a>
+                            <form method="post" action="{{ url('/gruposinvestigacion/' . $grupo->id) }}" style="display: inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('¿Esta seguro que desea eliminar este tipo de nota?');">Borrar
+                                    onclick="return confirm('¿Esta seguro que desea eliminar este grupo de investigacion?');">Borrar
                                 </button>
                             </form>
 
@@ -45,7 +47,7 @@
                 @endforelse
             </tbody>
         </table>
-        {{ $tipoNotas->links('pagination::bootstrap-4') }}
+        {{ $grupoInvestigacion->links('pagination::bootstrap-4') }}
     </div>
 
 
