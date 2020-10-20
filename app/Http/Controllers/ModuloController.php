@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Cohorte;
+use App\Models\Modulo;
 use App\Models\TipoCertificacion;
 
-class CohorteController extends Controller
+class ModuloController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,15 +18,15 @@ class CohorteController extends Controller
         //
     }
 
-    public function listCohorte(){
-        
-        $cohortes = Cohorte::select('c.id','c.id_cisco', 'c.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'tc.nombre as tc_nombre')
-        ->from('cohorte as c')
-        ->join('tipo_certificacion as tc', function($join){
-            $join->on('tc.id', '=', 'c.id_tipo_certificacion');
-        })->paginate(10);
 
-        return view('cohortes.listcohortes', compact('cohortes'));
+    public function listModulo(){
+        
+        $modulos = Modulo::select('m.id', 'm.numero', 'm.nombre', 't.nombre as nombre_certificacion', 'm.url1', 'm.url2')
+        ->from('modulo as m')
+        ->join('tipo_certificacion as t', function($join){
+            $join->on('t.id', '=', 'm.id_tipo_certificacion');
+        })->paginate(5);
+        return view('modulos/listmodulos', compact('modulos'));
     }
 
     /**
@@ -38,7 +38,7 @@ class CohorteController extends Controller
     {
         //
         $tipoCertificacion = TipoCertificacion::get();
-        return view('cohortes.create',compact('tipoCertificacion'));
+        return view('modulos/create', compact('tipoCertificacion'));
     }
 
     /**
@@ -50,17 +50,18 @@ class CohorteController extends Controller
     public function store(Request $request)
     {
         //
-        $campos=[
-            'id_cisco' => 'required|unique:cohorte,id_cisco',
-            'nombre' => 'required|unique:cohorte,nombre',
-            'fecha_inicio' => 'required',
-            'fecha_fin' => 'required'
+        $campos = [
+            'numero' => 'required',
+            'nombre' => 'required|unique:modulo,nombre',
+            'id_tipo_certificacion' => 'required',
+            'url1' => 'required',
+            'url2' => 'required'
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $campos, $mensaje);
-        $datosCohorte = request()->except(['_token', '_method', 'updated_at']);
-        Cohorte::insert($datosCohorte);
-        return redirect('cohortes/listcohortes')->with('Mensaje', 'Cohorte agregado con exito');
+        $datosModulo = request()->except(['_token', '_method', 'updated_at']);
+        Modulo::insert($datosModulo);
+        return redirect('modulos/listmodulos')->with('Mensaje', 'Modulo agregado con exito');
     }
 
     /**
@@ -83,10 +84,10 @@ class CohorteController extends Controller
     public function edit($id)
     {
         //
-        $cohortes = Cohorte::findOrFail($id);
+        $modulos = Modulo::findOrFail($id);
         $tipoCertificacion = TipoCertificacion::get();
 
-        return view('cohortes.edit',compact(['cohortes', 'tipoCertificacion']));
+        return view('modulos.edit',compact(['modulos', 'tipoCertificacion']));
     }
 
     /**
@@ -100,17 +101,17 @@ class CohorteController extends Controller
     {
         //
         $campos=[
-            'id_cisco' => 'required|unique:cohorte,id_cisco,'.$id,
-            'nombre' => 'required|unique:cohorte,nombre,'.$id,
-            'fecha_inicio' => 'required',
-            'fecha_fin' => 'required'
+            'numero' => 'required',
+            'nombre' => 'required|unique:modulo,nombre,'.$id,
+            'id_tipo_certificacion' => 'required',
+            'url1' => 'required',
+            'url2' => 'required'
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $campos, $mensaje);
-        $datosCohorte = request()->except(['_token', '_method', 'updated_at']);
-        Cohorte::where('id', '=', $id)->update($datosCohorte);
-        return redirect('cohortes/listcohortes')->with('Mensaje', 'Cohorte editado con exito');
-
+        $datosModulo = request()->except(['_token', '_method', 'updated_at']);
+        Modulo::where('id', '=', $id)->update($datosModulo);
+        return redirect('modulos/listmodulos')->with('Mensaje', 'Modulo editado con exito');
     }
 
     /**
@@ -122,8 +123,7 @@ class CohorteController extends Controller
     public function destroy($id)
     {
         //
-        Cohorte::destroy($id);
-        return redirect('cohortes/listcohortes')->with('Mensaje', 'Cohorte eliminado con exito');
-
+        Modulo::destroy($id);
+        return redirect('modulos/listmodulos')->with('Mensaje', 'Modulo eliminado con exito');
     }
 }

@@ -13,7 +13,7 @@
 <div class="form-group">
     <label for="fecha_inicio"> {{ 'Fecha Inicio' }}</label>
     <input class="form-control {{ $errors->has('fecha_inicio') ? 'is-invalid' : '' }}" type="date" name="fecha_inicio" id="fecha_inicio"
-        value="{{ isset($cohortes->nombre) ? $cohortes->fecha_inicio : old('fecha_inicio') }}"> 
+        value="{{ isset($cohortes->fecha_inicio) ? $cohortes->fecha_inicio : old('fecha_inicio') }}"> 
     {!! $errors->first('fecha_inicio', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
