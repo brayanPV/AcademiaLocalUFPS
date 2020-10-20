@@ -6,12 +6,12 @@
         <div class="row justify-content-center">
             <div class="card col-6">
                 <div class="card-header">
-                    <h2>Crear Cursos</h2>
+                    <h2>Crear Cohorte</h2>
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('/cursos') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ url('/cohortes') }}" method="post" enctype="multipart/form-data">
                         @csrf
-                        @include('cursos.formcursos', ['Modo'=>'Crear'])
+                        @include('cohortes.formcohorte', ['Modo'=>'Crear'])
                     </form>
                 </div>
             </div>
