@@ -8,6 +8,7 @@ use App\Http\Controllers\GrupoInvestigacionController;
 use App\Http\Controllers\TipoNotaController;
 use App\Http\Controllers\CohorteController;
 use App\Http\Controllers\ModuloController;
+use App\Http\Controllers\ProfesorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,12 +31,16 @@ Route::get('/tiponotas/listtiponotas', [App\Http\Controllers\TipoNotaController:
 Route::get('/gruposinvestigacion/listgruposinvestigacion', [App\Http\Controllers\GrupoInvestigacionController::class, 'listGrupoInvestigacion'])->name('listgruposinvestigacion');
 Route::get('/cohortes/listcohortes', [App\Http\Controllers\CohorteController::class, 'listCohorte'])->name('listcohortes');
 Route::get('/modulos/listmodulos', [App\Http\Controllers\ModuloController::class, 'listModulo'])->name('listmodulos');
+Route::get('/profesores/listprofesores', [App\Http\Controllers\ProfesorController::class, 'listProfesor'])->name('listprofesores');
+Route::get('/estudiantes/listestudiantes', [App\Http\Controllers\EstudianteController::class, 'listEstudiante'])->name('listestudiantes');
 Route::resource('anuncios', AnuncioController::class);
 Route::resource('cursos', CursoController::class); //->middleware('auth'); activar esto cuando tenga login
 Route::resource('tiponotas', TipoNotaController::class);
 Route::resource('gruposinvestigacion', GrupoInvestigacionController::class);
 Route::resource('cohortes', CohorteController::class);
 Route::resource('modulos', ModuloController::class);
+Route::resource('profesores', ProfesorController::class);
+Route::resource('estudiantes', EstudianteController::class);
 
 //Route::get('anuncios/listanuncio', [AnuncioController::class, 'anunciosprincipales'])->name('listanuncios');
 //Route::get('anuncios/listanuncio', 'AnuncioController@anunciosprincipales');
