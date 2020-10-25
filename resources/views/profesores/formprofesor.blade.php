@@ -7,31 +7,31 @@
 <div class="form-group">
     <label for="nombre"> {{ 'Nombre' }}</label>
     <input class="form-control {{ $errors->has('nombre') ? 'is-invalid' : '' }}" type="text" name="nombre" id="nombre"
-        value="{{ isset($profesores->nombre) ? $profesores->nombre : old('nombre') }}"> 
+        value="{{ isset($personas->nombre) ? $personas->nombre : old('nombre') }}"> 
     {!! $errors->first('nombre', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label for="direccion"> {{ 'Direccion' }}</label>
     <input class="form-control {{ $errors->has('direccion') ? 'is-invalid' : '' }}" type="text" name="direccion" id="direccion"
-        value="{{ isset($profesores->direccion) ? $profesores->direccion : old('direccion') }}"> 
+        value="{{ isset($personas->direccion) ? $personas->direccion : old('direccion') }}"> 
     {!! $errors->first('direccion', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label for="telfijo"> {{ 'Telefono' }}</label>
     <input class="form-control {{ $errors->has('telfijo') ? 'is-invalid' : '' }}" type="number" name="telfijo" id="telfijo"
-        value="{{ isset($profesores->telfijo) ? $profesores->telfijo : old('telfijo') }}"> 
+        value="{{ isset($personas->telfijo) ? $personas->telfijo : old('telfijo') }}"> 
     {!! $errors->first('telfijo', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label for="telcel"> {{ 'Celular' }}</label>
     <input class="form-control {{ $errors->has('telcel') ? 'is-invalid' : '' }}" type="number" name="telcel" id="telcel"
-        value="{{ isset($profesores->telcel) ? $profesores->telcel : old('telcel') }}"> 
+        value="{{ isset($personas->telcel) ? $personas->telcel : old('telcel') }}"> 
     {!! $errors->first('telcel', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label for="correo"> {{ 'Correo electronico' }}</label>
     <input class="form-control {{ $errors->has('correo') ? 'is-invalid' : '' }}" type="email" name="correo" id="correo"
-        value="{{ isset($profesores->correo) ? $profesores->correo : old('correo') }}"> 
+        value="{{ isset($personas->correo) ? $personas->correo : old('correo') }}"> 
     {!! $errors->first('correo', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">

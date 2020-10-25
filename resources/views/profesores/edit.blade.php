@@ -9,7 +9,7 @@
                     <h2>Editar Profesor</h2>
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('/profesores/' .$profesores->cedula) }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ url('/profesores/' . $profesores->cedula) }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
                         @include('profesores.formprofesor', ['Modo'=>'Editar'])

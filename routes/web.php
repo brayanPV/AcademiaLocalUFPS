@@ -9,6 +9,8 @@ use App\Http\Controllers\TipoNotaController;
 use App\Http\Controllers\CohorteController;
 use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\ProfesorController;
+use App\Http\Controllers\EstudianteController;
+use App\Http\Controllers\InscritoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +35,7 @@ Route::get('/cohortes/listcohortes', [App\Http\Controllers\CohorteController::cl
 Route::get('/modulos/listmodulos', [App\Http\Controllers\ModuloController::class, 'listModulo'])->name('listmodulos');
 Route::get('/profesores/listprofesores', [App\Http\Controllers\ProfesorController::class, 'listProfesor'])->name('listprofesores');
 Route::get('/estudiantes/listestudiantes', [App\Http\Controllers\EstudianteController::class, 'listEstudiante'])->name('listestudiantes');
+Route::get('/preinscripcion/preinscripcion', [App\Http\Controllers\InscritoController::class, 'preInscribirView'])->name('preinscribir');
 Route::resource('anuncios', AnuncioController::class);
 Route::resource('cursos', CursoController::class); //->middleware('auth'); activar esto cuando tenga login
 Route::resource('tiponotas', TipoNotaController::class);
@@ -41,6 +44,8 @@ Route::resource('cohortes', CohorteController::class);
 Route::resource('modulos', ModuloController::class);
 Route::resource('profesores', ProfesorController::class);
 Route::resource('estudiantes', EstudianteController::class);
+Route::resource('inscritos', InscritoController::class);
+
 
 //Route::get('anuncios/listanuncio', [AnuncioController::class, 'anunciosprincipales'])->name('listanuncios');
 //Route::get('anuncios/listanuncio', 'AnuncioController@anunciosprincipales');

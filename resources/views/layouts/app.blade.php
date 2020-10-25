@@ -40,7 +40,7 @@
                             <a class="navbar-brand" href="{{ url('/cursos') }}">Curscos y Certificaciones </a>
                         </li>
                         <li>
-                            <a class="navbar-brand" href="{{ url('/preinscripcion') }}">Preinscripcion </a>
+                            <a class="navbar-brand" href="{{ url('/preinscripcion/preinscripcion') }}">Preinscripcion </a>
                         </li>
                         <li>
                             <a class="navbar-brand" href="{{ url('/soporte') }}">Soporte </a>
