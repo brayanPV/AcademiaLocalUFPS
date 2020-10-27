@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdministradorController;
 use App\Http\Controllers\AnuncioController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -37,14 +38,16 @@ Route::get('/profesores/listprofesores', [App\Http\Controllers\ProfesorControlle
 Route::get('/estudiantes/listestudiantes', [App\Http\Controllers\EstudianteController::class, 'listEstudiante'])->name('listestudiantes');
 Route::get('/preinscripcion/preinscripcion', [App\Http\Controllers\InscritoController::class, 'preInscribirView'])->name('preinscribir');
 Route::resource('anuncios', AnuncioController::class);
-Route::resource('cursos', CursoController::class); //->middleware('auth'); activar esto cuando tenga login
-Route::resource('tiponotas', TipoNotaController::class);
+Route::resource('cursos', CursoController::class)->middleware('auth'); //activar esto cuando tenga login
+Route::resource('tiponotas', TipoNotaController::class)->middleware('auth', 'role:admin');
 Route::resource('gruposinvestigacion', GrupoInvestigacionController::class);
 Route::resource('cohortes', CohorteController::class);
 Route::resource('modulos', ModuloController::class);
 Route::resource('profesores', ProfesorController::class);
 Route::resource('estudiantes', EstudianteController::class);
 Route::resource('inscritos', InscritoController::class);
+Route::resource('administradores', AdministradorController::class);
+
 
 
 //Route::get('anuncios/listanuncio', [AnuncioController::class, 'anunciosprincipales'])->name('listanuncios');

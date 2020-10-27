@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Profesor;
 use App\Models\Persona;
 use App\Models\User;
-use App\Models\Usuario;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Role;
 
 class ProfesorController extends Controller
 {
@@ -81,7 +81,10 @@ class ProfesorController extends Controller
         $this->validate($request, $datosPer, $mensaje);
         $datosProfesor = request()->except(['_token', '_method', 'updated_at', 'nombre','direccion', 'telfijo', 'telcel' ,'password_confirmation', 'correo']);
         Profesor::insert($datosProfesor);
-        User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password')), 'tipo' => 'profesor']);
+        User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password'))]);
+        $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
+        $user->roles()->attach(Role::where('nombre', 'profesor')->first());
+        //$user->roles()->sync([2]);
         return redirect('profesores/listprofesores')->with('Mensaje', 'Profesor agregado con exito'  .$mensajep);
     }
 
