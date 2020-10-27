@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Profesor;
 use App\Models\Persona;
+use App\Models\User;
+use App\Models\Usuario;
+use Illuminate\Support\Facades\Hash;
 
 class ProfesorController extends Controller
 {
@@ -57,18 +60,18 @@ class ProfesorController extends Controller
             'cedula' => 'required|unique:profesor',
             'nombre' => 'required|max:50|string',
             'direccion' => 'required|max:50',
-            'telfijo' => 'required|max:20',
             'telcel' => 'required|max:20',
             'cedula' => 'required',
-            'cod_profesor' => 'required',
+            'cod_profesor' => 'required|max:10',
             'id_cisco' => 'required',
             'password' => 'required|string|max:20|confirmed',
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         if(Persona::where('cedula', $request->input('cedula'))->first() == null){
             $this->validate($request, $datosPer, $mensaje);
-            $datosPersona = request()->except(['_token', '_method', 'updated_at', 'cod_profesor', 'id_cisco', 'password', 'password_confirmation']);
+            $datosPersona = request()->except(['_token', '_method', 'updated_at', 'cod_profesor', 'password','id_cisco', 'password_confirmation']);
             Persona::insert($datosPersona);
+
         }else{
             $mensajep = ' esta persona ya existia en el sistema';
         }
@@ -76,8 +79,9 @@ class ProfesorController extends Controller
             return redirect('profesores/create')->with('Mensaje', 'Este profesor ya existe en el sistema, verfique sus datos');
         }
         $this->validate($request, $datosPer, $mensaje);
-        $datosProfesor = request()->except(['_token', '_method', 'updated_at', 'nombre','direccion', 'telfijo', 'telcel', 'password_confirmation', 'correo']);
+        $datosProfesor = request()->except(['_token', '_method', 'updated_at', 'nombre','direccion', 'telfijo', 'telcel' ,'password_confirmation', 'correo']);
         Profesor::insert($datosProfesor);
+        User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password')), 'tipo' => 'profesor']);
         return redirect('profesores/listprofesores')->with('Mensaje', 'Profesor agregado con exito'  .$mensajep);
     }
 

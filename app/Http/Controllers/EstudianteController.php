@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Estudiante;
 use App\Models\TipoCertificacion;
 use App\Models\Persona;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class EstudianteController extends Controller
 {
@@ -59,7 +61,6 @@ class EstudianteController extends Controller
             'cedula' => 'required|unique:profesor',
             'nombre' => 'required|max:50|string',
             'direccion' => 'required|max:50',
-            'telfijo' => 'required|max:20',
             'telcel' => 'required|max:20',
             'cedula' => 'required',
             'cod_estudiante' => 'required',
@@ -81,6 +82,7 @@ class EstudianteController extends Controller
         $this->validate($request, $datosPer, $mensaje);
         $datosEstudiante = request()->except(['_token', '_method', 'updated_at', 'nombre','direccion', 'telfijo', 'telcel', 'password_confirmation', 'correo']);
         Estudiante::insert($datosEstudiante);
+        User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password')), 'tipo' => 'estudiante']);
         return redirect('estudiantes/listestudiantes')->with('Mensaje', 'Estudiante agregado con exito'  .$mensajep);
     }
 

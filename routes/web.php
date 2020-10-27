@@ -53,13 +53,8 @@ Route::resource('inscritos', InscritoController::class);
 
 
 //Route::get('cursos', CursoController::class);
-Auth::routes();
-Route::match(['get', 'post'], 'register', function () {
-    return redirect('/');
-});
 Auth::routes(['reset' => false, 'register' => false]);
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Auth::routes();
+//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -33,8 +35,22 @@ class LoginController extends Controller
      *
      * @return void
      */
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->only('cedula', 'password');
+
+        if (Auth::attempt($credentials)) {
+            // Authentication passed...
+            var_dump("buena hp");
+            return redirect()->intended('/');
+        }
+    }
+
+
+    
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
     }
+    
 }

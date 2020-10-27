@@ -10,4 +10,11 @@ class Persona extends Model
     //use HasFactory;
     protected $table = 'persona';
     public $timestamps = false;
+
+   /* 
+   public function user()
+    {
+        return $this->HasMany(User::class, 'cedula');
+    }
+    */
 }
