@@ -39,7 +39,7 @@ Route::get('/estudiantes/listestudiantes', [App\Http\Controllers\EstudianteContr
 Route::get('/preinscripcion/preinscripcion', [App\Http\Controllers\InscritoController::class, 'preInscribirView'])->name('preinscribir');
 Route::resource('anuncios', AnuncioController::class);
 Route::resource('cursos', CursoController::class)->middleware('auth'); //activar esto cuando tenga login
-Route::resource('tiponotas', TipoNotaController::class)->middleware('auth', 'role:admin');
+Route::resource('tiponotas', TipoNotaController::class)->middleware('auth', 'role:administrador');
 Route::resource('gruposinvestigacion', GrupoInvestigacionController::class);
 Route::resource('cohortes', CohorteController::class);
 Route::resource('modulos', ModuloController::class);

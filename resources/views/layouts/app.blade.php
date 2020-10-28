@@ -30,112 +30,114 @@
                     HOLA PUTA
 
                 </div>
-            
-            <div class="col-10">
-            @else    
-            <div class="col-12">
-            @endif    
-                <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
-                    <div class="container">
-                        <a class="navbar-brand" href="{{ url('/') }}">
-                            {{ config('app.name', 'Laravel') }}
-                        </a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
 
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <!-- Left Side Of Navbar -->
+                <div class="col-10">
+                @else
+                    <div class="col-12">
+            @endif
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
+                <div class="container">
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        {{ config('app.name', 'Laravel') }}
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                            <ul class="navbar-nav mr-auto">
-                                <li>
-                                    <a class="navbar-brand" href="{{ url('') }}">Academia Cisco </a>
-                                </li>
-                                <li>
-                                    <a class="navbar-brand" href="{{ url('/cursos') }}">Curscos y Certificaciones
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <!-- Left Side Of Navbar -->
+
+                        <ul class="navbar-nav mr-auto">
+                            <li>
+                                <a class="navbar-brand" href="{{ url('') }}">Academia Cisco </a>
+                            </li>
+                            <li>
+                                <a class="navbar-brand" href="{{ url('/cursos/listcursos') }}">Curscos y Certificaciones
+                                </a>
+                            </li>
+                            <li>
+                                @if (!Auth::check())
+                                    <a class="navbar-brand"
+                                        href="{{ url('/preinscripcion/preinscripcion') }}">Preinscripcion
                                     </a>
-                                </li>
-                                <li>
-                                    @if (!Auth::check())
-                                        <a class="navbar-brand"
-                                            href="{{ url('/preinscripcion/preinscripcion') }}">Preinscripcion
-                                        </a>
 
-                                    @endif
-                                </li>
-                                <li>
-                                    <a class="navbar-brand" href="{{ url('/soporte') }}">Soporte </a>
-                                </li>
-                                <li>
-                                    <a class="navbar-brand" href="{{ url('/nosotros') }}">Nosotros </a>
-                                </li>
-                            </ul>
+                                @endif
+                            </li>
+                            <li>
+                                <a class="navbar-brand" href="{{ url('/soporte') }}">Soporte </a>
+                            </li>
+                            <li>
+                                <a class="navbar-brand" href="{{ url('/nosotros') }}">Nosotros </a>
+                            </li>
+                        </ul>
 
-                            <!-- Right Side Of Navbar -->
-                            <ul class="navbar-nav ml-auto">
-                                <!-- Authentication Links -->
-                                @guest
+                        <!-- Right Side Of Navbar -->
+                        <ul class="navbar-nav ml-auto">
+                            <!-- Authentication Links -->
+
+                            <li class="nav-item dropdown">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        CISCO
+                                    </button>
+                                    <div class="dropdown-menu col" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" target="_blank" href="https://www.cisco.com">CISCO</a>
+                                        <a class="dropdown-item" target="_blank"
+                                            href="https://www.cisco.com/c/es_co/index.html">CISCO COLOMBIA</a>
+                                        <a class="dropdown-item" target="_blank"
+                                            href="https://www.netacad.com">NetAcad</a>
+                                    </div>
+                                </div>
+                            </li>
+
+                            @guest
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                </li>
+                                @if (Route::has('register'))
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                        <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                     </li>
-                                    @if (Route::has('register'))
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                        </li>
-                                    @endif
-                                @else
-                                    <li class="nav-item dropdown">
-                                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                           {{ Auth::user()->persona->nombre }}
+                                @endif
+                            @else
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        {{ Auth::user()->persona->nombre }}
+                                    </a>
+
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
+                                                                                 document.getElementById('logout-form').submit();">
+                                            {{ __('Logout') }}
                                         </a>
 
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                                         document.getElementById('logout-form').submit();">
-                                                {{ __('Logout') }}
-                                            </a>
-
-                                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                                class="d-none">
-                                                @csrf
-                                            </form>
-                                        </div>
-                                    </li>
-
-                                @endguest
-                                <li class="nav-item dropdown">
-                                    <div class="dropdown">
-                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                            aria-expanded="false">
-                                            CISCO
-                                        </button>
-                                        <div class="dropdown-menu col" aria-labelledby="dropdownMenuButton">
-                                            <a class="dropdown-item" target="_blank"
-                                                href="https://www.cisco.com">CISCO</a>
-                                            <a class="dropdown-item" target="_blank"
-                                                href="https://www.cisco.com/c/es_co/index.html">CISCO COLOMBIA</a>
-                                            <a class="dropdown-item" target="_blank"
-                                                href="https://www.netacad.com">NetAcad</a>
-                                        </div>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
                                     </div>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="https://ww2.ufps.edu.co" target="_blank"> <img
-                                            src="{{ asset('resources/img/ufps.png') }}" alt="ufps" /> </a>
-                                </li>
-                            </ul>
-                        </div>
+
+                            @endguest
+
+                            <li class="nav-item">
+                                <a href="https://ww2.ufps.edu.co" target="_blank"> <img
+                                        src="{{ asset('resources/img/ufps.png') }}" alt="ufps" /> </a>
+                            </li>
+                        </ul>
                     </div>
-                </nav>
-            </div>
+                </div>
+            </nav>
         </div>
-        <main class="py-4">
-            @yield('content')
-        </main>
+    </div>
+    <main class="py-4">
+        @yield('content')
+    </main>
     </div>
     </div>
 

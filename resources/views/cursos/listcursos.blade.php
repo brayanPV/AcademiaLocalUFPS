@@ -7,11 +7,12 @@
             {{ Session::get('Mensaje') }}
         </div>
         @endif
+       @if (Auth::check() && Auth::user()->hasrole('administrador'))
         <div class="alert alert-primary" role="alert">
             <h2>Gestion de cursos</h2>
         </div>
         <a class="btn btn-success" href="{{ url('/cursos/create') }}"> Agregar Curso</a>
-
+        @endif
     </div>
     <div class="container">
         <table class="table table-hover">
@@ -24,7 +25,7 @@
                     <th>Fecha fin</th>
                     <th>Cohorte</th>
                     <th>Imagen</th>
-                    <th>Accion</th>
+                  @if(Auth::user()->hasrole('administrador'))<th>Accion</th> @endif
                 </tr>
             </thead>
             <tbody>
@@ -38,7 +39,8 @@
                         <td class="col">{{ $curso->nombre }}</td>
                         <td class="col"> <img src="{{ asset('storage') . '/' . $curso->imagen }}"
                                 alt="" width="250"></td>
-                        <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
+                       @if(Auth::user()->hasrole('administrador')) 
+                       <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
                                 href="{{ url('/cursos/' . $curso->id . '/edit') }}"> Editar </a>
                             <form method="post" action="{{ url('/cursos/' . $curso->id) }}" style="display: inline">
                                 @csrf
@@ -48,6 +50,7 @@
                             </form>
 
                         </td>
+                        @endif
                     </tr>
                 @empty
                     <h2>No hay nada por mostrar </h2>
