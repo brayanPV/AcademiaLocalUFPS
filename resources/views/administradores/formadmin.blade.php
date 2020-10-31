@@ -65,6 +65,6 @@
             value="{{ $Modo == 'Crear' ? 'Agregar Administrador' : 'Editar Administrador' }}">
     </div>
     <div class="col-2">
-        <a class="btn btn-secondary" inl href="{{ url('administradores/listadministradores') }}">Volver</a>
+        <a class="btn btn-secondary" inl href="{{ url('administradores/') }}">Volver</a>
     </div>
 </div>

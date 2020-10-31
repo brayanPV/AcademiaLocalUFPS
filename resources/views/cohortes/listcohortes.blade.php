@@ -2,15 +2,20 @@
 @section('content')
     <div class="container">
         @if (Session::has('Mensaje'))
-        <div class="alert alert-success" role="alert">
-            {{ Session::get('Mensaje') }}
-        </div>
+            <div class="alert alert-success" role="alert">
+                {{ Session::get('Mensaje') }}
+            </div>
         @endif
-        <div class="alert alert-primary" role="alert">
-            <h2>Gestion de cohortes</h2>
-        </div>
-        <a class="btn btn-success" href="{{ url('/cohortes/create') }}"> Agregar Cohorte</a>
-
+        @if (Auth::check() && Auth::user()->hasrole('administrador'))
+            <div class="alert alert-primary" role="alert">
+                <h2>Gestion de cohortes</h2>
+            </div>
+            <a class="btn btn-success" href="{{ url('/cohortes/create') }}"> Agregar Cohorte</a>
+        @else
+            <div class="alert alert-primary" role="alert">
+                <h2>Cohortes</h2>
+            </div>
+        @endif
     </div>
     <div class="container">
         <table class="table table-hover">
@@ -21,7 +26,7 @@
                     <th>Fecha inicio</th>
                     <th>Fecha fin</th>
                     <th>Certificacion</th>
-                    <th>Accion</th>
+                    @if (Auth::check() && Auth::user()->hasrole('administrador'))<th>Accion</th>@endif
                 </tr>
             </thead>
             <tbody>
@@ -32,8 +37,8 @@
                         <td class="col">{{ $cohorte->fecha_inicio }}</td>
                         <td class="col">{{ $cohorte->fecha_fin }}</td>
                         <td class="col">{{ $cohorte->tc_nombre }}</td>
-                        <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                href="{{ url('/cohortes/' .$cohorte->id . '/edit') }}"> Editar </a>
+                        @if (Auth::check() && Auth::user()->hasrole('administrador')) <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
+                                href="{{ url('/cohortes/' . $cohorte->id . '/edit') }}"> Editar </a>
                             <form method="post" action="{{ url('/cohortes/' . $cohorte->id) }}">
                                 @csrf
                                 @method('DELETE')
@@ -43,6 +48,7 @@
                             </form>
 
                         </td>
+                        @endif
                     </tr>
                 @empty
                     <h2>No hay nada por mostrar </h2>

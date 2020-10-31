@@ -47,14 +47,6 @@
     </select>
 </div>
 <div class="form-group">
-    <label class="control-label" for="imagen"> Imagen</label> </br>
-    @if (isset($curso->imagen))
-        <img class="img-thumbnail img-fluid" src="{{ asset('storage') . '/' . $curso->imagen }}" alt="" width="250">
-    @endif
-    <input class="form-control {{$errors->has('imagen')? 'is-invalid' : ''}}" type="file" name="imagen" id="imagen" >
-    {!! $errors->first('imagen', '<div class="invalid-feedback">:message</div>') !!}
-</div>
-<div class="form-group">
     <input class="btn btn-primary" type="submit" value="{{ $Modo == 'Crear' ? 'Agregar Curso' : 'Editar Curso' }}">
 
 </div>

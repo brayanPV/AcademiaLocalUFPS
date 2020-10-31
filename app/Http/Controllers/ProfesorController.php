@@ -84,6 +84,7 @@ class ProfesorController extends Controller
         User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password'))]);
         $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
         $user->roles()->attach(Role::where('nombre', 'profesor')->first());
+        $user->roles()->attach(Role::where('nombre', 'estudiante')->first());
         //$user->roles()->sync([2]);
         return redirect('profesores/listprofesores')->with('Mensaje', 'Profesor agregado con exito'  .$mensajep);
     }
@@ -107,15 +108,7 @@ class ProfesorController extends Controller
      */
     public function edit($id)
     {
-        //
-       /* $profesores = Profesor::select('p.cedula', 'p.cod_profesor', 'p.id_cisco', 'per.nombre', 'per.correo', 'per.telfijo', 'per.telcel', 'per.direccion')
-        ->from('profesor as p')
-        -where('cedula, $id)
-        ->join('persona as per', function ($join) {
-            $join->on('p.cedula', '=', 'per.cedula');
-    
-        })->get();
-*/
+       
         $profesores = Profesor::where('cedula', $id)->first();
         $personas = Persona::where('cedula', $id)   ->first();
         return view('profesores/edit', compact(['profesores' ,'personas']));

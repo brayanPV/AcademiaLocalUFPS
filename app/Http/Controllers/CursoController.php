@@ -20,18 +20,7 @@ class CursoController extends Controller
      */
     public function index()
     {
-        $anuncios = Anuncio::select('*')
-		->from('anuncio')
-		->where('tipo', '=', 0)
-		->get();
-
-        $cursos = Curso::select('c.id_cisco', 'c.imagen', 'm.nombre')
-            ->from('curso as c')
-            ->join('modulo as m', function ($join) {
-                $join->on('m.id', '=', 'c.id_modulo');
-            })
-            ->get();
-        return view('welcome', compact(['cursos', 'anuncios']));
+       
         
     }
 
@@ -47,7 +36,7 @@ class CursoController extends Controller
 
     public function listCursos()
     {
-        $cursos = Curso::select('c.id','c.id_cisco', 'm.nombre as nombre_modulo', 'p.cedula', 'c.fecha_inicio', 'c.fecha_fin', 'co.nombre', 'c.imagen')
+        $cursos = Curso::select('c.id','c.id_cisco', 'm.nombre as nombre_modulo', 'p.cedula', 'per.nombre as nombreper', 'c.fecha_inicio', 'c.fecha_fin', 'co.nombre')
             ->from('curso as c')
             ->join('modulo as m', function ($join) {
                 $join->on('m.id', '=', 'c.id_modulo');
@@ -55,9 +44,12 @@ class CursoController extends Controller
             ->join('profesor as p', function ($join) {
                 $join->on('p.cedula', '=', 'c.ced_profesor');
             })
+            ->join('persona as per', function ($join) {
+                $join->on('per.cedula', '=', 'p.cedula');
+            })
             ->join('cohorte as co', function ($join) {
                 $join->on('co.id', '=', 'c.id_cohorte');
-            })->orderBy('id_cisco','asc')->paginate(10);
+            })->orderBy('id_cisco','asc')->paginate(5);
         return view('cursos.listcursos', compact('cursos'));
     }
 
@@ -94,15 +86,11 @@ class CursoController extends Controller
             'ced_profesor' => 'required',
             'fecha_inicio' => 'required',
             'fecha_fin' => 'required',
-            'id_cohorte' => 'required',
-            'imagen' => 'required|max:10000|mimes:jpeg,png,jpg'
+            'id_cohorte' => 'required'
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $campos, $mensaje);
         $datoscurso = request()->except('_token');
-        if ($request->hasFile('imagen')) {
-            $datoscurso['imagen'] = $request->file('imagen')->store('uploads', 'public');
-        }
         Curso::insert($datoscurso);
         return redirect('cursos/listcursos')->with('Mensaje', 'Curso agregado con exito');
     }
@@ -155,17 +143,9 @@ class CursoController extends Controller
             'fecha_fin' => 'required',
             'id_cohorte' => 'required'
         ];
-        if ($request->hasFile('imagen')) {
-            $campos +=['imagen' => 'required|max:10000|mimes:jpeg,png,jpg'];
-        }
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $campos, $mensaje);
         $datoscurso = request()->except(['_token', '_method', 'updated_at']);
-        if ($request->hasFile('imagen')) {
-            $curso = Curso::findOrFail($id);
-            Storage::delete('public/' . $curso->imagen);
-            $datoscurso['imagen'] = $request->file('imagen')->store('uploads', 'public');
-        }
         Curso::where('id', '=', $id)->update($datoscurso);
         return redirect('cursos/listcursos')->with('Mensaje', 'Curso Editado con exito');
 

@@ -1,15 +1,8 @@
 
-    <div class="container">
-        @if (Session::has('Mensaje'))
-            <div class="alert alert-success" role="alert">
-                {{ Session::get('Mensaje') }}
-            </div>
-
-        @endif
-        
-        <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
+   
+        <div id="carouselExampleSlidesOnly" class="carousel slide bg-info text-white" data-ride="carousel">
+            <div class="carousel-inner" style="height: 300px;">
+                <div class="carousel-item active" >
                     <img class="d-block w-100" src="{{ asset('storage') . '/uploads/anuncio1_bg.jpg'  }}" alt="First slide"> 
                 </div>
                 @foreach ($anuncios as $anuncio)
@@ -24,5 +17,4 @@
 
             </div>
         </div>
-    </div>
-
+   
