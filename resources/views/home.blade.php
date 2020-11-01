@@ -1,6 +1,0 @@
-
-@extends('partials.header')
-
-@section('content')
-    <h1>HOME</h1>
-@endsection

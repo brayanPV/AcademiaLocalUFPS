@@ -29,8 +29,9 @@
 
                 <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
                     <div class="container">
-                        <a class="navbar-brand" href="{{ url('/') }}">
-                            Academia cisco local UFPS
+                        <a class="navbar-brand" href="{{ url('/') }}" >
+                            <img
+                            src="{{ asset('img/cisco.png') }}" alt="ufps" style="width: 100px"/> Inicio
                         </a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -102,8 +103,7 @@
                                         </a>
 
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                            <a class="dropdown-item" href=""
-                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                            <a class="dropdown-item" href="{{ url('/inicio/' . Auth::user()->id ) }}">
                                                 {{ __('Mi espacio') }}
                                             </a>
                                             <a class="dropdown-item" href="{{ route('logout') }}"
@@ -123,7 +123,7 @@
 
                                 <li class="nav-item">
                                     <a href="https://ww2.ufps.edu.co" target="_blank"> <img
-                                            src="{{ asset('resources/img/ufps.png') }}" alt="ufps" /> </a>
+                                            src="{{ asset('img/ufps.png') }}" alt="ufps" /> </a>
                                 </li>
                             </ul>
                         </div>

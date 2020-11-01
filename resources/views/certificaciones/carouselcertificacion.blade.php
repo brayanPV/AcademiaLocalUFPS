@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-6 align-self-center text-white">
                     <h2> {{ 'Certificaciones de la academia local ufps' }}</h2>
-                    <a class="btn btn-dark text-center" href="{{ url('certificaciones/listcertificaciones') }}">Ver Certificaciones </a>
+                    <a class="btn btn-dark text-center" href="{{ url('certificaciones/card') }}">Ver Certificaciones </a>
                 </div>
 
                 <div class="col-6">
@@ -20,7 +20,7 @@
                     <div class="row">
                         <div class="col-6 align-self-center text-light">
                             <h2 class="text-white"> {{ $certificacion->nombre }}</h2>
-                            <a class="btn btn-dark" href="{{ url('certificaciones/listcertificaciones') }}">Ver
+                            <a class="btn btn-dark" href="{{ url('certificaciones/card') }}">Ver
                                 Certificaciones </a>
                         </div>
                         <div class="col-6">

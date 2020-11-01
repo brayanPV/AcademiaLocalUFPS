@@ -11,6 +11,7 @@ use App\Http\Controllers\CohorteController;
 use App\Http\Controllers\ModuloController;
 use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\EstudianteController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InscritoController;
 use App\Http\Middleware\CheckRole;
 
@@ -27,6 +28,7 @@ use App\Http\Middleware\CheckRole;
 
 //index
 Route::get('/', [App\Http\Controllers\TipoCertificacionController::class, 'index'])->name('welcome');
+Route::get('/inicio/{inici}','App\Http\Controllers\UserController@show')->middleware('auth');
 //carousel
 Route::get('/certificaciones/carouselcertificacion', [App\Http\Controllers\TipoCertificacionController::class, 'carouselCertificacion'])->name("carouselcertificacion");
 Route::get('/anuncios/carouselanuncios', [App\Http\Controllers\AnuncioController::class, 'index'])->name("carouselanuncios");
@@ -80,6 +82,8 @@ Route::get('/profesores/create', 'App\Http\Controllers\ProfesorController@create
 Route::post('/profesores', 'App\Http\Controllers\ProfesorController@store')->middleware('auth','role:administrador');
 Route::get('/profesores/{profesore}/edit', 'App\Http\Controllers\ProfesorController@edit')->middleware('auth','role:administrador');
 Route::patch('/profesores', 'App\Http\Controllers\ProfesorController@update')->middleware('auth','role:administrador');
+Route::get('/profesores/{profesore}/cursosasignados', 'App\Http\Controllers\ProfesorController@verCursosAsignados')->middleware('auth','role:profesor');
+Route::get('/profesores/{profesore}/cursoestudiantes', 'App\Http\Controllers\ProfesorController@verEstudiantesCursos')->middleware('auth','role:profesor');
 //estudiantes
 Route::get('/estudiantes/create', 'App\Http\Controllers\EstudianteController@create')->middleware('auth','role:administrador');
 Route::post('/estudiantes', 'App\Http\Controllers\EstudianteController@store')->middleware('auth','role:administrador');
