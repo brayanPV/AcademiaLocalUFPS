@@ -7,6 +7,7 @@ use App\Models\Profesor;
 use App\Models\Persona;
 use App\Models\User;
 use App\Models\Curso;
+use App\Models\CursoEstudiante;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\Role;
@@ -56,18 +57,16 @@ class ProfesorController extends Controller
         return view('profesores/cursosasignados', compact('cursos'));
     }
 
-    /*$administradores = DB::select('select u.cedula, p.nombre, p.telfijo, p.telcel, p.correo, p.direccion
-        from role_user ru
-        inner join users u
-        on u.id = ru.user_id
-        inner join roles r
-        on r.id = ru.role_id
-        and r.nombre = ?
-        inner join persona p
-        on u.cedula = p.cedula', ['administrador']);*/
+
 
     public function verEstudiantesCursos($id)
     {
+        $curso = DB::select('select m.nombre
+        from curso c
+        inner join modulo m
+        on m.id = c.id_modulo
+        where c.id = ?', [$id]);
+
         $estudiantes = DB::select('select ce.id_curso as id, ce.ced_estudiante as cedula, p.nombre, ce.observaciones, ce.estado
         from curso_estudiante ce
         inner join curso c
@@ -77,7 +76,43 @@ class ProfesorController extends Controller
         on e.cedula = ce.ced_estudiante
         inner join persona p
         on p.cedula = ce.ced_estudiante', [$id]);
-        return view('profesores/cursoestudiantes', compact('estudiantes'));
+        return view('profesores/cursoestudiantes', compact('estudiantes', 'curso'));
+    }
+
+    public function agregarObservacion($curso, $estudiante)
+    {
+        $estudiante = CursoEstudiante::select('ce.id_curso', 'ce.ced_estudiante', 'ce.observaciones', 'p.nombre', 'c.id_cisco', 'm.nombre as modulo')
+        ->from('curso_estudiante as ce')
+        ->join('curso as c', function($join){
+            $join->on('c.id', '=', 'ce.id_curso');
+        })
+        ->join('modulo as m', function($join){
+            $join->on('m.id', '=', 'c.id_modulo');
+        })
+        ->join('persona as p', function($join){
+            $join->on('p.cedula', '=', 'ce.ced_estudiante');
+        })
+        ->where([
+            ['id_curso', $curso],
+            ['ced_estudiante', $estudiante]
+        ])->first();
+
+        return view('profesores/agregarobservacion', compact('estudiante'));
+    }
+
+    
+
+    public function observacionUpdate(Request $request, $id_curso){
+        $curso = DB::select('select m.nombre
+        from curso c
+        inner join modulo m
+        on m.id = c.id_modulo
+        where c.id = ?', [$id_curso]);
+        CursoEstudiante::where([
+            ['id_curso', $id_curso],
+            ['ced_estudiante', $request->input('cedula')]
+        ])->update(['observaciones' => $request->input('observaciones')]);
+        return $this->verEstudiantesCursos($id_curso);
     }
 
     /**
@@ -127,11 +162,12 @@ class ProfesorController extends Controller
         Profesor::insert($datosProfesor);
         User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password'))]);
         $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
-        $user->roles()->attach(Role::where('nombre', 'profesor')->first());
-        $user->roles()->attach(Role::where('nombre', 'estudiante')->first());
+        $user->roles()->sync([2,3]);
         //$user->roles()->sync([2]);
         return redirect('profesores/listprofesores')->with('Mensaje', 'Profesor agregado con exito'  . $mensajep);
     }
+
+
 
     /**
      * Display the specified resource.

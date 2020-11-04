@@ -35,7 +35,7 @@ class AnuncioController extends Controller
     public function AnunciosPrincipales()
     {
         $anuncios = Anuncio::paginate(5);
-        return view('anuncios.listanuncio', compact('anuncios'));
+        return view('anuncios/listanuncio', compact('anuncios'));
     }
 
 
@@ -63,7 +63,7 @@ class AnuncioController extends Controller
             $datosAnuncio['img1'] = $request->file('img1')->store('uploads', 'public');
         }
         Anuncio::insert($datosAnuncio);
-        return redirect('anuncios.listanuncio')->with('Mensaje', 'Anuncio agregado con exito');
+        return redirect('anuncios/listanuncio')->with('Mensaje', 'Anuncio agregado con exito');
     }
 
 
@@ -89,7 +89,7 @@ class AnuncioController extends Controller
     {
         //
         $anuncio = Anuncio::findOrFail($id);
-        return view('anuncios.edit', compact('anuncio'));
+        return view('anuncios/edit', compact('anuncio'));
     }
 
     /**
@@ -123,7 +123,7 @@ class AnuncioController extends Controller
         Anuncio::where('id', '=', $id)->update($datosAnuncio);
         //$anuncio = Anuncio::findOrFail($id);
         //return view('anuncios.edit', compact('anuncio'));
-        return redirect('anuncios.listanuncios')->with('Mensaje', 'Anuncio editado con exito');
+        return redirect('anuncios/listanuncio')->with('Mensaje', 'Anuncio editado con exito');
     }
 
     /**

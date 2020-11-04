@@ -2,42 +2,69 @@
 
 @section('content')
     <div class="container">
-        @if (Auth::user()->hasRole('administrador'))
-        <div class="card">
-          <div class="p-3 mb-2 bg-info text-white">Gestiona </div>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item"><a href="{{ url('/administradores/') }}">Administradores </a></li>
-            <li class="list-group-item"><a href="{{ url('/anuncios/listanuncio') }}">Anuncios </a></li>
-            <li class="list-group-item"><a href="{{ url('/certificaciones/listcertificaciones') }}">Certificaciones </a>
-            </li>
-            <li class="list-group-item"><a href="{{ url('/cohortes/listcohortes') }}">Cohortes </a></li>
-            <li class="list-group-item"><a href="{{ url('/cursos/listcursos') }}">Cursos </a></li>
-            <li class="list-group-item"><a href="{{ url('/estudiantes/listestudiantes') }}">Estudiantes </a></li>
-            <li class="list-group-item"><a href="{{ url('/gruposinvestigacion/listgruposinvestigacion') }}">Grupos de
-                    investigacion </a></li>
-            <li class="list-group-item"><a href="{{ url('/modulos/listmodulos') }}">Modulos </a></li>
-            <li class="list-group-item"><a href="{{ url('/profesores/listprofesores') }}">Profesores </a></li>
-            <li class="list-group-item"><a href="{{ url('/tiponotas/listtiponotas') }}">Tipo de notas </a></li>
-        </ul>
+        <div id="accordion">
+            @if (Auth::user()->hasRole('administrador'))
+              <div class="card pg-4">
+                    <h5 class="p-3 mb-2">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
+                            aria-controls="collapseOne">
+                            Gestiona
+                        </button>
+                    </h5>
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/administradores/') }}">Administradores </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/anuncios/listanuncio') }}">Anuncios </a></li>
+                        <li class="list-group-item list-group-item-action"><a
+                                href="{{ url('/certificaciones/listcertificaciones') }}">Certificaciones
+                            </a>
+                        </li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/cohortes/listcohortes') }}">Cohortes </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/cursos/listcursos') }}">Cursos </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/estudiantes/listestudiantes') }}">Estudiantes </a>
+                        </li>
+                        <li class="list-group-item"><a
+                                href="{{ url('/gruposinvestigacion/listgruposinvestigacion') }}">Grupos
+                                de
+                                investigacion </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/modulos/listmodulos') }}">Modulos </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/profesores/listprofesores') }}">Profesores </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/tiponotas/listtiponotas') }}">Tipo de notas </a></li>
+                    </ul>
+                </div>
+                </div>
+            @endif
+            @if (Auth::user()->hasRole('profesor'))
+                <div class="card pg-4">
+                    <h5 class="p-3 mb-2">
+                      <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Docencia
+                      </button>
+                    </h5>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-group-item-action"><a
+                                href="{{ url('/profesores/' . Auth::user()->cedula . '/cursosasignados') }}">Cursos
+                                asignados
+                            </a></li>
+                    </ul>
+                </div>
+                </div>
+            @endif
+            @if (Auth::user()->hasRole('estudiante'))
+                <div class="card pg-4">
+                  <h5 class="p-3 mb-2">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                      Estudiante
+                    </button>
+                  </h5>
+                  <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <li class="list-group-item list-group-item-action"><a
+                            href="{{ url('/estudiantes/' . Auth::user()->cedula . '/cursosasignados') }}">Mis cursos </a>
+                    </li>
+                </div>
+                </div>
+            @endif
         </div>
-        @endif
-        @if (Auth::user()->hasRole('profesor'))
-        <div class="card pg-4">
-          <div class="p-3 mb-2 bg-white text-primary"> 
-            <a href="{{ url('/profesores/' .Auth::user()->cedula .'/cursosasignados') }}">Cursos asignados </a>
-          </div>
-          
-        </div>
-        @endif
-        @if (Auth::user()->hasRole('estudiante'))
-            <ul class="list-group">
-                <h2>Estudiante </h2>
-                <li class="list-group-item">estudiante</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
-        @endif
     </div>
 @endsection

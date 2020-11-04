@@ -36,7 +36,7 @@
                         <td class="col">{{ $admin->direccion }}</td>
                         <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
                                 href="{{ url('/administradores/' .$admin->cedula . '/edit') }}"> Editar </a>
-                            <form method="post" action="{{ url('/administradores/' . $admin->cedula) }}" style="display: inline">
+                            <form method="post" action="{{ url('/administradores/' . $admin->id) }}" style="display: inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"

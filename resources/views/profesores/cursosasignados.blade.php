@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="alert alert-primary" role="alert">
-            <h2>Cursos</h2>
+            <h2>Cursos Asignados</h2>
         </div>
 
 
@@ -12,14 +12,14 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Id Cisco</th>
+                    <th>Curso</th>
                     <th>Modulo</th>
                     <th>Profesor</th>
                     <th>Feha inicio</th>
                     <th>Fecha fin</th>
                     <th>Cohorte</th>
-                    @if (Auth::check() && Auth::user()->hasrole('administrador'))
-                        <th>Accion</th>
+                    @if (Auth::check() && Auth::user()->hasrole('profesor'))
+                        <th></th>
                     @endif
                 </tr>
             </thead>
@@ -32,12 +32,13 @@
                         <td class="col-md-auto">{{ $curso->fecha_inicio }}</td>
                         <td class="col-md-auto">{{ $curso->fecha_fin }}</td>
                         <td class="col-md-auto">{{ $curso->nombre }}</td>
-                        @if (Auth::check() && Auth::user()->hasrole('administrador'))
+                        @if (Auth::check() && Auth::user()->hasrole('profesor'))
                             <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                    href="{{ url('/cursos/' . $curso->id . '/edit') }}"> Editar </a>
+                                    href="{{ url('/cursos/' . $curso->id . '/edit') }}" style="display: inline"> Editar </a>
 
-                                <a class="bnt btn-info"  role="button"
-                                    href="{{ url('/profesores/' . $curso->id . '/cursoestudiantes') }}">Estudiantes</a>
+                                <a class="bnt btn-info" role="button"
+                                    href="{{ url('/profesores/' . $curso->id . '/cursoestudiantes') }}"
+                                    style="display: inline">Estudiantes</a>
                             </td>
                         @endif
                     </tr>

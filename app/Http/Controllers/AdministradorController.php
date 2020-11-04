@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Administrador;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Persona;
@@ -19,7 +20,7 @@ class AdministradorController extends Controller
     public function index()
     {
         //$results = DB::select('select * from users where id = :id', ['id' => 1]);
-        $administradores = DB::select('select u.cedula, p.nombre, p.telfijo, p.telcel, p.correo, p.direccion
+        $administradores = DB::select('select u.id, u.cedula, p.nombre, p.telfijo, p.telcel, p.correo, p.direccion
         from role_user ru
         inner join users u
         on u.id = ru.user_id
@@ -75,7 +76,7 @@ class AdministradorController extends Controller
         $datosAdmin = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'password_confirmation', 'correo']);
         User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password'))]);
         $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
-        $user->roles()->attach(Role::where('nombre', 'administrador')->first());
+        $user->roles()->sync([1,2,3]);
         return redirect('administradores/')->with('Mensaje', 'Administrador agregado con exito'  . $mensajep);
     }
 
@@ -99,6 +100,8 @@ class AdministradorController extends Controller
     public function edit($id)
     {
         //
+        $administradores = User::findOrFail($id);
+        return view('administradores/edit', compact('administradores'));
     }
 
     /**
@@ -122,5 +125,7 @@ class AdministradorController extends Controller
     public function destroy($id)
     {
         //
+        User::destroy($id);
+        return redirect('administradores/')->with('Mensaje', 'Administrador eliminado con exito');
     }
 }
