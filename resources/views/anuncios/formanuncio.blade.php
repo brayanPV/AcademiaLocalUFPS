@@ -4,8 +4,8 @@
         <option value="">Seleccione el tipo</option>
         <option value="0"> Primario </option>
         <option value="1"> Secundario </option>
-        {!! $errors->first('tipo', '<div class="invalid-feedback">:message</div>') !!}
     </select>
+    {!! $errors->first('tipo', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label for="nombre" class="control-label"> {{ 'Nombre' }}</label>

@@ -26,6 +26,7 @@
 
                         <th>Nombre</th>
                         <th>Imagen</th>
+                        <th>Descripcion</th>
                         @if (Auth::check() && Auth::user()->hasrole('administrador'))
                             <th>Accion</th>
                         @endif
@@ -34,9 +35,10 @@
                 <tbody>
                     @forelse ($certificaciones as $certificacion)
                         <tr>
-                            <td class="col">{{ $certificacion->nombre }}</td>
-                            <td class="col"> <img src="{{ asset('storage') . '/' . $certificacion->imagen }}" alt=""
+                            <td class="col-md-auto">{{ $certificacion->nombre }}</td>
+                            <td class="col-md-auto"> <img src="{{ asset('storage') . '/' . $certificacion->imagen }}" alt=""
                                     width="250"></td>
+                            <td class="col-md-auto">{{ $certificacion->descripcion }}</td>       
                             @if (Auth::check() && Auth::user()->hasrole('administrador'))
                                 <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
                                         href="{{ url('/certificaciones/' . $certificacion->id . '/edit') }}"> Editar </a>

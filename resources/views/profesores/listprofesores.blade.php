@@ -31,15 +31,15 @@
                 <tbody>
                     @forelse ($profesores as $profesor)
                         <tr>
-                            <td class="col">{{ $profesor->cedula }}</td>
-                            <td class="col">{{ $profesor->nombre }}</td>
-                            <td class="col">{{ $profesor->correo }}</td>
-                            <td class="col">{{ $profesor->telfijo }}</td>
-                            <td class="col">{{ $profesor->telcel }}</td>
-                            <td class="col">{{ $profesor->direccion }}</td>
-                            <td class="col">{{ $profesor->cod_profesor }}</td>
-                            <td class="col">{{ $profesor->id_cisco }}</td>
-                            <td class="col">
+                            <td class="col-md-auto">{{ $profesor->cedula }}</td>
+                            <td class="col-md-auto">{{ $profesor->nombre }}</td>
+                            <td class="col-md-auto">{{ $profesor->correo }}</td>
+                            <td class="col-md-auto">{{ $profesor->telfijo }}</td>
+                            <td class="col-md-auto">{{ $profesor->telcel }}</td>
+                            <td class="col-md-auto">{{ $profesor->direccion }}</td>
+                            <td class="col-md-auto">{{ $profesor->cod_profesor }}</td>
+                            <td class="col-md-auto">{{ $profesor->id_cisco }}</td>
+                            <td class="col-md-auto">
                                 @if ($profesor->estado == 0)
                                     Activo
                                 @else

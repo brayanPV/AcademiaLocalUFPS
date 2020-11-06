@@ -28,10 +28,11 @@ class GrupoInvestigacionController extends Controller
         //
         $grupoInvestigacion = GrupoInvestigacion::get();
         $profesores = Profesor::select('p.cedula', 'per.nombre')
-            ->from('profesor as p')
-            ->join('persona as per', function ($join) {
-                $join->on('p.cedula', '=', 'per.cedula');
-            })->get();
+        ->from('profesor as p')
+        ->join('persona as per', function($join){
+            $join->on('p.cedula','=','per.cedula');
+        })
+        ->where('p.estado', '=', '0')->get();
         return view('gruposinvestigacion/create', compact(['grupoInvestigacion', 'profesores']));
     }
 
@@ -90,10 +91,11 @@ class GrupoInvestigacionController extends Controller
     {
         $grupoInvestigacion = GrupoInvestigacion::findOrFail($id);
         $profesores = Profesor::select('p.cedula', 'per.nombre')
-            ->from('profesor as p')
-            ->join('persona as per', function ($join) {
-                $join->on('p.cedula', '=', 'per.cedula');
-            })->get();
+        ->from('profesor as p')
+        ->join('persona as per', function($join){
+            $join->on('p.cedula','=','per.cedula');
+        })
+        ->where('p.estado', '=', '0')->get();
         return view('gruposinvestigacion.edit', compact(['grupoInvestigacion', 'profesores']));
     }
 
@@ -106,9 +108,9 @@ class GrupoInvestigacionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //'id_cisco' => 'required|unique:cohorte,id_cisco,'.$id,
         $campos = [
-            'nombre' => 'required|unique:grupo_investigacion,nombre',
+            'nombre' => 'required|unique:grupo_investigacion,nombre,' .$id,
             'descripcion' => 'required',
             'ced_prof_director' => 'required'
         ];

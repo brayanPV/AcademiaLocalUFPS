@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -5,14 +6,14 @@
         <div class="row justify-content-center">
             <div class="card col-6">
                 <div class="card-header">
-                    <h2>Editar Curso</h2>
+                    <h2>Editar Estudiante</h2>
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('/cursos/' . $curso->id) }}" class="form-horizontal" method="post"
+                    <form action="{{ url('/estudiantes/' . $estudiantes->cedula) }}" class="form-horizontal" method="post"
                         enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
-                        @include('cursos.formcursos', ['Modo'=>'Editar'])
+                        @include('estudiantes.formestudiante', ['Modo'=>'Editar'])
                     </form>
                 </div>
             </div>

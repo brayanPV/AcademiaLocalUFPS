@@ -1,7 +1,7 @@
 <div class="form-group">
     <label for="id_cisco"> {{ 'Id cisco' }}</label>
     <input class="form-control {{ $errors->has('id_cisco') ? 'is-invalid' : '' }}" type="text" name="id_cisco"
-        id="id_cisco" value="{{ isset($curso->id_cisco) ? $curso->id_cisco : old('id_cisco') }}">
+        id="id_cisco" value="{{ isset($curso->id_cisco) ? $curso->id_cisco : old('id_cisco') }}" placeholder="{{ isset($curso->id_cisco) ? $curso->id_cisco : 'UFPS_CCNA' }}">
     {!! $errors->first('id_cisco', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
@@ -11,8 +11,8 @@
         @foreach ($modulos as $modulo)
             <option value="{{ $modulo->id }}">{{ $modulo->nombre }} </>
         @endforeach
-        {!! $errors->first('id_modulo', '<div class="invalid-feedback">:message</div>') !!}
     </select>
+    {!! $errors->first('id_modulo', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label class="control-label" for="ced_profesor"> {{ 'Profesor' }}</label>
@@ -21,8 +21,8 @@
         @foreach ($profesores as $profesor)
             <option value="{{ $profesor->cedula }}">{{ $profesor->nombre }} </>
         @endforeach
-        {!! $errors->first('ced_profesor', '<div class="invalid-feedback">:message</div>') !!}
     </select>
+    {!! $errors->first('ced_profesor', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label class="control-label" for="fecha_inicio"> Fecha Inicio </label> </br>
@@ -43,13 +43,15 @@
         @foreach ($cohortes as $cohorte)
             <option value="{{ $cohorte->id }}">{{ $cohorte->nombre }} </>
         @endforeach
-        {!! $errors->first('id_cohorte', '<div class="invalid-feedback">:message</div>') !!}
     </select>
+    {!! $errors->first('id_cohorte', '<div class="invalid-feedback">:message</div>') !!}
 </div>
-<div class="form-group">
+<div class="row">
+<div class="col-10">
     <input class="btn btn-primary" type="submit" value="{{ $Modo == 'Crear' ? 'Agregar Curso' : 'Editar Curso' }}">
 
 </div>
-<div class="form-group">
-    <a class="btn btn-secondary" href="{{ url('cursos/listcursos') }}">Lista de Cursos</a>
+<div class="col-2">
+    <a class="btn btn-secondary" href="{{ url('cursos/listcursos') }}">Volver</a>
+</div>
 </div>

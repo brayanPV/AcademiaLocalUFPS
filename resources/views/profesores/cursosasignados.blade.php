@@ -33,12 +33,20 @@
                         <td class="col-md-auto">{{ $curso->fecha_fin }}</td>
                         <td class="col-md-auto">{{ $curso->nombre }}</td>
                         @if (Auth::check() && Auth::user()->hasrole('profesor'))
-                            <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                    href="{{ url('/cursos/' . $curso->id . '/edit') }}" style="display: inline"> Editar </a>
+                            <td class="d-flex justify-content-center">
+                                <form method="post" action="{{ url('/materialapoyo/listmaterial') }}" style="display: inline">
+                                    @csrf
+                                    <div class="form-group">
+                                        <input class="form-control" type="hidden" name="id" id="id" value="{{$curso->id }}">
+                                    </div>
+                                    <input class="btn btn-success p-1" type="submit" value="Material">
+                                </form>
 
-                                <a class="bnt btn-info" role="button"
-                                    href="{{ url('/profesores/' . $curso->id . '/cursoestudiantes') }}"
-                                    style="display: inline">Estudiantes</a>
+
+                                <p> ⠀ </p>
+                                <a class="btn btn-info p-1" href="{{ url('/profesores/' . $curso->id . '/cursoestudiantes') }}"
+                                    style="display: inline"> Estudiantes </a>
+
                             </td>
                         @endif
                     </tr>

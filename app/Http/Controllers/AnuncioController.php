@@ -17,7 +17,7 @@ class AnuncioController extends Controller
     {
        
         $anuncios = Anuncio::get(); //->where('tipo', 0)->sortBy('id');
-        return view('anuncios.carouselanuncios', compact('anuncios'));
+        return view('anuncios/carouselanuncios', compact('anuncios'));
     }
 
     /**
@@ -29,7 +29,7 @@ class AnuncioController extends Controller
     {
         //
 
-        return view('anuncios.create');
+        return view('anuncios/create');
     }
 
     public function AnunciosPrincipales()
@@ -138,6 +138,6 @@ class AnuncioController extends Controller
         if (Storage::delete('public/' . $anuncio->img1)) {
             Anuncio::destroy($id);
         }
-        return redirect('anuncios')->with('Mensaje', 'Anuncio eliminado con exito');
+        return redirect('anuncios/listanuncio')->with('Mensaje', 'Anuncio eliminado con exito');
     }
 }

@@ -1,7 +1,7 @@
 <div class="form-group">
     <label for="id_cisco"> {{ 'Id Cisco' }}</label>
     <input class="form-control {{ $errors->has('id_cisco') ? 'is-invalid' : '' }}" type="text" name="id_cisco" id="id_cisco"
-        value="{{ isset($cohortes->id_cisco) ? $cohortes->id_cisco : old('id_cisco') }}">
+        value="{{ isset($cohortes->id_cisco) ? $cohortes->id_cisco : old('id_cisco') }}" placeholder="{{ isset($cohortes->id_cisco) ? $cohortes->id_cisco : 'UFPS_CCNA' }}">
     {!! $errors->first('id_cisco', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
@@ -30,15 +30,16 @@
         @foreach ($tipoCertificacion as $tipo)
             <option value="{{ $tipo->id }}">{{ $tipo->nombre }} </>
         @endforeach
-        {!! $errors->first('Id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
     </select>
+    {!! $errors->first('Id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
 </div>
-
-<div class="form-group">
+<div class="row">
+    <div class="col-10">
     <input class="btn btn-primary" type="submit"
         value="{{ $Modo == 'Crear' ? 'Agregar Cohorte' : 'Editar Cohorte' }}">
 
 </div>
-<div class="form-group">
+<div class="col-2">
     <a class="btn btn-secondary" href="{{ url('cohortes/listcohortes') }}">Volver</a>
 </div>
+ </div>

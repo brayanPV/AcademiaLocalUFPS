@@ -6,8 +6,9 @@
 </div>
 <div class="form-group">
     <label for="descripcion"> {{ 'Descripcion' }}</label>
-    <input class="form-control {{ $errors->has('descripcion') ? 'is-invalid' : '' }}" type="textarea" name="descripcion" id="descripcion"
-        value="{{ isset($grupoInvestigacion->descripcion) ? $grupoInvestigacion->descripcion : old('descripcion') }}"> 
+    <input class="form-control {{ $errors->has('descripcion') ? 'is-invalid' : '' }}" type="textarea" name="descripcion"
+        id="descripcion"
+        value="{{ isset($grupoInvestigacion->descripcion) ? $grupoInvestigacion->descripcion : old('descripcion') }}">
     {!! $errors->first('descripcion', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
@@ -21,12 +22,13 @@
         {!! $errors->first('ced_prof_director', '<div class="invalid-feedback">:message</div>') !!}
     </select>
 </div>
+<div class="row">
+    <div class="col-10">
+        <input class="btn btn-primary" type="submit"
+            value="{{ $Modo == 'Crear' ? 'Agregar grupo de investigacion' : 'Editar grupo de investigacion' }}">
 
-<div class="form-group">
-    <input class="btn btn-primary" type="submit"
-        value="{{ $Modo == 'Crear' ? 'Agregar grupo de investigacion' : 'Editar grupo de investigacion' }}">
-
-</div>
-<div class="form-group">
-    <a class="btn btn-secondary" href="{{ url('gruposinvestigacion/listgruposinvestigacion') }}">Volver</a>
+    </div>
+    <div class="col-2">
+        <a class="btn btn-secondary" href="{{ url('gruposinvestigacion/listgruposinvestigacion') }}">Volver</a>
+    </div>
 </div>

@@ -25,9 +25,9 @@
             <tbody>
                 @forelse ($tipoNotas as $tipo)
                     <tr>
-                        <td class="col"> {{ $tipo->nombre }}</td>
-                        <td class="col">{{ $tipo->tc_nombre }}</td>
-                        <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
+                        <td class="col-md-auto"> {{ $tipo->nombre }}</td>
+                        <td class="col-md-auto">{{ $tipo->tc_nombre }}</td>
+                        <td class="d-flex justify"> <a class="btn btn-primary" role="button"
                                 href="{{ url('/tiponotas/' . $tipo->id . '/edit') }}"> Editar </a>
                             <form method="post" action="{{ url('/tiponotas/' . $tipo->id) }}" style="display: inline">
                                 @csrf

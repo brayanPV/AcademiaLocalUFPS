@@ -32,11 +32,11 @@
             <tbody>
                 @forelse ($cohortes as $cohorte)
                     <tr>
-                        <td class="col"> {{ $cohorte->id_cisco }}</td>
-                        <td class="col">{{ $cohorte->nombre }}</td>
-                        <td class="col">{{ $cohorte->fecha_inicio }}</td>
-                        <td class="col">{{ $cohorte->fecha_fin }}</td>
-                        <td class="col">{{ $cohorte->tc_nombre }}</td>
+                        <td class="col-md-auto"> {{ $cohorte->id_cisco }}</td>
+                        <td class="col-md-auto">{{ $cohorte->nombre }}</td>
+                        <td class="col-md-auto">{{ $cohorte->fecha_inicio }}</td>
+                        <td class="col-md-auto">{{ $cohorte->fecha_fin }}</td>
+                        <td class="col-md-auto">{{ $cohorte->tc_nombre }}</td>
                         @if (Auth::check() && Auth::user()->hasrole('administrador')) <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
                                 href="{{ url('/cohortes/' . $cohorte->id . '/edit') }}"> Editar </a>
                             <form method="post" action="{{ url('/cohortes/' . $cohorte->id) }}">

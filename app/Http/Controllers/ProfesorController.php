@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArchivoCurso;
 use Illuminate\Http\Request;
 use App\Models\Profesor;
 use App\Models\Persona;
@@ -58,6 +59,37 @@ class ProfesorController extends Controller
     }
 
 
+    public function verMaterialApoyo(Request $request)
+    {
+        $material = ArchivoCurso::select('a.nombre', 'a.url', 'a.descripcion', 'a.id', 'a.id_curso')
+            ->from('archivo_curso as a')
+            ->where('a.id_curso', $request->input('id'))->get();
+
+        return view('materialapoyo/listmaterial', compact('material'));
+    }
+
+    public function createMaterialApoyo(Request $request)
+    {   $material = ArchivoCurso::findOrFail($request->input('id'));
+        return view('materialapoyo/create', compact('material'));
+    }
+
+    public function storeMaterialApoyo(Request $request){
+
+        $datos=[
+            'nombre' => 'required|string',
+            'url' => 'required|file|mimes:zip,rar,png,jpg,jpeg,pptx,pdf,docx,doc,pkt',
+        ];
+        $mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datos, $mensaje);
+        $datos= request()->except(['_token', '_method']);
+
+    }
+
+    public function editMaterialApoyo($id)
+    {
+        $material = ArchivoCurso::findOrFail($id);
+        return view('materialapoyo/edit', compact('material'));
+    }
 
     public function verEstudiantesCursos($id)
     {
@@ -82,27 +114,28 @@ class ProfesorController extends Controller
     public function agregarObservacion($curso, $estudiante)
     {
         $estudiante = CursoEstudiante::select('ce.id_curso', 'ce.ced_estudiante', 'ce.observaciones', 'p.nombre', 'c.id_cisco', 'm.nombre as modulo')
-        ->from('curso_estudiante as ce')
-        ->join('curso as c', function($join){
-            $join->on('c.id', '=', 'ce.id_curso');
-        })
-        ->join('modulo as m', function($join){
-            $join->on('m.id', '=', 'c.id_modulo');
-        })
-        ->join('persona as p', function($join){
-            $join->on('p.cedula', '=', 'ce.ced_estudiante');
-        })
-        ->where([
-            ['id_curso', $curso],
-            ['ced_estudiante', $estudiante]
-        ])->first();
+            ->from('curso_estudiante as ce')
+            ->join('curso as c', function ($join) {
+                $join->on('c.id', '=', 'ce.id_curso');
+            })
+            ->join('modulo as m', function ($join) {
+                $join->on('m.id', '=', 'c.id_modulo');
+            })
+            ->join('persona as p', function ($join) {
+                $join->on('p.cedula', '=', 'ce.ced_estudiante');
+            })
+            ->where([
+                ['id_curso', $curso],
+                ['ced_estudiante', $estudiante]
+            ])->first();
 
         return view('profesores/agregarobservacion', compact('estudiante'));
     }
 
-    
 
-    public function observacionUpdate(Request $request, $id_curso){
+
+    public function observacionUpdate(Request $request, $id_curso)
+    {
         $curso = DB::select('select m.nombre
         from curso c
         inner join modulo m
@@ -144,12 +177,11 @@ class ProfesorController extends Controller
             'cedula' => 'required',
             'cod_profesor' => 'required|max:10',
             'id_cisco' => 'required',
-            'password' => 'required|string|max:20|confirmed',
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         if (Persona::where('cedula', $request->input('cedula'))->first() == null) {
             $this->validate($request, $datosPer, $mensaje);
-            $datosPersona = request()->except(['_token', '_method', 'updated_at', 'cod_profesor', 'password', 'id_cisco', 'password_confirmation']);
+            $datosPersona = request()->except(['_token', '_method', 'updated_at', 'cod_profesor', 'id_cisco']);
             Persona::insert($datosPersona);
         } else {
             $mensajep = ' esta persona ya existia en el sistema';
@@ -158,11 +190,11 @@ class ProfesorController extends Controller
             return redirect('profesores/create')->with('Mensaje', 'Este profesor ya existe en el sistema, verfique sus datos');
         }
         $this->validate($request, $datosPer, $mensaje);
-        $datosProfesor = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'password_confirmation', 'correo']);
+        $datosProfesor = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel',  'correo']);
         Profesor::insert($datosProfesor);
-        User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password'))]);
+        User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('cedula'))]);
         $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
-        $user->roles()->sync([2,3]);
+        $user->roles()->sync([2, 3]);
         //$user->roles()->sync([2]);
         return redirect('profesores/listprofesores')->with('Mensaje', 'Profesor agregado con exito'  . $mensajep);
     }
@@ -204,6 +236,26 @@ class ProfesorController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $mensajep = '';
+        $datosPer = [
+            'nombre' => 'required|max:50|string',
+            'direccion' => 'required|max:50',
+            'telcel' => 'required|max:20',
+            'cedula' => 'required',
+            'cod_profesor' => 'required|max:10',
+            'id_cisco' => 'required',
+        ];
+        $mensaje = ["required" => 'El :attribute es requerido'];
+
+        $this->validate($request, $datosPer, $mensaje);
+        $datosPersona = request()->except(['_token', '_method', 'updated_at', 'cod_profesor', 'id_cisco']);
+        Persona::where('cedula', $request->input('cedula'))->update($datosPersona);
+
+
+        $this->validate($request, $datosPer, $mensaje);
+        $datosProfesor = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel',  'correo']);
+        Profesor::where('cedula', $request->input('cedula'))->update($datosProfesor);
+        return redirect('profesores/listprofesores')->with('Mensaje', 'Profesor agregado con exito'  . $mensajep);
     }
 
     /**

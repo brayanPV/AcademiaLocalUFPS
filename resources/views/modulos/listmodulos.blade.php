@@ -28,10 +28,10 @@
             <tbody>
                 @forelse ($modulos as $modulo)
                     <tr>
-                        <td class="col-2">{{ $modulo->numero }}</td>
-                        <td class="col-3">{{ $modulo->nombre }}</td>
-                        <td class="col-3">{{ $modulo->nombre_certificacion }}</td>
-                        <td class="col-3 justify-content-center"> <a href="{{ $modulo->url1 }}" target="_blank"> {{ $modulo->url1 }} </a> <br> <a href="{{ $modulo->url2 }}" target="_blank"> {{ $modulo->url2 }} </a></td>
+                        <td class="col-md-auto">{{ $modulo->numero }}</td>
+                        <td class="col-md-auto">{{ $modulo->nombre }}</td>
+                        <td class="col-md-auto">{{ $modulo->nombre_certificacion }}</td>
+                        <td class="col-md-auto justify-content-center"> <a href="{{ $modulo->url1 }}" target="_blank"> {{ $modulo->url1 }} </a> <br> <a href="{{ $modulo->url2 }}" target="_blank"> {{ $modulo->url2 }} </a></td>
                         <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
                                 href="{{ url('/modulos/' . $modulo->id . '/edit') }}"> Editar </a>
                             <form method="post" action="{{ url('/modulos/' . $modulo->id) }}" style="display: inline">

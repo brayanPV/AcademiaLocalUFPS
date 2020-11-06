@@ -53,16 +53,6 @@ class EstudianteController extends Controller
 
     public function verCursosAsignados($id)
     {
-
-        /*$administradores = DB::select('select u.cedula, p.nombre, p.telfijo, p.telcel, p.correo, p.direccion
-        from role_user ru
-        inner join users u
-        on u.id = ru.user_id
-        inner join roles r
-        on r.id = ru.role_id
-        and r.nombre = ?
-        inner join persona p
-        on u.cedula = p.cedula', ['administrador']);*/
         $cursos = DB::select('select m.nombre, tc.nombre as nombrec, m.url1, m.url2
         from modulo m
         inner join tipo_certificacion tc
@@ -91,26 +81,25 @@ class EstudianteController extends Controller
             'direccion' => 'required|max:50',
             'telcel' => 'required|max:20',
             'cedula' => 'required',
-            'cod_estudiante' => 'required',
             'id_cisco' => 'required',
             'id_tipo_certificacion' => 'required',
-            'password' => 'required|string|max:20|confirmed',
+            'cod_estudiante' => 'string',
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         if (Persona::where('cedula', $request->input('cedula'))->first() == null) {
             $this->validate($request, $datosPer, $mensaje);
-            $datosPersona = request()->except(['_token', '_method', 'updated_at', 'cod_estudiante', 'id_cisco', 'password', 'id_tipo_certificacion', 'password_confirmation']);
+            $datosPersona = request()->except(['_token', '_method', 'updated_at', 'cod_estudiante', 'id_cisco', 'id_tipo_certificacion']);
             Persona::insert($datosPersona);
         } else {
             $mensajep = ' esta persona ya existia en el sistema';
         }
         if (Estudiante::where('cedula', $request->input('cedula'))->first() != null) {
-            return redirect('estudiantes/create')->with('Mensaje', 'Este profesor ya existe en el sistema, verfique sus datos');
+            return redirect('estudiantes/create')->with('Mensaje', 'Este estudiante ya existe en el sistema, verfique sus datos');
         }
         $this->validate($request, $datosPer, $mensaje);
-        $datosEstudiante = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'password_confirmation', 'correo']);
+        $datosEstudiante = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'correo']);
         Estudiante::insert($datosEstudiante);
-        User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password'))]);
+        User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('cedula'))]);
         $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
         $user->roles()->sync(Role::where('nombre', 'estudiante')->first());
         return redirect('estudiantes/listestudiantes')->with('Mensaje', 'Estudiante agregado con exito'  . $mensajep);
@@ -135,7 +124,11 @@ class EstudianteController extends Controller
      */
     public function edit($id)
     {
-        //
+        //Persona::where('cedula', $request->input('cedula'))->first()
+        $estudiantes = Estudiante::where('cedula', $id)->first();
+        $personas = Persona::where('cedula', $id)->first();
+        $tipoCertificacion = TipoCertificacion::get();
+        return view('estudiantes/edit', compact(['estudiantes', 'personas', 'tipoCertificacion']));
     }
 
     /**
@@ -147,7 +140,26 @@ class EstudianteController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $mensajep = '';
+        $datosPer = [
+            'nombre' => 'required|max:50|string',
+            'direccion' => 'required|max:50',
+            'telcel' => 'required|max:20',
+            'cedula' => 'required',
+            'id_cisco' => 'required',
+            'cod_estudiante' => 'string',
+        ];
+        $mensaje = ["required" => 'El :attribute es requerido'];
+
+        $this->validate($request, $datosPer, $mensaje);
+        $datosPersona = request()->except(['_token', '_method', 'updated_at', 'cod_estudiante', 'id_cisco', 'id_tipo_certificacion']);
+        Persona::where('cedula', $id)->update($datosPersona);
+
+        $this->validate($request, $datosPer, $mensaje);
+        $datosEstudiante = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'correo']);
+        Estudiante::where('cedula', $id)->update($datosEstudiante);
+        return redirect('estudiantes/listestudiantes')->with('Mensaje', 'Estudiante agregado con exito'  . $mensajep);
     }
 
     /**

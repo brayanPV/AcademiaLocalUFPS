@@ -1,7 +1,8 @@
 <div class="form-group">
     <label for="cedula"> {{ 'Cedula' }}</label>
     <input class="form-control {{ $errors->has('cedula') ? 'is-invalid' : '' }}" type="number" name="cedula" id="cedula"
-        value="{{ isset($estudiantes->cedula) ? $estudiantes->cedula : old('cedula') }}">
+        value="{{ isset($estudiantes->cedula) ? $estudiantes->cedula : old('cedula') }}" {{ $Modo == 'Crear' ?: 'readonly' }}>
+    
     {!! $errors->first('cedula', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
@@ -49,6 +50,7 @@
 </div>
 <div class="form-group">
     <label for="modulo" class="control-label"> {{ 'Modulo ' }}</label>
+    @if($Modo == 'Crear')
     <select name="id_tipo_certificacion" id="id_tipo_certificacion" class="form-control {{ $errors->has('id_tipo_certificacion') ? 'is-invalid' : '' }}">
         <option value="">Seleccione</option>
         @foreach ($tipoCertificacion as $tipo)
@@ -56,39 +58,17 @@
         @endforeach
         {!! $errors->first('id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
     </select>
+    @else 
+    <input type="text" class="form-control" value="{{$estudiantes->id_tipo_certificacion}}" readonly>
+    @endif
 </div>
-
-<div class="form-group row">
-    <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-    <div class="col-md-6">
-        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-            name="password" required autocomplete="new-password">
-
-        @error('password')
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
-        @enderror
-    </div>
-</div>
-
-<div class="form-group row">
-    <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-    <div class="col-md-6">
-        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required
-            autocomplete="new-password">
-    </div>
-</div>
-
 
 <div class="row">
     <div class="col-10">
         <input class="btn btn-primary" type="submit"
-            value="{{ $Modo == 'Crear' ? 'Agregar Profesor' : 'Editar Modulo' }}">
+            value="{{ $Modo == 'Crear' ? 'Agregar Estudiante' : 'Editar Esutidante' }}">
     </div>
     <div class="col-2">
-        <a class="btn btn-secondary" inl href="{{ url('profesores/listprofesores') }}">Volver</a>
+        <a class="btn btn-secondary" inl href="{{ url('estudiantes/listestudiantes') }}">Volver</a>
     </div>
 </div>

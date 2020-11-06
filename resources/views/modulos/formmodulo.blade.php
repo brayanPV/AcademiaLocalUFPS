@@ -18,8 +18,8 @@
         @foreach ($tipoCertificacion as $tipo)
             <option value="{{ $tipo->id }}">{{ $tipo->nombre }} </>
         @endforeach
-        {!! $errors->first('id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
-    </select>
+     </select>
+     {!! $errors->first('id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label for="url1"> {{ 'Url 1' }}</label>

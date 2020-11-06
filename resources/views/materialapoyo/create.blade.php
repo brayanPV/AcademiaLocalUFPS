@@ -11,16 +11,15 @@
         <div class="row justify-content-center">
             <div class="card col-6">
                 <div class="card-header">
-                    <h2>Crear tipo de nota</h2>
+                    <h2>Crear Archivo</h2>
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('/tiponotas') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ url('/materialapoyo') }}" method="post" enctype="multipart/form-data">
                         @csrf
-                        @include('tiponotas.formtiponotas', ['Modo'=>'Crear'])
+                        @include('materialapoyo.formmaterial', ['Modo'=>'Crear'])
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
 @endsection

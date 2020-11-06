@@ -31,7 +31,7 @@ class CursoController extends Controller
                 $join->on('m.id', '=', 'c.id_modulo');
             })
             ->get();
-        return view('cursos.carouselcursos', compact('cursos'));
+        return view('cursos/carouselcursos', compact('cursos'));
     }
 
     public function listCursos()
@@ -50,7 +50,7 @@ class CursoController extends Controller
             ->join('cohorte as co', function ($join) {
                 $join->on('co.id', '=', 'c.id_cohorte');
             })->orderBy('id_cisco','asc')->paginate(5);
-        return view('cursos.listcursos', compact('cursos'));
+        return view('cursos/listcursos', compact('cursos'));
     }
 
     /**
@@ -66,9 +66,10 @@ class CursoController extends Controller
         ->from('profesor as p')
         ->join('persona as per', function($join){
             $join->on('p.cedula','=','per.cedula');
-        })->get();
+        })
+        ->where('p.estado', '=', '0')->get();
         $cohortes = Cohorte::get();
-        return view('cursos.create', compact(['modulos','profesores', 'cohortes']));
+        return view('cursos/create', compact(['modulos','profesores', 'cohortes']));
     }
 
     /**
@@ -121,9 +122,10 @@ class CursoController extends Controller
         ->from('profesor as p')
         ->join('persona as per', function($join){
             $join->on('p.cedula','=','per.cedula');
-        })->get();
+        })
+        ->where('p.estado', '=', '0')->get();
         $cohortes = Cohorte::get();
-        return view('cursos.edit', compact(['curso','modulos','profesores', 'cohortes']));
+        return view('cursos/edit', compact(['curso','modulos','profesores', 'cohortes']));
     }
 
     /**
@@ -160,10 +162,7 @@ class CursoController extends Controller
     public function destroy($id)
     {
         //
-        $curso = Curso::findOrFail($id);
-        if (Storage::delete('public/' . $curso->imagen)) {
-            Anuncio::destroy($id);
-        }
+        Curso::destroy($id);
         return redirect('cursos/listcursos')->with('Mensaje', 'Curso eliminado con exito');
     }
 }

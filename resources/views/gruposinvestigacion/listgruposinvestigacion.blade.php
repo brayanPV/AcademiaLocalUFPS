@@ -26,9 +26,9 @@
             <tbody>
                 @forelse ($grupoInvestigacion as $grupo)
                     <tr>
-                        <td class="col"> {{ $grupo->nombre }}</td>
-                        <td class="col">{{ $grupo->descripcion }}</td>
-                        <td class="col">{{ $grupo->nombre_pro }}</td>
+                        <td class="col-md-auto"> {{ $grupo->nombre }}</td>
+                        <td class="col-md-auto">{{ $grupo->descripcion }}</td>
+                        <td class="col-md-auto">{{ $grupo->nombre_pro }}</td>
                         <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
                                 href="{{ url('/gruposinvestigacion/' . $grupo->id . '/edit') }}"> Editar </a>
                             <form method="post" action="{{ url('/gruposinvestigacion/' . $grupo->id) }}" style="display: inline">

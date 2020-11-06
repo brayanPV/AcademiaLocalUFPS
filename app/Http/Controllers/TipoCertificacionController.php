@@ -7,6 +7,7 @@ use App\Models\Curso;
 use App\Models\Anuncio;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TipoCertificacionController extends Controller
 {
@@ -138,6 +139,8 @@ class TipoCertificacionController extends Controller
     public function edit($id)
     {
         //
+        $certificaciones = TipoCertificacion::findOrFail($id);
+        return view('certificaciones/edit', compact('certificaciones'));
     }
 
     /**
@@ -146,10 +149,27 @@ class TipoCertificacionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     *
      */
     public function update(Request $request, $id)
     {
-        //
+        //'nombre' => 'required|unique:cohorte,nombre,'.$id,
+        $datos = [
+            'nombre' => 'required|String|max:50|unique:tipo_certificacion,nombre,'.$id
+        ];
+        if ($request->hasFile('imagen')) {
+            $datos +=['imagen' => 'required|max:10000|mimes:jpeg,png,jpg'];
+        }
+        $Mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datos, $Mensaje);
+        $datosCertificacion = request()->except(['_token', '_method', 'updated_at']);
+        if ($request->hasFile('imagen')) {
+            $certificacion = TipoCertificacion::findOrFail($id);
+            Storage::delete('public/' . $certificacion->imagen);
+            $datosCertificacion['imagen'] = $request->file('imagen')->store('uploads', 'public');
+        }
+        TipoCertificacion::where('id', $id)->update($datosCertificacion);
+        return redirect('certificaciones/listcertificaciones')->with('Mensaje', 'Certificacion editada con exito');
     }
 
     /**
