@@ -10,7 +10,7 @@
         <div class="alert alert-primary" role="alert">
             <h2>Gestion de Modulos</h2>
         </div>
-        <a class="btn btn-success" href="{{ url('/modulos/create') }}"> Agregar Modulo</a>
+        <a class="btn btn-success" href="{{ url('/modulos/create') }}"><i class="fas fa-plus-circle"></i> Agregar Modulo</a>
 
     </div>
     <div class="container">
@@ -31,14 +31,14 @@
                         <td class="col-md-auto">{{ $modulo->numero }}</td>
                         <td class="col-md-auto">{{ $modulo->nombre }}</td>
                         <td class="col-md-auto">{{ $modulo->nombre_certificacion }}</td>
-                        <td class="col-md-auto justify-content-center"> <a href="{{ $modulo->url1 }}" target="_blank"> {{ $modulo->url1 }} </a> <br> <a href="{{ $modulo->url2 }}" target="_blank"> {{ $modulo->url2 }} </a></td>
+                        <td class="col-md-auto justify-content-center"> <a href="{{ $modulo->url1 }}" target="_blank"> <i class="fas fa-external-link-square-alt"></i>{{ $modulo->url1 }} </a> <br> <a href="{{ $modulo->url2 }}" target="_blank"><i class="fas fa-external-link-square-alt"></i> {{ $modulo->url2 }} </a></td>
                         <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                href="{{ url('/modulos/' . $modulo->id . '/edit') }}"> Editar </a>
+                                href="{{ url('/modulos/' . $modulo->id . '/edit') }}"> <i class="fas fa-edit"></i> Editar </a> <p>⠀</p>
                             <form method="post" action="{{ url('/modulos/' . $modulo->id) }}" style="display: inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('¿Esta seguro que desea eliminar el modulo?    ');">Borrar </button>
+                                    onclick="return confirm('¿Esta seguro que desea eliminar el modulo?    ');"><i class="fas fa-trash"></i> Borrar </button>
                             </form>
 
                         </td>

@@ -1,0 +1,13 @@
+input[type=submit] {
+    border: none;
+    background-color: red;
+}
+
+.fa-book {
+    color: red;
+}
+
+#submit-group {
+    border: 1px gray solid;
+    padding: 10px;
+}

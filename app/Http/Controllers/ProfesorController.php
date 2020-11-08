@@ -58,37 +58,71 @@ class ProfesorController extends Controller
         return view('profesores/cursosasignados', compact('cursos'));
     }
 
+    public function showMaterial($id){
+        $material = ArchivoCurso::select('a.nombre', 'a.url', 'a.descripcion', 'a.id', 'a.id_curso')
+            ->from('archivo_curso as a')
+            ->where('a.id_curso', $id)->get();
+        $curso = Curso::where('id', $id)->first();
+        return view('materialapoyo/listmaterial', compact(['material', 'curso']));
+    }
 
     public function verMaterialApoyo(Request $request)
     {
         $material = ArchivoCurso::select('a.nombre', 'a.url', 'a.descripcion', 'a.id', 'a.id_curso')
             ->from('archivo_curso as a')
             ->where('a.id_curso', $request->input('id'))->get();
-
-        return view('materialapoyo/listmaterial', compact('material'));
+        $curso = Curso::where('id', $request->input('id'))->first();
+        return view('materialapoyo/listmaterial', compact(['material', 'curso']));
     }
 
     public function createMaterialApoyo(Request $request)
-    {   $material = ArchivoCurso::findOrFail($request->input('id'));
-        return view('materialapoyo/create', compact('material'));
+    {
+        $curso = Curso::findOrFail($request->input('id'));
+        return view('materialapoyo/create', compact('curso'));
     }
 
-    public function storeMaterialApoyo(Request $request){
+    /*
+ $campos = [
+            'tipo' => 'required',
+            'nombre' => 'required|string|max:100',
+            'url' => 'required|url|max:200',
+            'img1' => 'required|max:10000|mimes:jpeg,png,jpg'
+        ];
 
-        $datos=[
+        $Mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $campos, $Mensaje);
+
+        $datosAnuncio = request()->except('_token');
+        if ($request->hasFile('img1')) {
+            $datosAnuncio['img1'] = $request->file('img1')->store('uploads', 'public');
+        }
+        Anuncio::insert($datosAnuncio);
+        return redirect('anuncios/listanuncio')->with('Mensaje', 'Anuncio agregado con exito');
+        */
+
+    public function storeMaterialApoyo(Request $request)
+    {
+        $datos = [
             'nombre' => 'required|string',
             'url' => 'required|file|mimes:zip,rar,png,jpg,jpeg,pptx,pdf,docx,doc,pkt',
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $datos, $mensaje);
-        $datos= request()->except(['_token', '_method']);
-
+        $datos = request()->except(['_token', '_method']);
+        if ($request->hasFile('url')) {
+            $name = $request->file('url')->getClientOriginalName();
+            $datos['url'] = $request->file('url')->storeAs('/', $name, 'upload');
+        }
+        ArchivoCurso::insert($datos);
+        return $this->showMaterial($request->input('id_curso'));
+        //return redirect('materialapoyo/listmaterial');
     }
 
-    public function editMaterialApoyo($id)
+    public function editMaterialApoyo(Request $request, $id)
     {
         $material = ArchivoCurso::findOrFail($id);
-        return view('materialapoyo/edit', compact('material'));
+        $curso = Curso::findOrFail($request->input('id_curso'));
+        return view('materialapoyo/edit', compact(['material', 'curso']));
     }
 
     public function verEstudiantesCursos($id)

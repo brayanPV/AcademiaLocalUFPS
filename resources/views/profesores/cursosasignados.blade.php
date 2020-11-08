@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+    
     <div class="container">
         <div class="alert alert-primary" role="alert">
             <h2>Cursos Asignados</h2>
@@ -9,6 +10,7 @@
 
     </div>
     <div class="container">
+       
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -34,18 +36,21 @@
                         <td class="col-md-auto">{{ $curso->nombre }}</td>
                         @if (Auth::check() && Auth::user()->hasrole('profesor'))
                             <td class="d-flex justify-content-center">
-                                <form method="post" action="{{ url('/materialapoyo/listmaterial') }}" style="display: inline">
+                                <form method="post" action="{{ url('/materialapoyo/listmaterial') }}" class="form">
                                     @csrf
-                                    <div class="form-group">
-                                        <input class="form-control" type="hidden" name="id" id="id" value="{{$curso->id }}">
+                                    <input class="form-control" type="hidden" name="id" id="id" value="{{ $curso->id }}">
+                                    <div class="input-group" id="submit-group" >
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-book"></i> Material
+                                        </button>
                                     </div>
-                                    <input class="btn btn-success p-1" type="submit" value="Material">
                                 </form>
 
 
                                 <p> ⠀ </p>
+
                                 <a class="btn btn-info p-1" href="{{ url('/profesores/' . $curso->id . '/cursoestudiantes') }}"
-                                    style="display: inline"> Estudiantes </a>
+                                    style="display: inline"><i class="fas fa-users"></i> Estudiantes </a>
 
                             </td>
                         @endif

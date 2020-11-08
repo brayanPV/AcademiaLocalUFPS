@@ -11,7 +11,7 @@
             <div class="alert alert-primary" role="alert">
                 <h2>Gestion de profesores</h2>
             </div>
-            <a class="btn btn-success" href="{{ url('/profesores/create') }}"> Agregar profesor</a>
+            <a class="btn btn-success" href="{{ url('/profesores/create') }}"><i class="fas fa-user-plus"></i> Agregar profesor</a>
 
             <table class="table table-hover">
                 <thead>
@@ -46,21 +46,21 @@
                                     Inactivo
                                 @endif
                             </td>
-                            <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                    href="{{ url('/profesores/' . $profesor->cedula . '/edit') }}"> Editar </a>
+                            <td class="d-flex"> <a class="btn btn-primary" role="button"
+                                    href="{{ url('/profesores/' . $profesor->cedula . '/edit') }}"data-toggle="tooltip" title="Editar"> <i class="fas fa-user-edit" ></i>  </a> <p>⠀</p> 
                                 <form method="post" action="{{ url('/profesores/' . $profesor->cedula) }}"
                                     style="display: inline">
                                     @csrf
                                     @method('DELETE')
                                     @if ($profesor->estado == 0)
                                         <input type="hidden" value="1" id="estado" name="estado">
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('¿Esta seguro que desea desactivar este profesor?');">Desactivar
+                                        <button type="submit" class="btn btn-success"
+                                            onclick="return confirm('¿Esta seguro que desea desactivar este profesor?');" data-toggle="tooltip" title="Desactivar"><i class="fas fa-toggle-on"></i>   
                                         </button>
                                     @else
                                         <input type="hidden" value="0" id="estado" name="estado">
                                         <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('¿Esta seguro que desea activar este profesor?');">Activar
+                                            onclick="return confirm('¿Esta seguro que desea activar este profesor?');" data-toggle="tooltip" title="Activar"><i class="fas fa-toggle-off"></i> 
                                         </button>
                                     @endif
 

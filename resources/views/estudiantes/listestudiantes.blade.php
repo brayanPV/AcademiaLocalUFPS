@@ -11,7 +11,7 @@
             <div class="alert alert-primary" role="alert">
                 <h2>Gestion de estudiantes</h2>
             </div>
-            <a class="btn btn-success" href="{{ url('/estudiantes/create') }}"> Agregar estudiante</a>
+            <a class="btn btn-success" href="{{ url('/estudiantes/create') }}"><i class="fas fa-user-plus"></i> Agregar estudiante</a>
 
             <table class="table table-hover">
                 <thead>
@@ -36,13 +36,13 @@
                             <td class="col-md-auto">{{ $estudiante->recibo_pago_inscripcion }} <br>
                                 {{ $estudiante->recibo_pago_matricula }} </td>
                             <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                    href="{{ url('/estudiantes/' . $estudiante->cedula . '/edit') }}"> Editar </a>
+                                    href="{{ url('/estudiantes/' . $estudiante->cedula . '/edit') }}"><i class="fas fa-user-edit"></i>  </a> <p>⠀</p> 
                                 <form method="post" action="{{ url('/estudiantes/' . $estudiante->cedula) }}"
                                     style="display: inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger"
-                                        onclick="return confirm('¿Esta seguro que desea eliminar este estudiante?');">Borrar
+                                        onclick="return confirm('¿Esta seguro que desea eliminar este estudiante?');"><i class="fas fa-user-times"></i>
                                     </button>
                                 </form>
 

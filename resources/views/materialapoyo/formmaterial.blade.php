@@ -10,19 +10,17 @@
     {{ isset($material->descripcion) ? $material->descripcion : old('descripcion') }}</textarea>
     {!! $errors->first('descripcion', '<div class="invalid-feedback">:message</div>') !!}
 </div>
-</div>
 <div class="form-group">
     <label for="url"> {{ 'Archivo' }}</label>
     <input class="form-control {{ $errors->has('url') ? 'is-invalid' : '' }}" type="file" name="url" id="url"
         value="{{ isset($material->url) ? $material->url : old('url') }}">
-    <input type="hidden" id="id" name="id" value="{{ $material->id_curso }}">
+    <input type="hidden" id="id_curso" name="id_curso" value="{{ $curso->id }}">
     {!! $errors->first('url', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="row">
     <div class="col-9">
         <input class="btn btn-primary" type="submit"
-            value="{{ $Modo == 'Crear' ? 'Agregar tipo de nota' : 'Editar tipo de nota' }}">
-
+            value="{{ $Modo == 'Crear' ? 'Agregar material' : 'Editar material' }}">
     </div>
     <div class="col-3">
         <button class="btn btn-secondary" onclick="goBack()">Volver</button>

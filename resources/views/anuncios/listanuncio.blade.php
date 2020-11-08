@@ -9,7 +9,7 @@
         <div class="alert alert-primary" role="alert">
             <h2>Gestion de anuncios</h2>
         </div>
-        <a class="btn btn-success" href="{{ url('/anuncios/create') }}"> Agregar Anuncio</a>
+        <a class="btn btn-success" href="{{ url('/anuncios/create') }}"><i class="fas fa-plus-circle"></i> Agregar Anuncio</a>
 
     </div>
     <div class="container">
@@ -31,12 +31,12 @@
                         <td class="col"><a href="{{ $anuncio->url }}">{{ $anuncio->url }} </a></td>
                         <td class="col"> <img src="{{ asset('storage') . '/' . $anuncio->img1 }}" alt="" width="250"></td>
                         <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                href="{{ url('/anuncios/' . $anuncio->id . '/edit') }}"> Editar </a>
+                                href="{{ url('/anuncios/' . $anuncio->id . '/edit') }}"> <i class="fas fa-edit"></i>Editar </a> <p>⠀</p>
                             <form method="post" action="{{ url('/anuncios/' . $anuncio->id) }}" style="display: inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('¿Esta seguro que desea eliminar el anuncio?    ');">Borrar
+                                    onclick="return confirm('¿Esta seguro que desea eliminar el anuncio?    ');"> <i class="fas fa-trash"></i>Borrar
                                 </button>
                             </form>
 

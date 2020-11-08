@@ -8,12 +8,12 @@
                     <h5 class="p-3 mb-2">
                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false"
                             aria-controls="collapseOne">
-                            Gestiona
+                            <i class="fas fa-users-cog"></i>  Gestiona
                         </button>
                     </h5>
                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item list-group-item-action"><a href="{{ url('/administradores/') }}">Administradores </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/administradores/') }}"> Administradores </a></li>
                         <li class="list-group-item list-group-item-action"><a href="{{ url('/anuncios/listanuncio') }}">Anuncios </a></li>
                         <li class="list-group-item list-group-item-action"><a
                                 href="{{ url('/certificaciones/listcertificaciones') }}">Certificaciones
@@ -38,14 +38,13 @@
                 <div class="card pg-4">
                     <h5 class="p-3 mb-2">
                       <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Docencia
+                        <i class="fas fa-chalkboard-teacher"></i>  Docencia
                       </button>
                     </h5>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item list-group-item-action"><a
-                                href="{{ url('/profesores/' . Auth::user()->cedula . '/cursosasignados') }}">Cursos
-                                asignados
+                                href="{{ url('/profesores/' . Auth::user()->cedula . '/cursosasignados') }}">Cursos asignados
                             </a></li>
                     </ul>
                 </div>
@@ -55,7 +54,7 @@
                 <div class="card pg-4">
                   <h5 class="p-3 mb-2">
                     <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                      Estudiante
+                        <i class="fas fa-book"></i>  Estudiante
                     </button>
                   </h5>
                   <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">

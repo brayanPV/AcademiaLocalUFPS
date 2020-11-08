@@ -42,9 +42,9 @@
             name="password" required autocomplete="new-password">
 
         @error('password')
-        <span class="invalid-feedback" role="alert">
-            <strong>{{ $message }}</strong>
-        </span>
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
         @enderror
     </div>
 </div>
@@ -60,11 +60,12 @@
 
 
 <div class="row">
-    <div class="col-10">
-        <input class="btn btn-primary" type="submit"
+    
+    <div class="col-10" id="fontuser">
+        <input class="btn btn-primary " type="submit"
             value="{{ $Modo == 'Crear' ? 'Agregar Administrador' : 'Editar Administrador' }}">
     </div>
     <div class="col-2">
-        <a class="btn btn-secondary" inl href="{{ url('administradores/') }}">Volver</a>
+        <a class="btn btn-secondary" inl href="{{ url('administradores/') }}"> Volver</a>
     </div>
 </div>

@@ -11,7 +11,7 @@
         <div class="alert alert-primary" role="alert">
             <h2>Gestion de Administradores</h2>
         </div>
-        <a class="btn btn-success" href="{{ url('/administradores/create') }}"> Agregar Administrador</a>
+        <a class="btn btn-success" href="{{ url('/administradores/create') }}"> <i class="fas fa-user-plus"></i> Agregar Administrador</a>
 
         <table class="table table-hover">
             <thead>
@@ -28,19 +28,19 @@
             <tbody>
                 @forelse ($administradores as $admin)
                     <tr>
-                        <td class="col">{{ $admin->cedula }}</td>
-                        <td class="col">{{ $admin->nombre }}</td>
-                        <td class="col">{{ $admin->correo }}</td>
-                        <td class="col">{{ $admin->telfijo }}</td>
-                        <td class="col">{{ $admin->telcel }}</td>
-                        <td class="col">{{ $admin->direccion }}</td>
-                        <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                href="{{ url('/administradores/' .$admin->cedula . '/edit') }}"> Editar </a>
+                        <td class="col-md-auto">{{ $admin->cedula }}</td>
+                        <td class="col-md-auto">{{ $admin->nombre }}</td>
+                        <td class="col-md-auto">{{ $admin->correo }}</td>
+                        <td class="col-md-auto">{{ $admin->telfijo }}</td>
+                        <td class="col-md-auto">{{ $admin->telcel }}</td>
+                        <td class="col-md-auto">{{ $admin->direccion }}</td>
+                        <td class="d-flex"> <a class="btn btn-primary" role="button"
+                                href="{{ url('/administradores/' .$admin->cedula . '/edit') }}"> <i class="fas fa-user-edit"></i>  </a> <p>⠀</p>
                             <form method="post" action="{{ url('/administradores/' . $admin->id) }}" style="display: inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('¿Esta seguro que desea eliminar este administrador?');">Borrar
+                                    onclick="return confirm('¿Esta seguro que desea eliminar este administrador?');"> <i class="fas fa-user-times"></i>
                                 </button>
                             </form>
 

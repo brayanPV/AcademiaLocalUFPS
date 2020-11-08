@@ -11,7 +11,7 @@
         <div class="alert alert-primary" role="alert">
             <h2>Gestion de cursos</h2>
         </div>
-        <a class="btn btn-success" href="{{ url('/cursos/create') }}"> Agregar Curso</a>
+        <a class="btn btn-success" href="{{ url('/cursos/create') }}"><i class="fas fa-plus-circle"></i> Agregar Curso</a>
         @else 
         <div class="alert alert-primary" role="alert">
             <h2>Cursos</h2>
@@ -43,12 +43,12 @@
                         <td class="col-md-auto">{{ $curso->nombre }}</td>
                        @if (Auth::check() && Auth::user()->hasrole('administrador'))
                        <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                href="{{ url('/cursos/' . $curso->id . '/edit') }}"> Editar </a>
+                                href="{{ url('/cursos/' . $curso->id . '/edit') }}"><i class="fas fa-edit"></i> Editar </a> <p>⠀</p>
                             <form method="post" action="{{ url('/cursos/' . $curso->id) }}" style="display: inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('¿Esta seguro que desea eliminar el curso?    ');">Borrar </button>
+                                    onclick="return confirm('¿Esta seguro que desea eliminar el curso?    ');"><i class="fas fa-trash"></i> Borrar </button>
                             </form>
 
                         </td>

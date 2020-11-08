@@ -11,7 +11,7 @@
                 <div class="alert alert-primary" role="alert">
                     <h2>Gestion de certificaciones</h2>
                 </div>
-                <a class="btn btn-success" href="{{ url('/certificaciones/create') }}"> Agregar certificacion</a>
+                <a class="btn btn-success" href="{{ url('/certificaciones/create') }}"> <i class="fas fa-plus-circle"></i> Agregar certificacion</a>
             @else
                 <div class="alert alert-primary" role="alert">
                     <h2>Certificaciones</h2>
@@ -41,13 +41,13 @@
                             <td class="col-md-auto">{{ $certificacion->descripcion }}</td>       
                             @if (Auth::check() && Auth::user()->hasrole('administrador'))
                                 <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                        href="{{ url('/certificaciones/' . $certificacion->id . '/edit') }}"> Editar </a>
+                                        href="{{ url('/certificaciones/' . $certificacion->id . '/edit') }}"> <i class="fas fa-edit"></i>Editar </a>
                                     <form method="post" action="{{ url('/certificaciones/' . $certificacion->id) }}"
                                         style="display: inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('¿Esta seguro que desea eliminar la certificacion?    ');">Borrar
+                                            onclick="return confirm('¿Esta seguro que desea eliminar la certificacion?    ');"><i class="fas fa-trash"></i>Borrar
                                         </button>
                                     </form>
                                 </td>

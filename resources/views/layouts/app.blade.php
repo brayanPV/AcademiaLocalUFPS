@@ -15,10 +15,12 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('fontawesome-free/css/fontawesome.min.css') }}">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
+    
 </head>
 
 <body>
@@ -29,9 +31,8 @@
 
                 <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
                     <div class="container">
-                        <a class="navbar-brand" href="{{ url('/') }}" >
-                            <img
-                            src="{{ asset('img/cisco.png') }}" alt="ufps" style="width: 100px"/> Inicio
+                        <a class="navbar-brand"  href="{{ Auth::check() ?  url('/inicio/' . Auth::user()->id) : url('/') }}">
+                            <img src="{{ asset('img/cisco.png') }}" alt="ufps" style="width: 100px" /> Inicio
                         </a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse"
                             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -44,7 +45,8 @@
 
                             <ul class="navbar-nav mr-auto">
                                 <li>
-                                    <a class="navbar-brand" href="{{ url('/certificaciones/card') }}">Certificaciones</a>
+                                    <a class="navbar-brand"
+                                        href="{{ url('/certificaciones/card') }}">Certificaciones</a>
                                 </li>
                                 <li>
                                     <a class="navbar-brand" href="{{ url('/cursos/listcursos') }}">Cursos</a>
@@ -72,7 +74,7 @@
                                 <li class="nav-item">
                                     <div class="dropdown">
                                         <a class="nav-link dropdown-toggle" href="#" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                             CISCO
                                         </a>
                                         <div class="dropdown-menu col" aria-labelledby="dropdownMenuButton">
@@ -103,12 +105,12 @@
                                         </a>
 
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                            <a class="dropdown-item" href="{{ url('/inicio/' . Auth::user()->id ) }}">
+                                            <a class="dropdown-item" href="{{ url('/inicio/' . Auth::user()->id) }}">
                                                 {{ __('Mi espacio') }}
                                             </a>
                                             <a class="dropdown-item" href="{{ route('logout') }}"
                                                 onclick="event.preventDefault();
-                                                                                                         document.getElementById('logout-form').submit();">
+                                                                                                             document.getElementById('logout-form').submit();">
                                                 {{ __('Logout') }}
                                             </a>
 

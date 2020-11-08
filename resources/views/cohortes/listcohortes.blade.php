@@ -10,7 +10,7 @@
             <div class="alert alert-primary" role="alert">
                 <h2>Gestion de cohortes</h2>
             </div>
-            <a class="btn btn-success" href="{{ url('/cohortes/create') }}"> Agregar Cohorte</a>
+            <a class="btn btn-success" href="{{ url('/cohortes/create') }}"><i class="fas fa-plus-circle"></i> Agregar Cohorte</a>
         @else
             <div class="alert alert-primary" role="alert">
                 <h2>Cohortes</h2>
@@ -38,12 +38,12 @@
                         <td class="col-md-auto">{{ $cohorte->fecha_fin }}</td>
                         <td class="col-md-auto">{{ $cohorte->tc_nombre }}</td>
                         @if (Auth::check() && Auth::user()->hasrole('administrador')) <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                href="{{ url('/cohortes/' . $cohorte->id . '/edit') }}"> Editar </a>
+                                href="{{ url('/cohortes/' . $cohorte->id . '/edit') }}"><i class="fas fa-edit"></i> Editar </a> <p>⠀</p>
                             <form method="post" action="{{ url('/cohortes/' . $cohorte->id) }}">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('¿Esta seguro que desea eliminar el cohorte?    ');">Borrar
+                                    onclick="return confirm('¿Esta seguro que desea eliminar el cohorte?    ');"><i class="fas fa-trash"></i> Borrar
                                 </button>
                             </form>
 

@@ -10,7 +10,7 @@
         <div class="alert alert-primary" role="alert">
             <h2>Gestion de tipo de notas</h2>
         </div>
-        <a class="btn btn-success" href="{{ url('/tiponotas/create') }}"> Agregar Tipo de nota</a>
+        <a class="btn btn-success" href="{{ url('/tiponotas/create') }}"><i class="fas fa-plus-circle"></i> Agregar Tipo de nota</a>
 
     </div>
     <div class="container">
@@ -28,12 +28,12 @@
                         <td class="col-md-auto"> {{ $tipo->nombre }}</td>
                         <td class="col-md-auto">{{ $tipo->tc_nombre }}</td>
                         <td class="d-flex justify"> <a class="btn btn-primary" role="button"
-                                href="{{ url('/tiponotas/' . $tipo->id . '/edit') }}"> Editar </a>
+                                href="{{ url('/tiponotas/' . $tipo->id . '/edit') }}"> <i class="fas fa-edit"></i> Editar </a> <p>⠀</p>
                             <form method="post" action="{{ url('/tiponotas/' . $tipo->id) }}" style="display: inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('¿Esta seguro que desea eliminar este tipo de nota?');">Borrar
+                                    onclick="return confirm('¿Esta seguro que desea eliminar este tipo de nota?');"><i class="fas fa-trash"></i> Borrar
                                 </button>
                             </form>
 
