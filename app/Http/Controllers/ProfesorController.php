@@ -12,6 +12,8 @@ use App\Models\CursoEstudiante;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Models\Role;
+use Facade\FlareClient\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
 class ProfesorController extends Controller
 {
@@ -58,7 +60,8 @@ class ProfesorController extends Controller
         return view('profesores/cursosasignados', compact('cursos'));
     }
 
-    public function showMaterial($id){
+    public function showMaterial($id)
+    {
         $material = ArchivoCurso::select('a.nombre', 'a.url', 'a.descripcion', 'a.id', 'a.id_curso')
             ->from('archivo_curso as a')
             ->where('a.id_curso', $id)->get();
@@ -81,24 +84,6 @@ class ProfesorController extends Controller
         return view('materialapoyo/create', compact('curso'));
     }
 
-    /*
- $campos = [
-            'tipo' => 'required',
-            'nombre' => 'required|string|max:100',
-            'url' => 'required|url|max:200',
-            'img1' => 'required|max:10000|mimes:jpeg,png,jpg'
-        ];
-
-        $Mensaje = ["required" => 'El :attribute es requerido'];
-        $this->validate($request, $campos, $Mensaje);
-
-        $datosAnuncio = request()->except('_token');
-        if ($request->hasFile('img1')) {
-            $datosAnuncio['img1'] = $request->file('img1')->store('uploads', 'public');
-        }
-        Anuncio::insert($datosAnuncio);
-        return redirect('anuncios/listanuncio')->with('Mensaje', 'Anuncio agregado con exito');
-        */
 
     public function storeMaterialApoyo(Request $request)
     {
@@ -118,6 +103,14 @@ class ProfesorController extends Controller
         //return redirect('materialapoyo/listmaterial');
     }
 
+    public function downloadFile($id)
+    {
+        $path = 'C:\Users\stive\Documents\uploads';
+        var_dump($path);
+        $file = $path . '/' . $id;
+        return response()->download($file);
+    }
+
     public function editMaterialApoyo(Request $request, $id)
     {
         $material = ArchivoCurso::findOrFail($id);
@@ -127,21 +120,23 @@ class ProfesorController extends Controller
 
     public function verEstudiantesCursos($id)
     {
-        $curso = DB::select('select m.nombre
+        $curso = DB::select('select m.nombre, c.ced_profesor, c.id, tc.id as tipo_certificacion
         from curso c
         inner join modulo m
         on m.id = c.id_modulo
+        inner join tipo_certificacion tc
+        on m.id_tipo_certificacion = tc.id
         where c.id = ?', [$id]);
 
-        $estudiantes = DB::select('select ce.id_curso as id, ce.ced_estudiante as cedula, p.nombre, ce.observaciones, ce.estado
-        from curso_estudiante ce
-        inner join curso c
-        on c.id = ce.id_curso
-        and c.id = ?
-        inner join estudiante e
-        on e.cedula = ce.ced_estudiante
-        inner join persona p
-        on p.cedula = ce.ced_estudiante', [$id]);
+
+        $estudiantes = DB::table('curso_estudiante')
+            ->Join('curso', function ($join) use ($id) {
+                $join->on('curso_estudiante.id_curso', '=', 'curso.id')
+                    ->Where('curso.id', $id);
+            })
+            ->Join('estudiante', 'curso_estudiante.ced_estudiante', '=', 'estudiante.cedula')
+            ->Join('persona', 'curso_estudiante.ced_estudiante', '=', 'persona.cedula')
+            ->select('curso_estudiante.id_curso as id', 'curso_estudiante.ced_estudiante as cedula', 'persona.nombre', 'curso_estudiante.observaciones', 'curso_estudiante.estado')->paginate(10);
         return view('profesores/cursoestudiantes', compact('estudiantes', 'curso'));
     }
 
@@ -304,7 +299,20 @@ class ProfesorController extends Controller
         $est = $request->input('estado');
         var_dump($est);
         Profesor::where('cedula',  $id)->update(['estado' => $est]);
-        $mensaje = ($est == 0 ? 'Profesor activado con exito' : 'Profesor desactivado con exito');
+        //
+        $user = User::where('cedula', $id)->firstOrFail();
+        if ($est == 0) {
+            if ($user->hasRole('administrador')) {
+                $user->roles()->sync([1, 3]);
+            }
+            $user->roles()->sync([3]);
+        } else {
+            if ($user->hasRole('administrador')) {
+                $user->roles()->sync([1, 2, 3]);
+            }
+            $user->roles()->sync([2, 3]);
+        }
+        $mensaje = ($est == 0 ? 'Profesor desactivado con exito' : 'Profesor activado con exito');
         return redirect('profesores/listprofesores')->with('Mensaje', $mensaje);
     }
 }

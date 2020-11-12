@@ -32,7 +32,7 @@ class GrupoInvestigacionController extends Controller
         ->join('persona as per', function($join){
             $join->on('p.cedula','=','per.cedula');
         })
-        ->where('p.estado', '=', '0')->get();
+        ->where('p.estado', '=', '1')->get();
         return view('gruposinvestigacion/create', compact(['grupoInvestigacion', 'profesores']));
     }
 

@@ -53,7 +53,7 @@ class EstudianteController extends Controller
 
     public function verCursosAsignados($id)
     {
-        $cursos = DB::select('select m.nombre, tc.nombre as nombrec, m.url1, m.url2
+        $cursos = DB::select('select m.nombre, tc.nombre as nombrec, m.url1, m.url2, c.id
         from modulo m
         inner join tipo_certificacion tc
         on m.id_tipo_certificacion = tc.id

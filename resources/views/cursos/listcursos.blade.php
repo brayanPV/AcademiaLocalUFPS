@@ -49,8 +49,9 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger"
                                     onclick="return confirm('¿Esta seguro que desea eliminar el curso?    ');"><i class="fas fa-trash"></i> Borrar </button>
-                            </form>
-
+                            </form> <p>⠀</p>
+                            <a class="btn btn-info p-1" href="{{ url('/profesores/' . $curso->id . '/cursoestudiantes') }}"
+                                style="display: inline"><i class="fas fa-users"></i> Estudiantes </a>   
                         </td>
                         @endif
                     </tr>

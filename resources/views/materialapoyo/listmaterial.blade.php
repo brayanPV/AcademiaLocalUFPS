@@ -5,6 +5,7 @@
         <div class="alert alert-primary" role="alert">
             <h2>Archivos</h2>
         </div>
+        @if (Auth::check() && Auth::user()->hasrole('profesor'))
         <form method="post" action="{{ url('/materialapoyo') }}" style="display: inline">
             @csrf
             <input type="hidden" id="id" name="id" value="{{ $curso->id }}">
@@ -12,6 +13,7 @@
                 <i class="fas fa-plus-circle"></i> Agregar
             </button>
         </form>
+        @endif
     </div>
     <div class="container">
         <table class="table table-hover">
@@ -30,11 +32,13 @@
                     <tr>
                         <td class="col-md-auto">{{ $mat->nombre }}</td>
                         <td class="col-md-auto">{{ $mat->descripcion }}</td>
-                        <td class="col-md-auto"><a href="{{ asset($mat->url) }}" target="_blank">
-                                <button class="btn btn-success"><i class="fa fa-download"></i> Descargar</button>
+                        <td class="col-md-auto">
+                            
+                            <a href="{{ url('/materialapoyo/' . $mat->url) }}" target="_blank" class="btn btn-success">
+                                <i class="fa fa-download"></i> Descargar
                             </a></td>
                         @if (Auth::check() && Auth::user()->hasrole('profesor'))
-                            <td class="d-flex justify-content-center">
+                            <td class="d-flex">
 
                                 <form method="get" action="{{ url('/materialapoyo/' . $mat->id . '/edit') }}" class="form">
                                     <input class="form-control" type="hidden" name="id_curso" id="id_curso" value="{{ $curso->id }}">
@@ -64,9 +68,15 @@
                 @endforelse
             </tbody>
         </table>
+        <button  class="btn btn-primary" onclick="goBack()"> <i
+            class="fas fa-arrow-left"></i>Volver</button>
 
-        <a class="btn btn-primary" href="{{ url('/profesores/' . Auth::user()->cedula . '/cursosasignados') }}"><i
-                class="fas fa-arrow-left"></i> Volver</a>
+        <script>
+        function goBack() {
+          window.history.back();
+        }
+        </script> 
+       
     </div>
 
 

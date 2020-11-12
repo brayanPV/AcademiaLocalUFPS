@@ -50,6 +50,7 @@ return [
         'upload' => [
             'driver' => 'local',
             'root' => 'C:\Users\stive\Documents\uploads',
+            'url' => 'C:\Users\stive\Documents\uploads',
             'visibility' => 'public',
         ],
 

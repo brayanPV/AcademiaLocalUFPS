@@ -5,8 +5,11 @@
         <div class="alert alert-primary" role="alert">
             <h2>Estudiantes del curso {{ $curso[0]->nombre }}</h2>
         </div>
-
-
+        @if (Auth::user()->hasrole('administrador'))
+            <a role="button" class="btn btn-success p-1"
+                href="{{ url('cursos', ['curso' => $curso[0]->id, 'certificacion' => $curso[0]->tipo_certificacion, 'agregarestudiante']) }}">
+                <i class="fas fa-user-plus"></i> Agregar Estudiante </a>
+        @endif
     </div>
     <div class="container">
         <table class="table table-hover">
@@ -28,12 +31,15 @@
                         <td class="col-md-auto">{{ $estudiante->nombre }}</td>
                         <td class="col-md-auto">{{ $estudiante->observaciones }}</td>
                         <td class="col-md-auto">{{ $estudiante->estado }}</td>
-                        @if (Auth::check() && Auth::user()->hasrole('profesor'))
+                        @if (Auth::check() && Auth::user()->hasrole('profesor') && Auth::user()->cedula == $curso[0]->ced_profesor)
+
                             <td class="d-flex p-1">
-                                
-                                <a class="btn btn-warning p-3" role="button" href="{{ url('profesores',['curso'=>$estudiante->id, 'estudiante'=>$estudiante->cedula , 'agregarobservacion'])  }}"
+
+                                <a class="btn btn-warning p-3" role="button"
+                                    href="{{ url('profesores', ['curso' => $estudiante->id, 'estudiante' => $estudiante->cedula, 'agregarobservacion']) }}"
                                     style="display: inline"> Agregar observacion </a>
-                                </br> <p>⠀ </p>
+                                </br>
+                                <p>⠀ </p>
                                 <a class="btn btn-success p-3" role="button"
                                     href="{{ url('/profesores/' . $estudiante->id . '/agregarnota') }}">Agregar notas</a>
                             </td>
@@ -45,7 +51,7 @@
                 @endforelse
             </tbody>
         </table>
-
+        {{ $estudiantes->links('pagination::bootstrap-4') }}
         <a class="btn btn-primary" href="{{ url('/profesores/' . Auth::user()->cedula . '/cursosasignados') }}"> Volver</a>
     </div>
 

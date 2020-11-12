@@ -41,9 +41,9 @@
                             <td class="col-md-auto">{{ $profesor->id_cisco }}</td>
                             <td class="col-md-auto">
                                 @if ($profesor->estado == 0)
-                                    Activo
-                                @else
                                     Inactivo
+                                @else
+                                    Activo
                                 @endif
                             </td>
                             <td class="d-flex"> <a class="btn btn-primary" role="button"
@@ -54,13 +54,13 @@
                                     @method('DELETE')
                                     @if ($profesor->estado == 0)
                                         <input type="hidden" value="1" id="estado" name="estado">
-                                        <button type="submit" class="btn btn-success"
-                                            onclick="return confirm('¿Esta seguro que desea desactivar este profesor?');" data-toggle="tooltip" title="Desactivar"><i class="fas fa-toggle-on"></i>   
+                                        <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('¿Esta seguro que desea activar este profesor?');" data-toggle="tooltip" title="Activar"><i class="fas fa-toggle-off"></i>     
                                         </button>
                                     @else
                                         <input type="hidden" value="0" id="estado" name="estado">
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('¿Esta seguro que desea activar este profesor?');" data-toggle="tooltip" title="Activar"><i class="fas fa-toggle-off"></i> 
+                                        <button type="submit" class="btn btn-success"
+                                            onclick="return confirm('¿Esta seguro que desea Desactivar este profesor?');" data-toggle="tooltip" title="Desactivar"> <i class="fas fa-toggle-on"></i>
                                         </button>
                                     @endif
 
