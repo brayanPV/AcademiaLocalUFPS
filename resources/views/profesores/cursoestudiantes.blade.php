@@ -2,6 +2,11 @@
 
 @section('content')
     <div class="container">
+        @if (Session::has('Mensaje'))
+                <div class="alert alert-success" role="alert">
+                    {{ Session::get('Mensaje') }}
+                </div>
+            @endif
         <div class="alert alert-primary" role="alert">
             <h2>Estudiantes del curso {{ $curso[0]->nombre }}</h2>
         </div>
@@ -25,9 +30,11 @@
                 </tr>
             </thead>
             <tbody>
+              
                 @forelse ($estudiantes as $estudiante)
+               
                     <tr>
-                        <td class="col-md-auto">{{ $estudiante->cedula }}</td>
+                        <td class="col-md-auto">{{$estudiante->cedula }}</td>
                         <td class="col-md-auto">{{ $estudiante->nombre }}</td>
                         <td class="col-md-auto">{{ $estudiante->observaciones }}</td>
                         <td class="col-md-auto">{{ $estudiante->estado }}</td>
@@ -50,9 +57,17 @@
 
                 @endforelse
             </tbody>
+            
         </table>
+        <h5> total estudiantes  {{$estudiantes->total()}} </h5>
+        <div class="row">
+        <div class="col-11">
         {{ $estudiantes->links('pagination::bootstrap-4') }}
+        </div>
+        <div class="col-1">
         <a class="btn btn-primary" href="{{ url('/profesores/' . Auth::user()->cedula . '/cursosasignados') }}"> Volver</a>
+        </div>
+        </div>
     </div>
 
 

@@ -11,6 +11,7 @@ use App\Models\Profesor;
 use App\Models\Cohorte;
 use App\Models\CursoEstudiante;
 use App\Models\Estudiante;
+use App\Models\TipoCertificacion;
 
 class CursoController extends Controller
 {
@@ -52,6 +53,33 @@ class CursoController extends Controller
         return view('cursos/listcursos', compact('cursos'));
     }
 
+    public function getModulos(Request $request)
+    {
+
+        if ($request->ajax()) {
+            $modulos = Modulo::where('id_tipo_certificacion', $request->certificacion_id)->get();
+            $moduloArray = array();
+            foreach ($modulos as $modulo) {
+                $moduloArray[$modulo->id] = $modulo->nombre;
+            }
+            return response()->json($moduloArray);
+        }
+    }
+
+    public function getCohortes(Request $request)
+    {
+
+        if ($request->ajax()) {
+            $cohortes = Cohorte::where('id_tipo_certificacion', $request->certificacion_id)->get();
+            $cohortesArray = array();
+            foreach ($cohortes as $cohorte) {
+                $cohortesArray[$cohorte->id] = $cohorte->nombre;
+            }
+            return response()->json($cohortesArray);
+        }
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -60,25 +88,32 @@ class CursoController extends Controller
     public function create()
     {
         //
-        $modulos = Modulo::get();
+        $certificaciones = TipoCertificacion::get();
         $profesores = Profesor::select('p.cedula', 'per.nombre')
             ->from('profesor as p')
             ->join('persona as per', function ($join) {
                 $join->on('p.cedula', '=', 'per.cedula');
             })
             ->where('p.estado', '=', '1')->get();
-        $cohortes = Cohorte::get();
-        return view('cursos/create', compact(['modulos', 'profesores', 'cohortes']));
+        return view('cursos/create', compact(['certificaciones', 'profesores']));
     }
 
 
-    public function verEstudiantes(){
-        
-    }
+    public function verEstudiantes()
+    { }
 
 
     public function createNuevoEstudianteCurso($curso, $certificacion)
     {
+
+        $estudiantescertificacion = Estudiante::select('p.nombre', 'e.cedula')
+            ->from('estudiante as e')
+            ->join('persona as p', function ($join) use ($certificacion) {
+                $join->on('p.cedula', '=', 'e.cedula')
+                    ->where('e.id_tipo_certificacion', $certificacion);
+            })->get();
+
+
         $estudiantesmatriculados = Estudiante::select('p.nombre', 'e.cedula')
             ->from('estudiante as e')
             ->join('persona as p', function ($join) {
@@ -99,13 +134,6 @@ class CursoController extends Controller
                     ->where('t_cer.id', $certificacion);
             })->get();
 
-        $estudiantescertificacion = Estudiante::select('p.nombre', 'e.cedula')
-            ->from('estudiante as e')
-            ->join('persona as p', function ($join) {
-                $join->on('p.cedula', '=', 'e.cedula');
-            })
-            ->where('e.id_tipo_certificacion', $certificacion)->get();
-
         $lista = array();
         if (!empty($estudiantescertificacion)) {
             foreach ($estudiantescertificacion as $cer) {
@@ -115,7 +143,7 @@ class CursoController extends Controller
                     foreach ($estudiantesmatriculados as $mat) {
                         $cc1 = $mat->cedula;
                         if ($cc == $cc1) {
-                            $sw = false;
+                            $sw = ($sw && false);
                         }
                     }
                 }
@@ -125,13 +153,13 @@ class CursoController extends Controller
                 }
             }
         }
-        
-        $cursoEstudiante = Curso::where('id', $curso)->first();
 
+        $cursoEstudiante = Curso::where('id', $curso)->first();
         return view('cursos/agregarestudiante', compact(['lista', 'cursoEstudiante']));
     }
 
-    public function storeNuevoEstudianteCurso(Request $request){
+    public function storeNuevoEstudianteCurso(Request $request)
+    {
         $campos = [
             'id_curso' => 'required',
             'ced_estudiante' => 'required',
@@ -142,9 +170,7 @@ class CursoController extends Controller
         $datos = request()->except(['_token', 'id_cisco']);
         CursoEstudiante::insert($datos);
 
-        $profesorController = new ProfesorController();
-        return redirect('profesores/'.$request->input('id_curso').'/cursoestudiantes');
-        
+        return redirect('profesores/' . $request->input('id_curso') . '/cursoestudiantes')->with('Mensaje', 'Estudiante agregado con exito');
     }
 
 
@@ -167,7 +193,7 @@ class CursoController extends Controller
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $campos, $mensaje);
-        $datoscurso = request()->except('_token');
+        $datoscurso = request()->except('_token', 'certificaciones');
         Curso::insert($datoscurso);
         return redirect('cursos/listcursos')->with('Mensaje', 'Curso agregado con exito');
     }
@@ -192,16 +218,31 @@ class CursoController extends Controller
     public function edit($id)
     {
         //
-        $curso = Curso::findOrFail($id);
-        $modulos = Modulo::get();
+
+        $curso = Curso::select('c.id', 'c.id_cisco', 'c.ced_profesor', 'tc.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'tc.id as id_certificacion', 'm.id as id_modulo', 'm.nombre as nombre_modulo')
+            ->from('curso as c')
+            ->join('modulo as m', function ($join) {
+                $join->on('c.id_modulo', '=', 'm.id');
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('m.id_tipo_certificacion', '=', 'tc.id');
+            })->where('c.id', $id)->first();
+        //Curso::findOrFail($id);
+        $certificaciones = TipoCertificacion::get();
         $profesores = Profesor::select('p.cedula', 'per.nombre')
             ->from('profesor as p')
             ->join('persona as per', function ($join) {
                 $join->on('p.cedula', '=', 'per.cedula');
             })
-            ->where('p.estado', '=', '0')->get();
-        $cohortes = Cohorte::get();
-        return view('cursos/edit', compact(['curso', 'modulos', 'profesores', 'cohortes']));
+            ->where('p.estado', '=', '1')->get();
+        $cer = $curso->id_certificacion;
+        $cohortes = Cohorte::select('c.id', 'c.id_cisco', 'c.nombre')
+            ->from('cohorte as c')
+            ->join('tipo_certificacion as tc', function ($join) use ($cer) {
+                $join->on('c.id_tipo_certificacion', '=', 'tc.id')
+                    ->where('tc.id', $cer);
+            })->get();
+        return view('cursos/edit', compact(['curso', 'certificaciones', 'profesores', 'cohortes']));
     }
 
     /**
@@ -223,8 +264,9 @@ class CursoController extends Controller
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $campos, $mensaje);
-        $datoscurso = request()->except(['_token', '_method', 'updated_at']);
+        $datoscurso = request()->except(['_token', '_method', 'updated_at', 'certificaciones']);
         Curso::where('id', '=', $id)->update($datoscurso);
+        var_dump($id);
         return redirect('cursos/listcursos')->with('Mensaje', 'Curso Editado con exito');
     }
 

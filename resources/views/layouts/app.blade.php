@@ -19,8 +19,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    
-    
+    <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
+
 </head>
 
 <body>
@@ -31,7 +31,8 @@
 
                 <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
                     <div class="container">
-                        <a class="navbar-brand"  href="{{ Auth::check() ?  url('/inicio/' . Auth::user()->id) : url('/') }}">
+                        <a class="navbar-brand"
+                            href="{{ Auth::check() ? url('/inicio/' . Auth::user()->id) : url('/') }}">
                             <img src="{{ asset('img/cisco.png') }}" alt="ufps" style="width: 100px" /> Inicio
                         </a>
                         <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -110,7 +111,7 @@
                                             </a>
                                             <a class="dropdown-item" href="{{ route('logout') }}"
                                                 onclick="event.preventDefault();
-                                                                                                             document.getElementById('logout-form').submit();">
+                                                                                                                 document.getElementById('logout-form').submit();">
                                                 {{ __('Logout') }}
                                             </a>
 
@@ -173,6 +174,8 @@
             </div>
         </footer>
     </body>
+
+    @yield('scripts')
 </body>
 
 </html>

@@ -44,6 +44,8 @@ Route::get('/certificaciones/{certificacione}/vercurso', 'App\Http\Controllers\T
 Route::delete('/certificaciones/{certificacione}', 'App\Http\Controllers\TipoCertificacionController@destroy')->middleware('auth', 'role:administrador');
 //cursos
 Route::get('/cursos/create', 'App\Http\Controllers\CursoController@create')->middleware('auth', 'role:administrador');
+Route::get('/cursos/modulos', 'App\Http\Controllers\CursoController@getModulos')->middleware('auth', 'role:administrador');
+Route::get('/cursos/cohortes', 'App\Http\Controllers\CursoController@getCohortes')->middleware('auth', 'role:administrador');
 Route::post('/cursos', 'App\Http\Controllers\CursoController@store')->middleware('auth', 'role:administrador');
 Route::get('/cursos/{curso}/edit', 'App\Http\Controllers\CursoController@edit')->middleware('auth', 'role:administrador');
 Route::patch('/cursos/{curso}', 'App\Http\Controllers\CursoController@update')->middleware('auth', 'role:administrador');
