@@ -6,12 +6,13 @@
         <div class="row justify-content-center">
             <div class="card col-6">
                 <div class="card-header">
-                    <h2>Crear Certificacion</h2>
+                    <h2>Editar Informacion</h2>
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('/certificaciones') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ url('/preinscripcion/' .$preinscritos->cedula) }}" method="post" enctype="multipart/form-data">
                         @csrf
-                        @include('certificaciones.formcertificacion', ['Modo'=>'Crear'])
+                        @method('PATCH')
+                        @include('preinscripcion.formpreinscripcion', ['Modo'=>'Editar'])
                     </form>
                 </div>
             </div>

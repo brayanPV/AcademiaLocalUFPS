@@ -34,7 +34,7 @@ class AnuncioController extends Controller
 
     public function AnunciosPrincipales()
     {
-        $anuncios = Anuncio::paginate(5);
+        $anuncios = Anuncio::paginate(10);
         return view('anuncios/listanuncio', compact('anuncios'));
     }
 

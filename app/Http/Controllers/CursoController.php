@@ -49,7 +49,7 @@ class CursoController extends Controller
             })
             ->join('cohorte as co', function ($join) {
                 $join->on('co.id', '=', 'c.id_cohorte');
-            })->orderBy('id_cisco', 'asc')->paginate(5);
+            })->orderBy('id_cisco', 'asc')->paginate(10);
         return view('cursos/listcursos', compact('cursos'));
     }
 

@@ -6,20 +6,27 @@
 </div>
 <div class="form-group">
     <label for="nombre"> {{ 'Nombre' }}</label>
-    <input class="form-control {{ $errors->has('nombre') ? 'is-invalid' : '' }}" type="text" name="nombre"
-        id="nombre" value="{{ isset($modulos->nombre) ? $modulos->nombre : old('nombre') }}">
+    <input class="form-control {{ $errors->has('nombre') ? 'is-invalid' : '' }}" type="text" name="nombre" id="nombre"
+        value="{{ isset($modulos->nombre) ? $modulos->nombre : old('nombre') }}">
     {!! $errors->first('nombre', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label for="director" class="control-label"> {{ 'Certificacion ' }}</label>
-    <select name="id_tipo_certificacion" id="id_tipo_certificacion"
-        class="form-control {{ $errors->has('id_tipo_certificacion') ? 'is-invalid' : '' }}">
-        <option value="">Seleccione</option>
-        @foreach ($tipoCertificacion as $tipo)
-            <option value="{{ $tipo->id }}">{{ $tipo->nombre }} </>
-        @endforeach
-     </select>
-     {!! $errors->first('id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
+    @if ($Modo == 'Crear')
+        <select name="id_tipo_certificacion" id="id_tipo_certificacion"
+            class="form-control {{ $errors->has('id_tipo_certificacion') ? 'is-invalid' : '' }}">
+            <option value="">Seleccione</option>
+            @foreach ($tipoCertificacion as $tipo)
+                <option value="{{ $tipo->id }}">{{ $tipo->nombre }} </>
+            @endforeach
+        </select>
+    @else
+    <input class="form-control {{ $errors->has('id_tipo_certificacion') ? 'is-invalid' : '' }}" type="hidden"
+    name="id_tipo_certificacion" id="id_tipo_certificacion"
+    value="{{ isset($modulos->id_tipo_certificacion) ? $modulos->id_tipo_certificacion : old('id_tipo_certificacion') }}">
+    <label class="form-control">{{$modulos->tc_nombre}} </label>
+    @endif
+    {!! $errors->first('id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
     <label for="url1"> {{ 'Url 1' }}</label>
@@ -37,7 +44,8 @@
 
 <div class="row">
     <div class="col-10">
-    <input class="btn btn-primary" type="submit" value="{{ $Modo == 'Crear' ? 'Agregar Modulo' : 'Editar Modulo' }}">
+        <input class="btn btn-primary" type="submit"
+            value="{{ $Modo == 'Crear' ? 'Agregar Modulo' : 'Editar Modulo' }}">
     </div>
     <div class="col-2">
         <a class="btn btn-secondary" inl href="{{ url('modulos/listmodulos') }}">Volver</a>

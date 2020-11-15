@@ -31,7 +31,7 @@ class TipoCertificacionController extends Controller
     public function listTipoCertificacion()
     {
 
-        $certificaciones = TipoCertificacion::paginate(5);
+        $certificaciones = TipoCertificacion::paginate(10);
         return view('certificaciones/listcertificaciones', compact('certificaciones'));
     }
     public function cardCertificacion()

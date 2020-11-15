@@ -6,7 +6,7 @@
         <div class="row justify-content-center">
             <div class="card col-6">
                 <div class="card-header">
-                    <h2>Crear Cursos</h2>
+                    <h2>Editar Certificacion</h2>
                 </div>
                 <div class="card-body">
                     <form action="{{ url('/certificaciones/' .$certificaciones->id ) }}" method="post" enctype="multipart/form-data">

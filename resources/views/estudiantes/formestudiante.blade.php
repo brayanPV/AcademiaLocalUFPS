@@ -49,7 +49,7 @@
     {!! $errors->first('id_cisco', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
-    <label for="modulo" class="control-label"> {{ 'Modulo ' }}</label>
+    <label for="Certificacion" class="control-label"> {{ 'Certificacion ' }}</label>
     @if($Modo == 'Crear')
     <select name="id_tipo_certificacion" id="id_tipo_certificacion" class="form-control {{ $errors->has('id_tipo_certificacion') ? 'is-invalid' : '' }}">
         <option value="">Seleccione</option>
@@ -59,7 +59,9 @@
         {!! $errors->first('id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
     </select>
     @else 
-    <input type="text" class="form-control" value="{{$estudiantes->id_tipo_certificacion}}" readonly>
+    <input type="hidden" id="id_tipo_certificacion" name="id_tipo_certificacion" class="form-control" value="{{$estudiantes->id_tipo_certificacion}}" readonly>
+   <input type="text" class="form-control" value="{{ $tipoCertificacion->nombre}}" readonly>
+
     @endif
 </div>
 

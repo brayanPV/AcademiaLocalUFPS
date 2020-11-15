@@ -47,7 +47,16 @@
                 @endforelse
             </tbody>
         </table>
-        {{ $grupoInvestigacion->links('pagination::bootstrap-4') }}
+        <div class="row">
+            <h5>Total de grupos de investigacion: {{ $grupoInvestigacion->total() }} </h5>
+            <div class="col-11">
+                {{ $grupoInvestigacion->links('pagination::bootstrap-4') }}
+            </div>
+            <div class="col-1">
+                <a class="btn btn-primary"
+                    href="{{ Auth::check() ? url('/inicio/' . Auth::user()->id) : url('/') }}">inicio</a>
+            </div>
+        </div>
     </div>
 
 

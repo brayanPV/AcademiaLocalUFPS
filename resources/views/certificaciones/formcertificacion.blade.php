@@ -17,11 +17,11 @@
     <textarea class="form-control" id="descripcion" name="descripcion" rows="3" value="{{ isset($certificaciones->descripcion) ? $certificaciones->descripcion :old('descripcion') }}">{{ isset($certificaciones->descripcion) ? $certificaciones->descripcion :old('descripcion') }}</textarea>
 </div>
 <div class="row">
-<div class="col">
+<div class="col-7">
     <input class="btn btn-primary" type="submit" value="{{ $Modo == 'Crear' ? 'Agregar certificacion' : 'Editar certificacion' }}">
 
 </div>
-<div class="col">
+<div class="col-5">
     <a class="btn btn-secondary" href="{{ url('certificaciones/listcertificaciones') }}">Lista de Certificaciones</a>
 </div>
 </div>

@@ -45,7 +45,7 @@ class GrupoInvestigacionController extends Controller
             })
             ->join('persona as per', function ($join) {
                 $join->on('per.cedula', '=', 'pro.cedula');
-            })->orderBy('id', 'asc')->paginate(5);
+            })->orderBy('id', 'asc')->paginate(10);
         return view('gruposinvestigacion/listgruposinvestigacion', compact('grupoInvestigacion'));
     }
 

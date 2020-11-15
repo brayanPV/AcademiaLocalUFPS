@@ -59,7 +59,16 @@
                     @endforelse
                 </tbody>
             </table>
-            {{ $certificaciones->links('pagination::bootstrap-4') }}
+            <div class="row">
+                <h5>Total de certificaciones: {{ $certificaciones->total() }} </h5>
+                <div class="col-11">
+                    {{ $certificaciones->links('pagination::bootstrap-4') }}
+                </div>
+                <div class="col-1">
+                    <a class="btn btn-primary"
+                        href="{{ Auth::check() ? url('/inicio/' . Auth::user()->id) : url('/') }}">inicio</a>
+                </div>
+            </div>
 
         </div>
     </div>

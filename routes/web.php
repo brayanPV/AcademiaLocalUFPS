@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InscritoController;
+use App\Http\Controllers\PreinscritoController;
 use App\Http\Middleware\CheckRole;
 
 /*
@@ -115,6 +116,12 @@ Route::get('/estudiantes/{estudiante}/edit', 'App\Http\Controllers\EstudianteCon
 Route::patch('/estudiantes/{estudiante}', 'App\Http\Controllers\EstudianteController@update')->middleware('auth', 'role:administrador');
 Route::get('/estudiantes/{estudiante}/cursosasignados', 'App\Http\Controllers\EstudianteController@verCursosAsignados')->middleware('auth', 'role:estudiante');
 Route::delete('/estudiantes/{estudiante}', 'App\Http\Controllers\EstudianteController@destroy')->middleware('auth', 'role:administrador');
+//preinscripcion
+Route::get('/preinscripcion/create', 'App\Http\Controllers\PreinscritoController@create')->name('preinscribir');
+Route::post('/preinscripcion', 'App\Http\Controllers\PreinscritoController@store')->name('preinscribirstore');
+Route::get('/preinscripcion/{preinscripcion}/edit', 'App\Http\Controllers\PreinscritoController@edit')->middleware('auth', 'role:administrador');
+Route::patch('/preinscripcion/{preinscripcion}', 'App\Http\Controllers\PreinscritoController@update')->middleware('auth', 'role:administrador');
+Route::get('/preinscripcion/listpreinscripcion', 'App\Http\Controllers\PreinscritoController@listPreinscritos')->middleware('auth', 'role:administrador');
 //inscrito //aun falta esto
 //Route::get('/estudiantes/{estudiante}/edit', 'App\Http\Controllers\InscritoController@edit')->middleware('auth','role:administrador');
 //Route::patch('/estudiantes', 'App\Http\Controllers\InscritoController@update')->middleware('auth','role:administrador');
@@ -130,8 +137,7 @@ Route::get('/modulos/listmodulos', [App\Http\Controllers\ModuloController::class
 Route::get('/profesores/listprofesores', [App\Http\Controllers\ProfesorController::class, 'listProfesor'])->middleware('auth', 'role:administrador');
 Route::get('/estudiantes/listestudiantes', [App\Http\Controllers\EstudianteController::class, 'listEstudiante'])->name('listestudiantes');
 
-//preinscripcion
-Route::get('/preinscripcion/preinscripcion', [App\Http\Controllers\InscritoController::class, 'preInscribirView'])->name('preinscribir');
+
 
 //Route::get('anuncios/listanuncio', [AnuncioController::class, 'anunciosprincipales'])->name('listanuncios');
 //Route::get('anuncios/listanuncio', 'AnuncioController@anunciosprincipales');

@@ -34,7 +34,7 @@ class ProfesorController extends Controller
             ->from('profesor as p')
             ->join('persona as per', function ($join) {
                 $join->on('p.cedula', '=', 'per.cedula');
-            })->paginate(5);
+            })->paginate(10);
 
         return view('profesores/listprofesores', compact('profesores'));
     }
@@ -129,8 +129,8 @@ class ProfesorController extends Controller
                 $join->on('m.id_tipo_certificacion', '=', 'tc.id');
             })
             ->where('c.id', $id)->get();
-        
-            $estudiantes = DB::table('curso_estudiante')
+
+        $estudiantes = DB::table('curso_estudiante')
             ->Join('curso', function ($join) use ($id) {
                 $join->on('curso_estudiante.id_curso', '=', 'curso.id')
                     ->Where('curso.id', $id);
@@ -297,6 +297,7 @@ class ProfesorController extends Controller
     public function destroy(Request $request, $id)
     {
         //
+        $mensaje = "";
         $est = $request->input('estado');
         var_dump($est);
         Profesor::where('cedula',  $id)->update(['estado' => $est]);
@@ -304,19 +305,17 @@ class ProfesorController extends Controller
         $user = User::where('cedula', $id)->firstOrFail();
         if ($est == 0) {
             if ($user->hasRole('administrador')) {
-                $mensaje = "ES ADMIN";
                 $user->roles()->sync([1, 3]);
-                //       $user->roles()->sync([1, 3]);
                 var_dump("ES ADMIN");
+            } else {
+                $user->roles()->sync([3]);
             }
-            $user->roles()->sync([3]);
         } else {
             if ($user->hasRole('administrador')) {
-                //      $user->roles()->sync([1, 2, 3]);
-
-                $mensaje = "ES ADMIN";
+                $user->roles()->sync([1, 2, 3]);
+            } else {
+                $user->roles()->sync([2, 3]);
             }
-            //  $user->roles()->sync([2, 3]);
         }
         $mensaje .= ($est == 0 ? ' Profesor desactivado con exito' : ' Profesor activado con exito');
         return redirect('profesores/listprofesores')->with('Mensaje', $mensaje);

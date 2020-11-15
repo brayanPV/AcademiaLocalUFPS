@@ -9,9 +9,9 @@
                 </div>
             @endif
             <div class="alert alert-primary" role="alert">
-                <h2>Gestion de estudiantes</h2>
+                <h2>Gestion de personas preinscritas</h2>
             </div>
-            <a class="btn btn-success" href="{{ url('/estudiantes/create') }}"><i class="fas fa-user-plus"></i> Agregar estudiante</a>
+           <!-- <a class="btn btn-success" href="{{ url('/estudiantes/create') }}"><i class="fas fa-user-plus"></i> Agregar estudiante</a> -->
 
             <table class="table table-hover">
                 <thead>
@@ -21,27 +21,24 @@
                         <th>Certificacion</th>
                         <th>Correo</th>
                         <th>Celular</th>
-                        <th>Recibos de pago</th>
                         <th></th>
                         <th>Accion</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($estudiantes as $estudiante)
+                    @forelse ($preinscritos as $preinscrito)
                         <tr>
-                            <td class="col-md-auto">{{ $estudiante->cedula }}</td>
-                            <td class="col-md-auto">{{ $estudiante->nombre }}</td>
-                            <td class="col-md-auto">{{ $estudiante->nombre_certificacion }}</td>
-                            <td class="col-md-auto">{{ $estudiante->correo }}</td>
-                            <td class="col-md-auto">{{ $estudiante->telcel }}</td>
-                            <td class="col-md-auto">{{ $estudiante->recibo_pago_inscripcion }} <br>    
-                                {{ $estudiante->recibo_pago_matricula }} </td>
-                            <td><span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Telefono: {{$estudiante->telfijo . PHP_EOL}}Id Cisco:  {{$estudiante->id_cisco . PHP_EOL}}Codigo estudiante:  {{$estudiante->cod_estudiante . PHP_EOL}} ">
+                            <td class="col-md-auto">{{ $preinscrito->cedula }}</td>
+                            <td class="col-md-auto">{{ $preinscrito->nombre }}</td>
+                            <td class="col-md-auto">{{ $preinscrito->nombre_certificacion }}</td>
+                            <td class="col-md-auto">{{ $preinscrito->correo }}</td>
+                            <td class="col-md-auto">{{ $preinscrito->telcel }}</td>
+                            <td><span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Telefono: {{$preinscrito->telfijo . PHP_EOL}}Direccion:  {{$preinscrito->direccion . PHP_EOL}}Semestre:  {{$preinscrito->semestre . PHP_EOL}} ">
                                 <button class="btn btn-primary" style="pointer-events: none;" type="button" disabled>Mas</button>
                               </span> </td>    
                             <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                    href="{{ url('/estudiantes/' . $estudiante->cedula . '/edit') }}"><i class="fas fa-user-edit"></i>  </a> <p>⠀</p> 
-                                <form method="post" action="{{ url('/estudiantes/' . $estudiante->cedula) }}"
+                                    href="{{ url('/preinscripcion/' . $preinscrito->cedula . '/edit') }}"><i class="fas fa-user-edit"></i>  </a> <p>⠀</p> 
+                                <form method="post" action="{{ url('/preinscripcion/' . $preinscrito->cedula) }}"
                                     style="display: inline">
                                     @csrf
                                     @method('DELETE')
@@ -59,9 +56,9 @@
                 </tbody>
             </table>
             <div class="row">
-                <h5>Total de estudiantes: {{ $estudiantes->total() }} </h5>
+                <h5>Total de personas pre inscritas: {{ $preinscritos->total() }} </h5>
                 <div class="col-11">
-                    {{ $estudiantes->links('pagination::bootstrap-4') }}
+                    {{ $preinscritos->links('pagination::bootstrap-4') }}
                 </div>
                 <div class="col-1">
                     <a class="btn btn-primary"

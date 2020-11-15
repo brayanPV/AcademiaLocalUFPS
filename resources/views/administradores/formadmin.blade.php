@@ -1,7 +1,7 @@
 <div class="form-group">
     <label for="cedula"> {{ 'Cedula' }}</label>
     <input class="form-control {{ $errors->has('cedula') ? 'is-invalid' : '' }}" type="number" name="cedula" id="cedula"
-        value="{{ isset($administradores->cedula) ? $administradores->cedula : old('cedula') }}">
+        value="{{ isset($administradores->cedula) ? $administradores->cedula : old('cedula') }}" @if($Modo == 'Editar') readonly @endif>
     {!! $errors->first('cedula', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
@@ -34,6 +34,7 @@
         value="{{ isset($personas->correo) ? $personas->correo : old('correo') }}">
     {!! $errors->first('correo', '<div class="invalid-feedback">:message</div>') !!}
 </div>
+@if($Modo == 'Crear')
 <div class="form-group row">
     <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
@@ -57,8 +58,7 @@
             autocomplete="new-password">
     </div>
 </div>
-
-
+@endif
 <div class="row">
     
     <div class="col-10" id="fontuser">

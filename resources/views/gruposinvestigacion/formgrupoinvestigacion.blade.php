@@ -19,8 +19,8 @@
         @foreach ($profesores as $profesor)
             <option value="{{ $profesor->cedula }}">{{ $profesor->nombre }} </>
         @endforeach
-        {!! $errors->first('ced_prof_director', '<div class="invalid-feedback">:message</div>') !!}
     </select>
+    {!! $errors->first('ced_prof_director', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="row">
     <div class="col-10">

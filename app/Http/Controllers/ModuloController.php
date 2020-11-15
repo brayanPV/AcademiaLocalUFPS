@@ -25,7 +25,7 @@ class ModuloController extends Controller
         ->from('modulo as m')
         ->join('tipo_certificacion as t', function($join){
             $join->on('t.id', '=', 'm.id_tipo_certificacion');
-        })->paginate(5);
+        })->paginate(10);
         return view('modulos/listmodulos', compact('modulos'));
     }
 
@@ -84,7 +84,12 @@ class ModuloController extends Controller
     public function edit($id)
     {
         //
-        $modulos = Modulo::findOrFail($id);
+        //$modulos = Modulo::findOrFail($id);
+        $modulos = Modulo::select('m.id', 'm.numero', 'm.nombre as nombre', 'm.url1', 'm.url2', 'm.id_tipo_certificacion' ,'tc.nombre as tc_nombre')
+        ->from('modulo as m')
+        ->join('tipo_certificacion as tc', function($join){
+            $join->on('m.id_tipo_certificacion', '=', 'tc.id');
+        })->where('m.id', $id)->first();
         $tipoCertificacion = TipoCertificacion::get();
 
         return view('modulos.edit',compact(['modulos', 'tipoCertificacion']));

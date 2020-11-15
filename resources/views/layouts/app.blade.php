@@ -55,9 +55,8 @@
                                 <li>
                                     @if (!Auth::check())
                                         <a class="navbar-brand"
-                                            href="{{ url('/preinscripcion/preinscripcion') }}">Preinscripcion
+                                            href="{{ url('/preinscripcion/create') }}">Preinscripcion
                                         </a>
-
                                     @endif
                                 </li>
                                 <li>
@@ -111,7 +110,7 @@
                                             </a>
                                             <a class="dropdown-item" href="{{ route('logout') }}"
                                                 onclick="event.preventDefault();
-                                                                                                                 document.getElementById('logout-form').submit();">
+                                                                                                                     document.getElementById('logout-form').submit();">
                                                 {{ __('Logout') }}
                                             </a>
 

@@ -26,14 +26,15 @@ class EstudianteController extends Controller
 
     public function listEstudiante()
     {
-        $estudiantes = Estudiante::select('e.cedula', 'per.nombre', 'e.id_tipo_certificacion', 'c.nombre as nombre_certificacion', 'per.correo', 'per.telcel', 'per.direccion', 'e.recibo_pago_inscripcion', 'e.recibo_pago_matricula')
+        $estudiantes = Estudiante::select('e.cedula', 'per.nombre', 'e.id_tipo_certificacion', 'c.nombre as nombre_certificacion', 
+        'per.correo','per.telfijo','e.id_cisco','e.cod_estudiante' ,'per.telcel', 'per.direccion', 'e.recibo_pago_inscripcion', 'e.recibo_pago_matricula')
             ->from('estudiante as e')
             ->join('tipo_certificacion as c', function ($join) {
                 $join->on('e.id_tipo_certificacion', '=', 'c.id');
             })
             ->join('persona as per', function ($join) {
                 $join->on('e.cedula', '=', 'per.cedula');
-            })->paginate(5);
+            })->paginate(10);
 
         return view('estudiantes/listestudiantes', compact('estudiantes'));
     }
@@ -127,7 +128,12 @@ class EstudianteController extends Controller
         //Persona::where('cedula', $request->input('cedula'))->first()
         $estudiantes = Estudiante::where('cedula', $id)->first();
         $personas = Persona::where('cedula', $id)->first();
-        $tipoCertificacion = TipoCertificacion::get();
+        $tipoCertificacion = TipoCertificacion::select('tc.id', 'tc.nombre')
+            ->from('tipo_certificacion as tc')
+            ->join('estudiante as e', function ($join) use ($estudiantes) {
+                $join->on('tc.id', '=', 'e.id_tipo_certificacion')
+                    ->where('e.id_tipo_certificacion', $estudiantes->id_tipo_certificacion);
+            })->first();
         return view('estudiantes/edit', compact(['estudiantes', 'personas', 'tipoCertificacion']));
     }
 
@@ -148,7 +154,6 @@ class EstudianteController extends Controller
             'telcel' => 'required|max:20',
             'cedula' => 'required',
             'id_cisco' => 'required',
-            'cod_estudiante' => 'string',
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
 

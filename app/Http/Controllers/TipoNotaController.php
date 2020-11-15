@@ -25,7 +25,7 @@ class TipoNotaController extends Controller
             ->from('tipo_nota as t')
             ->join('tipo_certificacion as tc', function ($join) {
                 $join->on('tc.id', '=', 't.id_tipo_certificacion');
-            })->orderBy('id','asc')->paginate(5);
+            })->orderBy('id','asc')->paginate(10);
         return view('tiponotas.listtiponotas', compact('tipoNotas'));
     }
 

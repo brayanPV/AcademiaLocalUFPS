@@ -20,7 +20,7 @@ class AdministradorController extends Controller
     public function index()
     {
         //$results = DB::select('select * from users where id = :id', ['id' => 1]);
-        $administradores = DB::select('select u.id, u.cedula, p.nombre, p.telfijo, p.telcel, p.correo, p.direccion
+        /* $administradores = DB::select('select u.id, u.cedula, p.nombre, p.telfijo, p.telcel, p.correo, p.direccion
         from role_user ru
         inner join users u
         on u.id = ru.user_id
@@ -28,7 +28,19 @@ class AdministradorController extends Controller
         on r.id = ru.role_id
         and r.nombre = ?
         inner join persona p
-        on u.cedula = p.cedula', ['administrador']);
+        on u.cedula = p.cedula', ['administrador']);*/
+        $administradores = User::select('u.id', 'u.cedula', 'p.nombre', 'p.telfijo', 'p.telcel', 'p.correo', 'p.direccion')
+            ->from('users as u')
+            ->join('role_user as ru', function ($join) {
+                $join->on('u.id', '=', 'ru.user_id');
+            })
+            ->join('roles as r', function ($join) {
+                $join->on('ru.role_id', '=', 'r.id')
+                    ->where('r.nombre', '=', 'administrador');
+            })
+            ->join('persona as p', function ($join) {
+                $join->on('u.cedula', '=', 'p.cedula');
+            })->paginate(10);
         return view('administradores/listadministradores', compact('administradores'));
     }
 
@@ -73,10 +85,10 @@ class AdministradorController extends Controller
             return redirect('administradores/create')->with('Mensaje', 'Este administrador ya existe en el sistema, verfique sus datos');
         }
         $this->validate($request, $datosPer, $mensaje);
-        $datosAdmin = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'password_confirmation', 'correo']);
+        //$datosAdmin = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'password_confirmation', 'correo']);
         User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password'))]);
         $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
-        $user->roles()->sync([1,2,3]);
+        $user->roles()->sync([1, 2, 3]);
         return redirect('administradores/')->with('Mensaje', 'Administrador agregado con exito'  . $mensajep);
     }
 
@@ -101,7 +113,8 @@ class AdministradorController extends Controller
     {
         //
         $administradores = User::findOrFail($id);
-        return view('administradores/edit', compact('administradores'));
+        $personas = Persona::where('cedula', $administradores->cedula)->first();
+        return view('administradores/edit', compact(['administradores', 'personas']));
     }
 
     /**
@@ -114,6 +127,18 @@ class AdministradorController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $datosPer = [
+            'cedula' => 'required|unique:users,id,' . $id,
+            'nombre' => 'required|max:50|string',
+            'direccion' => 'required|max:50',
+            'telcel' => 'required|max:20',
+            'correo' => 'required',
+        ];
+        $mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datosPer, $mensaje);
+        $datosPersona = request()->except(['_token', '_method', 'updated_at', 'cedula']);
+        Persona::where('cedula', $request->input('cedula'))->update($datosPersona);
+        return redirect('administradores/')->with('Mensaje', 'Administrador editado con exito');
     }
 
     /**

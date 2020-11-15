@@ -54,7 +54,8 @@ class CohorteController extends Controller
             'id_cisco' => 'required|unique:cohorte,id_cisco',
             'nombre' => 'required|unique:cohorte,nombre',
             'fecha_inicio' => 'required',
-            'fecha_fin' => 'required'
+            'fecha_fin' => 'required',
+            'id_tipo_certificacion' => 'required'
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $campos, $mensaje);
@@ -83,7 +84,12 @@ class CohorteController extends Controller
     public function edit($id)
     {
         //
-        $cohortes = Cohorte::findOrFail($id);
+        //$cohortes = Cohorte::findOrFail($id);
+        $cohortes = Cohorte::select('c.id', 'c.id_cisco', 'c.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'c.id_tipo_certificacion', 'tc.nombre')
+        ->from('cohorte as c')
+        ->join('tipo_certificacion as tc', function($join){
+            $join->on('c.id_tipo_certificacion', '=', 'tc.id');
+        })->where('c.id', $id)->first();
         $tipoCertificacion = TipoCertificacion::get();
 
         return view('cohortes.edit',compact(['cohortes', 'tipoCertificacion']));
