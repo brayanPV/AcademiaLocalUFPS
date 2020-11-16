@@ -19,16 +19,6 @@ class AdministradorController extends Controller
      */
     public function index()
     {
-        //$results = DB::select('select * from users where id = :id', ['id' => 1]);
-        /* $administradores = DB::select('select u.id, u.cedula, p.nombre, p.telfijo, p.telcel, p.correo, p.direccion
-        from role_user ru
-        inner join users u
-        on u.id = ru.user_id
-        inner join roles r
-        on r.id = ru.role_id
-        and r.nombre = ?
-        inner join persona p
-        on u.cedula = p.cedula', ['administrador']);*/
         $administradores = User::select('u.id', 'u.cedula', 'p.nombre', 'p.telfijo', 'p.telcel', 'p.correo', 'p.direccion')
             ->from('users as u')
             ->join('role_user as ru', function ($join) {
@@ -42,6 +32,33 @@ class AdministradorController extends Controller
                 $join->on('u.cedula', '=', 'p.cedula');
             })->paginate(10);
         return view('administradores/listadministradores', compact('administradores'));
+    }
+
+    public function buscarAdmin(Request $request)
+    {
+            $request->get('buscarAdmin');
+            $administradores = User::select('u.id', 'u.cedula', 'p.nombre', 'p.telfijo', 'p.telcel', 'p.correo', 'p.direccion')
+                ->from('users as u')
+                ->join('persona as p', function ($join) use ($request) {
+                    $join->on('u.cedula', '=', 'p.cedula')
+                    ->where(function ($query) use ($request){
+                        if(is_numeric($request->get('buscarAdmin'))){
+                            return $query->where('p.cedula', 'like', '%' . $request->get('buscarAdmin') . '%');
+                        }else{
+                            return $query->where('p.nombre', 'like', '%' . $request->get('buscarAdmin') . '%')
+                            ->orWhere('p.correo', 'like', '%' . $request->get('buscarAdmin') . '%');
+                        }
+                    });
+                })
+                ->join('role_user as ru', function ($join) {
+                    $join->on('u.id', '=', 'ru.user_id');
+                })
+                ->join('roles as r', function ($join) {
+                    $join->on('ru.role_id', '=', 'r.id')
+                        ->where('r.nombre', '=', 'administrador');
+                })->get();
+       
+        return json_encode($administradores);
     }
 
     /**

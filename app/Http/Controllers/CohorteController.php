@@ -18,15 +18,29 @@ class CohorteController extends Controller
         //
     }
 
-    public function listCohorte(){
-        
-        $cohortes = Cohorte::select('c.id','c.id_cisco', 'c.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'tc.nombre as tc_nombre')
-        ->from('cohorte as c')
-        ->join('tipo_certificacion as tc', function($join){
-            $join->on('tc.id', '=', 'c.id_tipo_certificacion');
-        })->paginate(10);
+    public function listCohorte()
+    {
+
+        $cohortes = Cohorte::select('c.id', 'c.id_cisco', 'c.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'tc.nombre as tc_nombre')
+            ->from('cohorte as c')
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('tc.id', '=', 'c.id_tipo_certificacion');
+            })->paginate(10);
 
         return view('cohortes.listcohortes', compact('cohortes'));
+    }
+
+    public function buscarCohorte(Request $request)
+    {
+        $cohortes = Cohorte::select('c.id', 'c.id_cisco', 'c.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'tc.nombre as tc_nombre')
+            ->from('cohorte as c')
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('tc.id', '=', 'c.id_tipo_certificacion');
+            })->where('c.nombre', 'like', '%' . $request->get('buscarCohorte') . '%')
+            ->orWhere('c.id_cisco', 'like', '%' . $request->get('buscarCohorte') . '%')
+            ->orWhere('tc.nombre', 'like', '%' . $request->get('buscarCohorte') . '%')->get();
+
+        return json_encode($cohortes);
     }
 
     /**
@@ -38,7 +52,7 @@ class CohorteController extends Controller
     {
         //
         $tipoCertificacion = TipoCertificacion::get();
-        return view('cohortes.create',compact('tipoCertificacion'));
+        return view('cohortes.create', compact('tipoCertificacion'));
     }
 
     /**
@@ -50,7 +64,7 @@ class CohorteController extends Controller
     public function store(Request $request)
     {
         //
-        $campos=[
+        $campos = [
             'id_cisco' => 'required|unique:cohorte,id_cisco',
             'nombre' => 'required|unique:cohorte,nombre',
             'fecha_inicio' => 'required',
@@ -86,13 +100,13 @@ class CohorteController extends Controller
         //
         //$cohortes = Cohorte::findOrFail($id);
         $cohortes = Cohorte::select('c.id', 'c.id_cisco', 'c.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'c.id_tipo_certificacion', 'tc.nombre')
-        ->from('cohorte as c')
-        ->join('tipo_certificacion as tc', function($join){
-            $join->on('c.id_tipo_certificacion', '=', 'tc.id');
-        })->where('c.id', $id)->first();
+            ->from('cohorte as c')
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('c.id_tipo_certificacion', '=', 'tc.id');
+            })->where('c.id', $id)->first();
         $tipoCertificacion = TipoCertificacion::get();
 
-        return view('cohortes.edit',compact(['cohortes', 'tipoCertificacion']));
+        return view('cohortes.edit', compact(['cohortes', 'tipoCertificacion']));
     }
 
     /**
@@ -105,9 +119,9 @@ class CohorteController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $campos=[
-            'id_cisco' => 'required|unique:cohorte,id_cisco,'.$id,
-            'nombre' => 'required|unique:cohorte,nombre,'.$id,
+        $campos = [
+            'id_cisco' => 'required|unique:cohorte,id_cisco,' . $id,
+            'nombre' => 'required|unique:cohorte,nombre,' . $id,
             'fecha_inicio' => 'required',
             'fecha_fin' => 'required'
         ];
@@ -116,7 +130,6 @@ class CohorteController extends Controller
         $datosCohorte = request()->except(['_token', '_method', 'updated_at']);
         Cohorte::where('id', '=', $id)->update($datosCohorte);
         return redirect('cohortes/listcohortes')->with('Mensaje', 'Cohorte editado con exito');
-
     }
 
     /**
@@ -130,6 +143,5 @@ class CohorteController extends Controller
         //
         Cohorte::destroy($id);
         return redirect('cohortes/listcohortes')->with('Mensaje', 'Cohorte eliminado con exito');
-
     }
 }

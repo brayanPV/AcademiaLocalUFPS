@@ -33,7 +33,6 @@ Route::get('/inicio/{inici}', 'App\Http\Controllers\UserController@show')->middl
 //carousel
 Route::get('/certificaciones/carouselcertificacion', [App\Http\Controllers\TipoCertificacionController::class, 'carouselCertificacion'])->name("carouselcertificacion");
 Route::get('/anuncios/carouselanuncios', [App\Http\Controllers\AnuncioController::class, 'index'])->name("carouselanuncios");
-
 //post -> crear = store
 //patch -> editar/actualizar = update
 //certificaciones
@@ -43,6 +42,7 @@ Route::get('/certificaciones/{certificacione}/edit', 'App\Http\Controllers\TipoC
 Route::patch('/certificaciones/{certificacione}', 'App\Http\Controllers\TipoCertificacionController@update')->middleware('auth', 'role:administrador');
 Route::get('/certificaciones/{certificacione}/vercurso', 'App\Http\Controllers\TipoCertificacionController@verCursos');
 Route::delete('/certificaciones/{certificacione}', 'App\Http\Controllers\TipoCertificacionController@destroy')->middleware('auth', 'role:administrador');
+Route::post('/certificaciones/buscarCertificacion','App\Http\Controllers\TipoCertificacionController@buscarCertificacion')->middleware('auth', 'role:administrador');
 //cursos
 Route::get('/cursos/create', 'App\Http\Controllers\CursoController@create')->middleware('auth', 'role:administrador');
 Route::get('/cursos/modulos', 'App\Http\Controllers\CursoController@getModulos')->middleware('auth', 'role:administrador');
@@ -62,12 +62,14 @@ Route::get('/administradores/{administradore}/edit', 'App\Http\Controllers\Admin
 Route::put('/administradores/{administradore}', 'App\Http\Controllers\AdministradorController@update')->middleware('auth', 'role:administrador');
 Route::delete('/administradores/{administradore}', 'App\Http\Controllers\AdministradorController@destroy')->middleware('auth', 'role:administrador');
 Route::get('/administradores', 'App\Http\Controllers\AdministradorController@index')->middleware('auth', 'role:administrador');
+Route::post('/administradores/buscarAdmin','App\Http\Controllers\AdministradorController@buscarAdmin')->middleware('auth', 'role:administrador');
 //cohortes
 Route::get('/cohortes/create', 'App\Http\Controllers\CohorteController@create')->middleware('auth', 'role:administrador');
 Route::post('/cohortes', 'App\Http\Controllers\CohorteController@store')->middleware('auth', 'role:administrador');
 Route::get('/cohortes/{cohorte}/edit', 'App\Http\Controllers\CohorteController@edit')->middleware('auth', 'role:administrador');
 Route::patch('/cohortes/{cohorte}', 'App\Http\Controllers\CohorteController@update')->middleware('auth', 'role:administrador');
 Route::delete('/cohortes/{cohorte}', 'App\Http\Controllers\CohorteController@destroy')->middleware('auth', 'role:administrador');
+Route::post('/cohortes/buscarCohorte','App\Http\Controllers\CohorteController@buscarCohorte')->middleware('auth', 'role:administrador');
 //anuncios
 Route::get('/anuncios/create', 'App\Http\Controllers\AnuncioController@create')->middleware('auth', 'role:administrador');
 Route::post('/anuncios', 'App\Http\Controllers\AnuncioController@store')->middleware('auth', 'role:administrador');

@@ -9,8 +9,16 @@
         <div class="alert alert-primary" role="alert">
             <h2>Gestion de anuncios</h2>
         </div>
-        <a class="btn btn-success" href="{{ url('/anuncios/create') }}"><i class="fas fa-plus-circle"></i> Agregar
-            Anuncio</a>
+
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-success" href="{{ url('/anuncios/create') }}"><i class="fas fa-plus-circle"></i> Agregar
+                    Anuncio</a>
+            </div>
+            <br>
+        </div>
+
+       
 
         <table class="table table-hover">
             <thead>

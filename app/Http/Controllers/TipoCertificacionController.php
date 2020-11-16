@@ -28,6 +28,18 @@ class TipoCertificacionController extends Controller
         return view('welcome', compact(['certificaciones', 'anuncios']));
     }
 
+    public function buscarCertificacion(Request $request)
+    {
+        $request->get('buscarCertificacion');
+        $certificaciones = TipoCertificacion::select('tc.id', 'tc.nombre', 'tc.imagen', 'tc.descripcion')
+            ->from('tipo_certificacion as tc')
+            ->where('tc.nombre', 'like', '%' . $request->get('buscarCertificacion') . '%')
+            ->orWhere('tc.descripcion', 'like', '%' . $request->get('buscarCertificacion') . '%')
+            ->get();
+
+        return json_encode($certificaciones);
+    }
+
     public function listTipoCertificacion()
     {
 
@@ -46,17 +58,6 @@ class TipoCertificacionController extends Controller
         $certificaciones = TipoCertificacion::get();
         return view('certificaciones/carouselcertificacion', compact('certificaciones'));
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    /*DB::table('users')->where(function ($query) use ($activated,$var2) {
-    $query->where('activated', '=', $activated);
-    $query->where('var2', '>', $var2);
-})->get();*/
 
 
     public function verCursos($id)
@@ -155,10 +156,10 @@ class TipoCertificacionController extends Controller
     {
         //'nombre' => 'required|unique:cohorte,nombre,'.$id,
         $datos = [
-            'nombre' => 'required|String|max:50|unique:tipo_certificacion,nombre,'.$id
+            'nombre' => 'required|String|max:50|unique:tipo_certificacion,nombre,' . $id
         ];
         if ($request->hasFile('imagen')) {
-            $datos +=['imagen' => 'required|max:10000|mimes:jpeg,png,jpg'];
+            $datos += ['imagen' => 'required|max:10000|mimes:jpeg,png,jpg'];
         }
         $Mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $datos, $Mensaje);

@@ -26,7 +26,7 @@ class EstudianteSeeder extends Seeder
                 'password' => Hash::make($estudiante->password)
             ]);
             $user = User::where('cedula', $estudiante->cedula,)->firstOrFail();
-            $user->roles()->sync(Role::where('nombre', 'estudiante')->first());
+            $user->roles()->sync([3]);
         }
     }
 }
