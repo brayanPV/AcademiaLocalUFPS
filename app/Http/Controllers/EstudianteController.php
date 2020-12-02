@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CursoEstudiante;
 use Illuminate\Http\Request;
 use App\Models\Estudiante;
 use App\Models\TipoCertificacion;
@@ -28,11 +29,13 @@ class EstudianteController extends Controller
     {
         $estudiantes = Estudiante::select(
             'e.cedula',
+            'e.id',
             'per.nombre',
-            'c.id',
+            'c.id as tipo_certificacion_id',
             'c.nombre as nombre_certificacion',
             'per.correo',
             'per.telfijo',
+            'e.estado',
             'e.id_cisco',
             'e.cod_estudiante',
             'per.telcel',
@@ -56,8 +59,10 @@ class EstudianteController extends Controller
     {
         $estudiantes = Estudiante::select(
             'e.cedula',
+            'e.id',
             'per.nombre',
-            'c.id',
+            'e.estado',
+            'c.id as tipo_certificacion_id',
             'c.nombre as nombre_certificacion',
             'per.correo',
             'per.telfijo',
@@ -71,7 +76,7 @@ class EstudianteController extends Controller
             ->from('estudiante as e')
             ->join('persona as per', function ($join) {
                 $join->on('e.cedula', '=', 'per.cedula');
-            })->join('estudiante_tipo_certificacion as etc', function($join) {
+            })->join('estudiante_tipo_certificacion as etc', function ($join) {
                 $join->on('etc.estudiante_id', '=', 'e.id');
             })
             ->join('tipo_certificacion as c', function ($join) use ($request) {
@@ -194,7 +199,7 @@ class EstudianteController extends Controller
         $personas = Persona::where('cedula', $id)->first();
         $tipoCertificacion = TipoCertificacion::select('tc.id', 'tc.nombre')
             ->from('tipo_certificacion as tc')
-            ->join('estudiante_tipo_certificacion as etc', function($join){
+            ->join('estudiante_tipo_certificacion as etc', function ($join) {
                 $join->on('etc.tipo_certificacion_id', '=', 'tc.id');
             })
             ->join('estudiante as e', function ($join) use ($estudiantes) {
@@ -229,9 +234,9 @@ class EstudianteController extends Controller
         Persona::where('cedula', $id)->update($datosPersona);
 
         $this->validate($request, $datosPer, $mensaje);
-        $datosEstudiante = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'correo']);
+        $datosEstudiante = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'correo', 'id_cisco', 'id_tipo_certificacion']);
         Estudiante::where('cedula', $id)->update($datosEstudiante);
-        return redirect('estudiantes/listestudiantes')->with('Mensaje', 'Estudiante agregado con exito'  . $mensajep);
+        return redirect('estudiantes/listestudiantes')->with('Mensaje', 'Estudiante editado con exito'  . $mensajep);
     }
 
     /**
@@ -240,8 +245,20 @@ class EstudianteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $estado = $request->input('estado');
+        if ($estado == 0) {
+            Estudiante::where('cedula', $id)->update(['estado' => $estado]);
+            User::where('cedula', $id)->delete();
+        } else {
+            Estudiante::where('cedula', $id)->update(['estado' => $estado]);
+            User::insert(['cedula' => $id, 'password' => Hash::make($id)]);
+            $user = User::where('cedula', $id)->firstOrFail();
+            $user->roles()->sync(Role::where('nombre', 'estudiante')->first());
+        }
+
+        $mensaje = ($estado == 0 ? ' Estudiante desactivado con exito' : ' Estudiante activado con exito');
+        return redirect('estudiantes/listestudiantes')->with('Mensaje', $mensaje);
     }
 }

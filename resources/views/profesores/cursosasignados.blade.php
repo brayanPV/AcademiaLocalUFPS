@@ -16,10 +16,11 @@
                 <tr>
                     <th>Curso</th>
                     <th>Modulo</th>
+                    <th>Cohorte</th>
                     <th>Profesor</th>
                     <th>Feha inicio</th>
                     <th>Fecha fin</th>
-                    <th>Cohorte</th>
+                    <th>Certificacion</th>
                     @if (Auth::check() && Auth::user()->hasrole('profesor'))
                         <th></th>
                     @endif
@@ -30,10 +31,11 @@
                     <tr>
                         <td class="col-md-auto">{{ $curso->id_cisco }}</td>
                         <td class="col-md-auto">{{ $curso->nombre_modulo }}</td>
+                        <td class="col-md-auto">{{ $curso->nombre }}</td>
                         <td class="col-md-auto">{{ $curso->nombreper }}</td>
                         <td class="col-md-auto">{{ $curso->fecha_inicio }}</td>
                         <td class="col-md-auto">{{ $curso->fecha_fin }}</td>
-                        <td class="col-md-auto">{{ $curso->nombre }}</td>
+                        <td class="col-md-auto">{{ $curso->nombre_certificacion }}</td>
                         @if (Auth::check() && Auth::user()->hasrole('profesor'))
                             <td class="d-flex justify-content-center">
                                 <form method="post" action="{{ url('/materialapoyo/listmaterial') }}" class="form">

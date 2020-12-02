@@ -9,8 +9,8 @@
                     <h2>Matricula</h2>
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('cursos',['id_curso'=>$cursoEstudiante->id, 'cursoestudiantes']) }}" method="post"
-                        enctype="multipart/form-data">
+                    <form action="{{ url('cursos', ['id_curso' => $cursoEstudiante->id, 'cursoestudiantes']) }}"
+                        method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="id_cisco"> {{ 'Id cisco' }}</label>
@@ -51,15 +51,7 @@
 
                             </div>
                             <div class="col-2">
-                                <button class="btn btn-secondary" onclick="goBack()">Volver</button>
-
-                                <script>
-                                    function goBack() {
-                                        window.history.back();
-                                    }
-
-                                </script>
-
+                                <a class="btn btn-secondary" onclick="goBack()">Volver</a>
                             </div>
                         </div>
                     </form>
@@ -67,5 +59,12 @@
             </div>
         </div>
     </div>
+@endsection
+@section('scripts')
+    <script>
+        function goBack() {
+            window.history.back();
+        }
 
+    </script>
 @endsection

@@ -42,7 +42,7 @@ class ProfesorController extends Controller
     public function verCursosAsignados($id)
     {
 
-        $cursos = Curso::select('c.id', 'c.id_cisco', 'm.nombre as nombre_modulo', 'p.cedula', 'per.nombre as nombreper', 'c.fecha_inicio', 'c.fecha_fin', 'co.nombre')
+        $cursos = Curso::select('c.id', 'c.id_cisco', 'm.nombre as nombre_modulo', 'p.cedula', 'per.nombre as nombreper', 'c.fecha_inicio', 'c.fecha_fin', 'co.nombre', 'tc.nombre as nombre_certificacion')
             ->from('curso as c')
             ->join('modulo as m', function ($join) {
                 $join->on('m.id', '=', 'c.id_modulo');
@@ -56,7 +56,11 @@ class ProfesorController extends Controller
             })
             ->join('cohorte as co', function ($join) {
                 $join->on('co.id', '=', 'c.id_cohorte');
-            })->orderBy('id_cisco', 'asc')->paginate(5);
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('co.id_tipo_certificacion', '=', 'tc.id');
+            })
+            ->orderBy('id_cisco', 'asc')->paginate(5);
         return view('profesores/cursosasignados', compact('cursos'));
     }
 
@@ -230,17 +234,36 @@ class ProfesorController extends Controller
     }
 
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function buscarProfesor(Request $request)
     {
-        //
+
+
+        /*
+$profesores = Profesor::select('p.cedula', 'p.cod_profesor', 'p.id_cisco', 'per.nombre', 'per.correo', 'per.telfijo', 'per.telcel', 'per.direccion', 'p.estado')
+            ->from('profesor as p')
+            ->join('persona as per', function ($join) {
+                $join->on('p.cedula', '=', 'per.cedula');
+            })->paginate(10);
+            */
+
+        $request->get('buscarProfesor');
+        $profesores = Profesor::select('p.cedula', 'p.cod_profesor', 'p.id_cisco', 'per.nombre', 'per.correo', 'per.telfijo', 'per.telcel', 'per.direccion', 'p.estado')
+            ->from('profesor as p')
+            ->join('persona as per', function ($join) use ($request) {
+                $join->on('p.cedula', '=', 'per.cedula')
+                    ->where(function ($query) use ($request) {
+                        if (is_numeric($request->get('buscarProfesor'))) {
+                            return $query->where('p.cedula', 'like', '%' . $request->get('buscarProfesor') . '%');
+                        } else {
+                            return $query->where('per.nombre', 'like', '%' . $request->get('buscarProfesor') . '%')
+                                ->orWhere('per.correo', 'like', '%' . $request->get('buscarProfesor') . '%');
+                        }
+                    });
+            })->get();
+
+        return json_encode($profesores);
     }
+
 
     /**
      * Show the form for editing the specified resource.

@@ -35,7 +35,7 @@ class Estudiante extends Model
                 }
             }
         } else {
-            if ($this->hasRole($certificaciones)) {
+            if ($this->hasCertificacion($certificaciones)) {
                 return true;
             }
         }

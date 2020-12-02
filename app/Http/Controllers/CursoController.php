@@ -133,10 +133,14 @@ class CursoController extends Controller
 
         $estudiantescertificacion = Estudiante::select('p.nombre', 'e.cedula')
             ->from('estudiante as e')
-            ->join('persona as p', function ($join) use ($certificacion) {
-                $join->on('p.cedula', '=', 'e.cedula')
-                    ->where('e.id_tipo_certificacion', $certificacion);
-            })->get();
+            ->join('persona as p', function ($join) {
+                $join->on('p.cedula', '=', 'e.cedula');
+                //->where('e.id_tipo_certificacion', $certificacion);
+            })->join('estudiante_tipo_certificacion as etc', function ($join) use ($certificacion) {
+                $join->on('e.id', '=', 'etc.estudiante_id')
+                    ->where('etc.tipo_certificacion_id', '=', $certificacion);
+            })->where('e.estado', '=', '1')
+            ->get();
 
 
         $estudiantesmatriculados = Estudiante::select('p.nombre', 'e.cedula')

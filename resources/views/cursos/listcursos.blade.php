@@ -120,7 +120,7 @@
                     tableRow += "<td class='col-md-auto'>" + value.nombre + " </td>";
                     var link = value.id;
                     if(AuthUser!=""){
-                    tableRow += `<td class="d-flex"><a href="/cursos/${link}/edit " class="btn btn-primary" id="editar" role="button">
+                    tableRow += `<td class="d-flex justify-content-center"><a href="/cursos/${link}/edit " class="btn btn-primary" id="editar" role="button">
                             <i class="fas fa-edit"></i> Editar </a>`
                     tableRow += `<p> ⠀ </p>
                             <form action="/cursos/${link}" method = "post">
