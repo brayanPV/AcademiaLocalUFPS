@@ -94,7 +94,6 @@
 <script>
     $('body').on('keyup', '#buscar', function() {
         var buscarCertificacion = $(this).val();
-        console.log(buscarCertificacion);
         $.ajax({
             method: "POST",
             url: "{{ url('certificaciones/buscarCertificacion') }}",
@@ -108,23 +107,21 @@
                 var con = 0;
                 $.each(JSON.parse(res), function(index, value) {
                     con++;
-                    console.log(value.nombre)
-                    var tableRow = "<tr> <td class='col-md-auto'> " + value.cedula +
+                    var tableRow = "<tr> <td class='col-md-auto'> " + value.nombre +
                         " </td>"
-                    tableRow += "<td class='col-md-auto'>" + value.nombre + " </td>";
                     img = value.imagen;
                     tableRow += `<td class="col-md-auto"> <img src="http://127.0.0.1:8080/storage/${img}"
                      width = "250" > </td>`;
                     tableRow += "<td class='col-md-auto'>" + value.descripcion + " </td>";
                     var link = value.id
                     tableRow += `<td class="d-flex"><a href="/certificaciones/${link}/edit " class="btn btn-primary" id="editar" role="button">
-                            <i class="fas fa-edit"></i></a>`
+                            <i class="fas fa-edit"></i>Editar </a>`
                     tableRow += `<p> ⠀ </p>
                             <form action="/certificaciones/${link}" method = "post">
                             @csrf
                             @method('DELETE') <button type = "submit" class = "btn btn-danger" onclick =
                             'return confirm("¿Esta seguro que desea eliminar la certificacion?");' >
-                            <i class="fas fa-trash"> </i> </button > </form> </td > </tr>`;
+                            <i class="fas fa-trash"></i>Borrar </button > </form> </td > </tr>`;
                     $('#dynamic-row').append(tableRow);
                 });
                 var t = document.getElementById('total');

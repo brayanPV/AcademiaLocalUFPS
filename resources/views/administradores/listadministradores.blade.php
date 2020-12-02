@@ -9,7 +9,7 @@
                 </div>
             @endif
             <div class="alert alert-primary" role="alert">
-                <h2>Gestion de Administradores</h2>
+                <h2><a href="{{ url('/administradores') }}">Gestion de Administradores</a></h2>
             </div>
             <div class="row">
                 <div class="col">
@@ -87,7 +87,6 @@
 <script>
     $('body').on('keyup', '#buscar', function() {
         var buscarAdmin = $(this).val();
-        console.log(buscarAdmin);
         $.ajax({
             method: "POST",
             url: "{{ url('administradores/buscarAdmin') }}",

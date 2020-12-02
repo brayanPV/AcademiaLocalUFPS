@@ -49,8 +49,8 @@ return [
         ],
         'upload' => [
             'driver' => 'local',
-            'root' => 'C:\Users\stive\Documents\uploads',
-            'url' => 'C:\Users\stive\Documents\uploads',
+            'root' => 'C:/Users/stive/Documents/uploads',
+            'path' => 'C:/Users/stive/Documents/uploads',
             'visibility' => 'public',
         ],
 

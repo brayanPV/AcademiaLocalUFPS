@@ -6,6 +6,7 @@ use App\Models\Administrador;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Persona;
+use App\Models\Profesor;
 use App\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -104,6 +105,7 @@ class AdministradorController extends Controller
         $this->validate($request, $datosPer, $mensaje);
         //$datosAdmin = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'password_confirmation', 'correo']);
         User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password'))]);
+        Profesor::insert(['cedula' => $request->input('cedula')]);
         $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
         $user->roles()->sync([1, 2, 3]);
         return redirect('administradores/')->with('Mensaje', 'Administrador agregado con exito'  . $mensajep);

@@ -53,6 +53,31 @@ class CursoController extends Controller
         return view('cursos/listcursos', compact('cursos'));
     }
 
+    public function buscarCurso(Request $request)
+    {
+        $cursos = Curso::select('c.id', 'c.id_cisco', 'm.nombre as nombre_modulo', 'p.cedula', 'per.nombre as nombreper', 'c.fecha_inicio', 'c.fecha_fin', 'co.nombre', 'm.id_tipo_certificacion as certificacion')
+            ->from('curso as c')
+            ->join('modulo as m', function ($join) {
+                $join->on('m.id', '=', 'c.id_modulo');
+            })
+            ->join('profesor as p', function ($join) {
+                $join->on('p.cedula', '=', 'c.ced_profesor');
+            })
+            ->join('persona as per', function ($join) {
+                $join->on('per.cedula', '=', 'p.cedula');
+            })
+            ->join('cohorte as co', function ($join) {
+                $join->on('co.id', '=', 'c.id_cohorte');
+            })
+            ->where('c.id_cisco', 'like', '%' . $request->get('buscarCurso') . '%')
+            ->orWhere('m.nombre', 'like', '%' . $request->get('buscarCurso') . '%')
+            ->orWhere('co.nombre', 'like', '%' . $request->get('buscarCurso') . '%')
+            ->orWhere('per.nombre', 'like', '%' . $request->get('buscarCurso') . '%')
+            ->orderBy('id_cisco', 'asc')->get();
+
+        return json_encode($cursos);
+    }
+
     public function getModulos(Request $request)
     {
 

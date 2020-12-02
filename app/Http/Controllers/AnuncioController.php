@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Anuncio;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class AnuncioController extends Controller
@@ -15,9 +16,21 @@ class AnuncioController extends Controller
      */
     public function index()
     {
-       
+
         $anuncios = Anuncio::get(); //->where('tipo', 0)->sortBy('id');
         return view('anuncios/carouselanuncios', compact('anuncios'));
+    }
+
+    public function buscarAnuncio(Request $request)
+    {
+        $request->get('buscarAnuncio');
+        Log::info($request->get('buscarAnuncio'));
+        $anuncios = Anuncio::select('a.id', 'a.tipo', 'a.nombre', 'a.url', 'a.img1')
+            ->from('anuncio as a')
+            ->where('a.nombre', 'like', '%' . $request->get('buscarAnuncio') . '%')
+            ->get();
+        Log::info($anuncios);
+        return json_encode($anuncios);
     }
 
     /**
@@ -108,7 +121,7 @@ class AnuncioController extends Controller
             'url' => 'required|url|max:200'
         ];
         if ($request->hasFile('img1')) {
-            $campos +=['img1' => 'required|max:10000|mimes:jpeg,png,jpg'];
+            $campos += ['img1' => 'required|max:10000|mimes:jpeg,png,jpg'];
         }
         $Mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $campos, $Mensaje);

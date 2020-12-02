@@ -19,14 +19,31 @@ class ModuloController extends Controller
     }
 
 
-    public function listModulo(){
-        
+    public function listModulo()
+    {
+
+
+
         $modulos = Modulo::select('m.id', 'm.numero', 'm.nombre', 't.nombre as nombre_certificacion', 'm.url1', 'm.url2')
-        ->from('modulo as m')
-        ->join('tipo_certificacion as t', function($join){
-            $join->on('t.id', '=', 'm.id_tipo_certificacion');
-        })->paginate(10);
+            ->from('modulo as m')
+            ->join('tipo_certificacion as t', function ($join) {
+                $join->on('t.id', '=', 'm.id_tipo_certificacion');
+            })->paginate(10);
         return view('modulos/listmodulos', compact('modulos'));
+    }
+
+    public function buscarModulo(Request $request)
+    {
+        $modulos = Modulo::select('m.id', 'm.numero', 'm.nombre', 't.nombre as nombre_certificacion', 'm.url1', 'm.url2')
+            ->from('modulo as m')
+            ->join('tipo_certificacion as t', function ($join) {
+                $join->on('t.id', '=', 'm.id_tipo_certificacion');
+            })
+            ->where('m.nombre', 'like', '%' . $request->get('buscarModulo') . '%')
+            ->orWhere('t.nombre', 'like', '%' . $request->get('buscarModulo') . '%')
+            ->get();
+
+        return json_encode($modulos);
     }
 
     /**
@@ -85,14 +102,14 @@ class ModuloController extends Controller
     {
         //
         //$modulos = Modulo::findOrFail($id);
-        $modulos = Modulo::select('m.id', 'm.numero', 'm.nombre as nombre', 'm.url1', 'm.url2', 'm.id_tipo_certificacion' ,'tc.nombre as tc_nombre')
-        ->from('modulo as m')
-        ->join('tipo_certificacion as tc', function($join){
-            $join->on('m.id_tipo_certificacion', '=', 'tc.id');
-        })->where('m.id', $id)->first();
+        $modulos = Modulo::select('m.id', 'm.numero', 'm.nombre as nombre', 'm.url1', 'm.url2', 'm.id_tipo_certificacion', 'tc.nombre as tc_nombre')
+            ->from('modulo as m')
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('m.id_tipo_certificacion', '=', 'tc.id');
+            })->where('m.id', $id)->first();
         $tipoCertificacion = TipoCertificacion::get();
 
-        return view('modulos.edit',compact(['modulos', 'tipoCertificacion']));
+        return view('modulos.edit', compact(['modulos', 'tipoCertificacion']));
     }
 
     /**
@@ -105,9 +122,9 @@ class ModuloController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $campos=[
+        $campos = [
             'numero' => 'required',
-            'nombre' => 'required|unique:modulo,nombre,'.$id,
+            'nombre' => 'required|unique:modulo,nombre,' . $id,
             'id_tipo_certificacion' => 'required',
             'url1' => 'required',
             'url2' => 'required'

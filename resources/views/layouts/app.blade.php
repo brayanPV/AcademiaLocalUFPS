@@ -18,7 +18,17 @@
     <link rel="stylesheet" href="{{ asset('fontawesome-free/css/fontawesome.min.css') }}">
 
     <!-- Styles -->
+  
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+       
+        body {
+            overflow-x: hidden;
+            margin:0;
+            padding:0;  
+        }
+    </style>
     <script src="{{ asset('js/jquery-3.5.1.min.js') }}"></script>
 
 </head>
@@ -107,6 +117,9 @@
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                             <a class="dropdown-item" href="{{ url('/inicio/' . Auth::user()->id) }}">
                                                 {{ __('Mi espacio') }}
+                                            </a>
+                                            <a class="dropdown-item" target="_blank" href="http://giret.ufps.edu.co/cisco/descargas/">
+                                                {{ __('Descargas') }}
                                             </a>
                                             <a class="dropdown-item" href="{{ route('logout') }}"
                                                 onclick="event.preventDefault();

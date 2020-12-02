@@ -57,11 +57,11 @@
     </div>
     <div class="row">
         <div class="col-10">
-            <input class="btn btn-primary" type="submit" value="Preinscribir">
+            <input class="btn btn-primary" type="submit" value="{{ $Modo == 'Crear' ? 'Preinscribir' : 'Editar' }}">
         </div>
         <div class="col-2">
            @if(!Auth::check()) <a class="btn btn-secondary" inl href="{{ url('/') }}">Inicio</a>
-           @else <a class="btn btn-secondary" inl href="{{ url('/preinscripcion/listpreinscripcion') }}">Lsitado</a>
+           @else <a class="btn btn-secondary" inl href="{{ url('/preinscripcion/listpreinscripcion') }}">Listado</a>
            @endif
         </div>
     </div>

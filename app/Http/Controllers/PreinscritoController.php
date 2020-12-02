@@ -33,6 +33,32 @@ class PreinscritoController extends Controller
 
         return view('preinscripcion/listpreinscripcion', compact('preinscritos'));
     }
+
+    public function buscarPreinscrito(Request $request)
+    {
+        $request->get('buscarPreinscrito');
+        $preinscritos = Inscrito::select('i.cedula', 'p.nombre', 'i.semestre', 'tc.nombre as nombre_certificacion', 'p.correo', 'p.telcel', 'p.telfijo', 'p.direccion')
+            ->from('inscrito as i')
+            ->join('persona as p', function ($join) {
+                $join->on('i.cedula', '=', 'p.cedula');
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('i.certificacion', '=', 'tc.id');
+            })->where('i.estado', '=', 'PRE-INSCRITO')
+            ->where(function ($query) use ($request) {
+                if (is_numeric($request->get('buscarPreinscrito'))) {
+                    return $query->where('p.cedula', 'like', '%' . $request->get('buscarPreinscrito') . '%');
+                } else {
+                    return $query->where('p.nombre', 'like', '%' . $request->get('buscarPreinscrito') . '%')
+                        ->orWhere('p.correo', 'like', '%' . $request->get('buscarPreinscrito') . '%')
+                        ->orWhere('tc.nombre', 'like', '%' . $request->get('buscarPreinscrito') . '%');
+                }
+            })
+            ->get();
+
+        return json_encode($preinscritos);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -65,6 +91,7 @@ class PreinscritoController extends Controller
             'certificacion' => 'required'
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
+        $mensajep ="";
         if (Persona::where('cedula', $request->input('cedula'))->first() == null) {
             $this->validate($request, $datos, $mensaje);
             $datosPersona = request()->except(['_token', '_method', 'updated_at', 'certificacion', 'semestre']);
@@ -141,6 +168,13 @@ class PreinscritoController extends Controller
         return redirect('preinscripcion/listpreinscripcion')->with('Mensaje', 'Se ha editado con exito');
     }
 
+
+    public function inscribir($id){
+        $estado = "INSCRITO";
+        Inscrito::where('cedula', $id)->update(['estado' => $estado]);
+        return redirect('preinscripcion/listpreinscripcion')->with('Mensaje', 'Se ha inscrito con exito');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -150,5 +184,7 @@ class PreinscritoController extends Controller
     public function destroy($id)
     {
         //
+        Inscrito::where('cedula', $id)->delete();
+        return redirect('preinscripcion/listpreinscripcion')->with('Mensaje', 'Se ha eliminado con exito');
     }
 }

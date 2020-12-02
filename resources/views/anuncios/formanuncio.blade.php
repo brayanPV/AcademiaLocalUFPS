@@ -22,6 +22,7 @@
 <div class="form-group">
     <label class="control-label" for="img1"> Imagen</label> </br>
     @if (isset($anuncio->img1))
+    
         <img class="img-thumbnail img-fluid" src="{{ asset('storage') . '/' . $anuncio->img1 }}" alt="" width="250">
     @endif
     <input class="form-control {{ $errors->has('img1') ? 'is-invalid' : '' }}" type="file" name="img1" id="img1">

@@ -107,6 +107,7 @@
             success: function(res) {
                 $('#dynamic-row').html("");
                 var con = 0;
+                console.log(res);
                 $("#pagination").remove();
                 $.each(JSON.parse(res), function(index, value) {
                     con++;
@@ -117,13 +118,14 @@
                     tableRow += "<td class='col-md-auto'>" + value.tc_nombre + "</td>";
                     var link = value.id
                     tableRow += `<td class="d-flex"><a href="/cohortes/${link}/edit " class="btn btn-primary" id="editar" role="button">
-                            <i class="fas fa-edit"></i></a>`
+                            <i class="fas fa-edit"></i> Editar
+                        </a>`
                     tableRow += `<p> ⠀ </p>
                             <form action="/cohortes/${link}" method = "post">
                             @csrf
                             @method('DELETE') <button type = "submit" class = "btn btn-danger" onclick =
                             'return confirm("¿Esta seguro que desea eliminar el cohorte?");' >
-                            <i class="fas fa-trash"> </i> </button > </form> </td > </tr>`;
+                            <i class="fas fa-trash"></i> Borrar </button > </form> </td > </tr>`;
                     $('#dynamic-row').append(tableRow);
                 });
                 var t = document.getElementById('total');
