@@ -247,11 +247,28 @@ class CursoController extends Controller
     public function edit($id)
     {
         //
-
-        $curso = Curso::select('c.id', 'c.id_cisco', 'c.ced_profesor', 'tc.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'tc.id as id_certificacion', 'm.id as id_modulo', 'm.nombre as nombre_modulo')
+        $estado =
+        $curso = Curso::select(
+            'c.id',
+            'c.id_cisco',
+            'c.ced_profesor',
+            'tc.nombre',
+            'c.fecha_inicio',
+            'c.fecha_fin',
+            'tc.id as id_certificacion',
+            'm.id as id_modulo',
+            'm.nombre as nombre_modulo',
+            'p.nombre as nombre_profesor',
+            'p.cedula'
+        )
             ->from('curso as c')
             ->join('modulo as m', function ($join) {
                 $join->on('c.id_modulo', '=', 'm.id');
+            })->join('profesor as pro', function ($join){
+                $join->on('c.ced_profesor', '=', 'pro.cedula');
+            })
+            ->join('persona as p', function ($join) {
+                $join->on('c.ced_profesor', '=', 'p.cedula');
             })
             ->join('tipo_certificacion as tc', function ($join) {
                 $join->on('m.id_tipo_certificacion', '=', 'tc.id');

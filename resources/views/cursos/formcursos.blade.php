@@ -32,7 +32,7 @@
     <div class="form-group">
         <label for="modulo" class="control-label"> {{ 'Modulo ' }}</label>
         <input class="form-control {{ $errors->has('id_modulo') ? 'is-invalid' : '' }}" type="hidden" name="id_modulo"
-            id="id_modulo" value="{{ $curso->id_modulo}}">
+            id="id_modulo" value="{{ $curso->id_modulo }}">
         <label for="modulo" class="form-control"> {{ $curso->nombre_modulo }}</label>
 @endif
 <div class="form-group">
@@ -52,9 +52,15 @@
     <label class="control-label" for="ced_profesor"> {{ 'Profesor' }}</label>
     <select name="ced_profesor" id="ced_profesor"
         class="form-control {{ $errors->has('ced_profesor') ? 'is-invalid' : '' }}">
-        <option value="">Seleccione</option>
+        <option value="{{ isset($curso->cedula) }}">{{ isset($curso->nombre_profesor) ? $curso->nombre_profesor : 'Seleccione' }}</option>
         @foreach ($profesores as $profesor)
-            <option value="{{ $profesor->cedula }}">{{ $profesor->nombre }} </>
+            @if (isset($curso))
+                @if ($curso->cedula != $profesor->cedula)
+                    <option value="{{ $profesor->cedula }}">{{ $profesor->nombre }} </>
+                @endif
+            @else
+                <option value="{{ $profesor->cedula }}">{{ $profesor->nombre }} </>
+            @endif
         @endforeach
     </select>
     {!! $errors->first('ced_profesor', '<div class="invalid-feedback">:message</div>') !!}
