@@ -9,7 +9,7 @@
             @endif
             @if (Auth::check() && Auth::user()->hasrole('administrador'))
                 <div class="alert alert-primary" role="alert">
-                    <h2>Gestion de certificaciones</h2>
+                    <h2><a href="{{ url('/certificaciones/listcertificaciones') }}">Gestion de certificaciones</a></h2>
                 </div>
 
                 <div class="row">
@@ -56,7 +56,7 @@
                             @if (Auth::check() && Auth::user()->hasrole('administrador'))
                                 <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
                                         href="{{ url('/certificaciones/' . $certificacion->id . '/edit') }}"> <i
-                                            class="fas fa-edit"></i>Editar </a>
+                                            class="fas fa-edit"></i>Editar </a> <p>⠀</p>
                                     <form method="post" action="{{ url('/certificaciones/' . $certificacion->id) }}"
                                         style="display: inline">
                                         @csrf
@@ -116,7 +116,7 @@
                     var link = value.id
                     tableRow += `<td class="d-flex"><a href="/certificaciones/${link}/edit " class="btn btn-primary" id="editar" role="button">
                             <i class="fas fa-edit"></i>Editar </a>`
-                    tableRow += `<p> ⠀ </p>
+                    tableRow += `<p>⠀</p>
                             <form action="/certificaciones/${link}" method = "post">
                             @csrf
                             @method('DELETE') <button type = "submit" class = "btn btn-danger" onclick =

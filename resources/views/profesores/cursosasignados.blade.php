@@ -29,6 +29,7 @@
             <tbody>
                 @forelse ($cursos as $curso)
                     <tr>
+                        
                         <td class="col-md-auto">{{ $curso->id_cisco }}</td>
                         <td class="col-md-auto">{{ $curso->nombre_modulo }}</td>
                         <td class="col-md-auto">{{ $curso->nombre }}</td>

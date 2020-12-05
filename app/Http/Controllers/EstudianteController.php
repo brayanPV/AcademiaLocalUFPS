@@ -110,7 +110,7 @@ class EstudianteController extends Controller
 
     public function verCursosAsignados($id)
     {
-        $cursos = DB::select('select m.nombre, tc.nombre as nombrec, m.url1, m.url2, c.id
+        /* $cursos = DB::select('select m.nombre, tc.nombre as nombrec, m.url1, m.url2, c.id
         from modulo m
         inner join tipo_certificacion tc
         on m.id_tipo_certificacion = tc.id
@@ -119,6 +119,24 @@ class EstudianteController extends Controller
         inner join curso_estudiante ce
         on ce.id_curso = c.id
         and ce.ced_estudiante = ?', [$id]);
+        return view('estudiantes/cursosasignados', compact('cursos'));*/
+
+        $cursos = CursoEstudiante::select('m.nombre', 'tc.nombre as certificacion', 'm.url1', 'm.url2', 'c.id', 'ce.valor', 'ce.laboratorio', 'ce.certificado', 'ce.carta')
+            ->from('curso_estudiante as ce')
+            ->join('curso as c', function ($join) {
+                $join->on('ce.id_curso', '=', 'c.id');
+            })
+            ->join('modulo as m', function ($join) {
+                $join->on('c.id_modulo', '=', 'm.id');
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('m.id_tipo_certificacion', '=', 'tc.id');
+            })
+            ->join('estudiante as e', function ($join) use ($id) {
+                $join->on('ce.ced_estudiante', '=', 'e.cedula')
+                    ->where('e.cedula', '=', $id);
+            })->paginate(10)->sortBy('tc.id');
+
         return view('estudiantes/cursosasignados', compact('cursos'));
     }
 

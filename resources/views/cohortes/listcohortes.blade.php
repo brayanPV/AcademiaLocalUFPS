@@ -8,7 +8,7 @@
         @endif
         @if (Auth::check() && Auth::user()->hasrole('administrador'))
             <div class="alert alert-primary" role="alert">
-                <h2>Gestion de cohortes</h2>
+                <h2><a href="{{ url('/cohortes/listcohortes') }}">Gestion de cohortes</a></h2>
             </div>
             <div class="row">
                 <div class="col">

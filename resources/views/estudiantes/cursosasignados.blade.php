@@ -14,32 +14,38 @@
                 <tr>
                     <th>Curso</th>
                     <th>Certificacion</th>
-                    <th>Enlaces</th>
+                    <th>Contenido</th>
                     <th>Material</th>
-                    <th>Notas</th>
+                    <th>Notas Modulo</th>
+                    <th>Notas Laboratorio</th>
+                    <th>Certificado</th>
+                    <th>Carta</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($cursos as $curso)
                     <tr>
                         <td class="col-md-auto">{{ $curso->nombre }}</td>
-                        <td class="col-md-auto">{{ $curso->nombrec }}</td>
+                        <td class="col-md-auto">{{ $curso->certificacion }}</td>
                         <td class="col-md-auto"> <a target="_blank" href="{{ $curso->url1 }}" class="btn btn-primary"> <i class="fas fa-eye"></i>Ver</a> <a  class="btn btn-secondary" target="_blank" href="{{ $curso->url2 }}"><i class="fas fa-eye"></i>Ver</a></td>
                         <td class="col-md-auto">
                             <form method="post" action="{{ url('/materialapoyo/listmaterial') }}" class="form">
                                 @csrf
                                 <input class="form-control" type="hidden" name="id" id="id" value="{{ $curso->id }}">
                                 <div class="input-group" id="submit-group" >
-                                    <button type="submit" class="btn btn-success">
+                                    <button data-toggle="tooltip" data-placement="bottom" title="Material del curso" type="submit" class="btn btn-success">
                                         <i class="fas fa-book"></i> Material
                                     </button>
                                 </div>
                             </form>
                         </td>
-                        <td> </td>
+                        <td class="col-md-auto">{{ $curso->valor }}</td>
+                        <td class="col-md-auto">{{ $curso->laboratorio }}</td>
+                        <td class="col-md-auto"> @if($curso->certificado) <a data-toggle="tooltip" data-placement="bottom" title="Ver/Descargar" href="{{ $curso->certificado }}" class="btn btn-primary" target="_blank">  <i class="fas fa-file-download"></i></a>  @else @endif </td>
+                        <td class="col-md-auto">@if($curso->carta)<a data-toggle="tooltip" data-placement="bottom" title="Ver/Descargar" href="{{ $curso->carta }}" class="btn btn-primary" target="_blank"> <i class="fas fa-file-download"></i></a> @else  @endif </td>
                     </tr>
                 @empty
-                    <h2>No hay nada por mostrar </h2>
+                    <h2>No tiene cursos asignados </h2>
 
                 @endforelse
             </tbody>

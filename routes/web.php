@@ -106,9 +106,13 @@ Route::patch('/profesores/{profesore}', 'App\Http\Controllers\ProfesorController
 Route::get('/profesores/{profesore}/cursosasignados', 'App\Http\Controllers\ProfesorController@verCursosAsignados')->middleware('auth', 'role:profesor');
 Route::get('/profesores/{curso}/cursoestudiantes', 'App\Http\Controllers\ProfesorController@verEstudiantesCursos')->middleware('auth', 'role:profesor');
 Route::get('/profesores/{curso}/{estudiante}/agregarobservacion', 'App\Http\Controllers\ProfesorController@agregarObservacion')->middleware('auth', 'role:profesor');
+Route::get('/profesores/{curso}/{estudiante}/agregarnota', 'App\Http\Controllers\ProfesorController@agregarNota')->middleware('auth', 'role:profesor');
 Route::put('/profesores/{curso}/cursoestudiantes', 'App\Http\Controllers\ProfesorController@observacionUpdate')->middleware('auth', 'role:profesor');
+Route::patch('/profesores/{curso}/cursoestudiantes', 'App\Http\Controllers\ProfesorController@notaUpdate')->middleware('auth', 'role:profesor');
+Route::delete('/profesores/{curso}/cursoestudiantes', 'App\Http\Controllers\ProfesorController@eliminarEstudianteCurso')->middleware('auth', 'role:administrador');
 Route::delete('/profesores/{profesore}', 'App\Http\Controllers\ProfesorController@destroy')->middleware('auth', 'role:administrador');
 Route::post('/profesores/buscarProfesor','App\Http\Controllers\ProfesorController@buscarProfesor')->middleware('auth', 'role:administrador');
+Route::post('/profesores/buscarEstudianteCurso','App\Http\Controllers\ProfesorController@buscarEstudianteCurso')->middleware('auth', 'role:profesor');
 //material de apoyo downloadfile
 Route::post('/materialapoyo', 'App\Http\Controllers\ProfesorController@createMaterialApoyo')->middleware('auth', 'role:profesor');
 Route::post('/materialapoyoupload', 'App\Http\Controllers\ProfesorController@storeMaterialApoyo')->middleware('auth', 'role:profesor');

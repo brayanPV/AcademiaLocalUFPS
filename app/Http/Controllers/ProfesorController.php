@@ -141,8 +141,54 @@ class ProfesorController extends Controller
             })
             ->Join('estudiante', 'curso_estudiante.ced_estudiante', '=', 'estudiante.cedula')
             ->Join('persona', 'curso_estudiante.ced_estudiante', '=', 'persona.cedula')
-            ->select('curso_estudiante.id_curso as id', 'curso_estudiante.ced_estudiante as cedula', 'persona.nombre', 'curso_estudiante.observaciones', 'curso_estudiante.estado')->paginate(10);
+            ->select(
+                'curso_estudiante.id_curso as id',
+                'curso_estudiante.ced_estudiante as cedula',
+                'persona.nombre',
+                'curso_estudiante.observaciones',
+                'curso_estudiante.estado',
+                'curso_estudiante.valor',
+                'curso_estudiante.laboratorio',
+                'curso_estudiante.certificado',
+                'curso_estudiante.carta'
+            )->paginate(10);
         return view('profesores/cursoestudiantes', compact('estudiantes', 'curso'));
+    }
+
+    public function buscarEstudianteCurso(Request $request)
+    {
+        $estudiantes = CursoEstudiante::select(
+            'ce.id_curso as id',
+            'ce.ced_estudiante as cedula',
+            'p.nombre',
+            'ce.observaciones',
+            'ce.estado',
+            'ce.valor',
+            'ce.laboratorio',
+            'ce.certificado',
+            'ce.carta'
+        )
+            ->from('curso_estudiante as ce')
+            ->Join('curso as c', function ($join) use ($request) {
+                $join->on('ce.id_curso', '=', 'c.id')
+                    ->Where('c.id', $request->get('id_curso'));
+            })
+            ->Join('estudiante as e', function ($join) {
+                $join->on('ce.ced_estudiante', '=', 'e.cedula');
+            })
+            ->Join('persona as p', function ($join) use ($request) {
+                $join->on('e.cedula', '=', 'p.cedula')
+                    ->where(function ($query) use ($request) {
+                        if (is_numeric($request->get('buscarEstudianteCurso'))) {
+                            return $query->where('p.cedula', 'like', '%' . $request->get('buscarEstudianteCurso') . '%');
+                        } else {
+                            return $query->where('p.nombre', 'like', '%' . $request->get('buscarEstudianteCurso') . '%')
+                                ->orWhere('p.correo', 'like', '%' . $request->get('buscarEstudianteCurso') . '%');
+                        }
+                    });
+            })->get();
+
+        return json_encode($estudiantes);
     }
 
     public function agregarObservacion($curso, $estudiante)
@@ -166,7 +212,36 @@ class ProfesorController extends Controller
         return view('profesores/agregarobservacion', compact('estudiante'));
     }
 
+    public function agregarNota($curso, $estudiante)
+    {
+        $estudiante = CursoEstudiante::select(
+            'ce.id_curso',
+            'ce.ced_estudiante',
+            'ce.observaciones',
+            'p.nombre',
+            'c.id_cisco',
+            'm.nombre as modulo',
+            'ce.valor',
+            'ce.laboratorio'
+        )
+            ->from('curso_estudiante as ce')
+            ->join('curso as c', function ($join) use ($curso) {
+                $join->on('ce.id_curso', '=', 'c.id')
+                    ->where('c.id', '=', $curso);
+            })
+            ->join('modulo as m', function ($join) {
+                $join->on('m.id', '=', 'c.id_modulo');
+            })
+            ->join('estudiante as e', function ($join) use ($estudiante) {
+                $join->on('ce.ced_estudiante', '=', 'e.cedula')
+                    ->where('e.cedula', '=', $estudiante);
+            })
+            ->join('persona as p', function ($join) {
+                $join->on('e.cedula', '=', 'p.cedula');
+            })->first();
 
+        return view('profesores/agregarnota', compact('estudiante'));
+    }
 
     public function observacionUpdate(Request $request, $id_curso)
     {
@@ -180,6 +255,43 @@ class ProfesorController extends Controller
             ['ced_estudiante', $request->input('cedula')]
         ])->update(['observaciones' => $request->input('observaciones')]);
         return $this->verEstudiantesCursos($id_curso);
+    }
+
+    public function notaUpdate(Request $request, $id_curso)
+    {
+
+        if ($request->input('valor') != 0 && $request->input('laboratorio') != 0) {
+            CursoEstudiante::where([
+                ['id_curso', $id_curso],
+                ['ced_estudiante', $request->input('cedula')]
+            ])->update(['valor' => $request->input('valor'), 'laboratorio'  => $request->input('laboratorio')]);
+            return $this->verEstudiantesCursos($id_curso);
+        } else if ($request->input('valor') != 0) {
+            CursoEstudiante::where([
+                ['id_curso', $id_curso],
+                ['ced_estudiante', $request->input('cedula')]
+            ])->update(['valor' => $request->input('valor')]);
+            return $this->verEstudiantesCursos($id_curso);
+        } else if ($request->input('laboratorio') != 0) {
+            CursoEstudiante::where([
+                ['id_curso', $id_curso],
+                ['ced_estudiante', $request->input('cedula')]
+            ])->update(['laboratorio' => $request->input('laboratorio')]);
+            return $this->verEstudiantesCursos($id_curso);
+        } else {
+            $datos = [
+                'valor' => 'numeric|max:100',
+                'laboratorio' => 'numeric|max:100'
+            ];
+            $mensaje = ["numeric" => 'El :attribute debe ser numerico'];
+            $this->validate($request, $datos, $mensaje);
+        }
+    }
+
+    public function eliminarEstudianteCurso(Request $request, $id)
+    {
+        CursoEstudiante::where([['id_curso', $id], ['ced_estudiante', $request->input('cedula')]])->delete();
+        return $this->verEstudiantesCursos($id);
     }
 
     /**
@@ -236,15 +348,6 @@ class ProfesorController extends Controller
 
     public function buscarProfesor(Request $request)
     {
-
-
-        /*
-$profesores = Profesor::select('p.cedula', 'p.cod_profesor', 'p.id_cisco', 'per.nombre', 'per.correo', 'per.telfijo', 'per.telcel', 'per.direccion', 'p.estado')
-            ->from('profesor as p')
-            ->join('persona as per', function ($join) {
-                $join->on('p.cedula', '=', 'per.cedula');
-            })->paginate(10);
-            */
 
         $request->get('buscarProfesor');
         $profesores = Profesor::select('p.cedula', 'p.cod_profesor', 'p.id_cisco', 'per.nombre', 'per.correo', 'per.telfijo', 'per.telcel', 'per.direccion', 'p.estado')
