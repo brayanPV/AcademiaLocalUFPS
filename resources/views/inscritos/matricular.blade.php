@@ -33,7 +33,7 @@
                         <div class="form-group">
                             <label for="correo"> {{ 'Recibo pago' }}</label></br>
                             @if ($inscritos->recibo_pago_inscripcion != '')
-                            <input type="text" name="recibo_pago_inscripcion" id="recibo_pago_inscripcion" value="{{$inscritos->recibo_pago_inscripcion}}">
+                            <input type="hidden" name="recibo_pago_inscripcion" id="recibo_pago_inscripcion" value="{{$inscritos->recibo_pago_inscripcion}}">
                                 <a class="btn btn-success" aria-disabled=""> <i class="fas fa-check-square"></i> </a>
                             @else <input
                                     class="form-control {{ $errors->has('recibo_pago_inscripcion') ? 'is-invalid' : '' }}"

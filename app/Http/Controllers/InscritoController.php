@@ -100,30 +100,51 @@ class InscritoController extends Controller
 
     public function matricular(Request $request)
     {
-        //dd('PdfController / store()', $request->all());
-        //var_dump($request->input('nombre'));
-       
-        $datos = [
-            'recibo_pago_inscripcion' => 'required|max:10000|mimes:jpeg,png,jpg',
-            'cedula' => 'required',
-            'nombre' => 'required',
-            'id_tipo_certificacion' => 'required',
-            'id_cisco' => 'required'
-        ];
-        $mensaje = ["required" => 'El :attribute es requerido'];
-        $this->validate($request, $datos, $mensaje);
-        $datosmatricula = request()->except(['_token',  'updated_at', 'nombre']);
-        dump($this->validate($request, $datos, $mensaje));
-        die();
-        
-        //dd($datosmatricula);
-        Estudiante::insert($datosmatricula);
-        Inscrito::where('cedula', $request->input('cedula'))->delete();
-        if(User::where('cedula', $request->input('cedula'))->first() == null) {
+        //'recibo_pago_inscripcion' => 'required|max:10000|mimes:jpeg,png,jpg',
+        $user = Inscrito::where([['cedula', $request->input('cedula')], ['certificacion', $request->input('id_tipo_certificacion')]])->first();
+        if ($user->recibo_pago_inscripcion == null) {
+            $datos = [
+                'recibo_pago_inscripcion' => 'required|max:10000|mimes:jpeg,png,jpg',
+                'cedula' => 'required',
+                'nombre' => 'required',
+                'id_tipo_certificacion' => 'required',
+                'id_cisco' => 'required'
+            ];
+            $mensaje = ["required" => 'El :attribute es requerido'];
+            $this->validate($request, $datos, $mensaje);
+            $datosmatricula = request()->except(['_token',  'updated_at', 'nombre']);
+            if ($request->hasFile('recibo_pago_inscripcion')) {
+                $name = $request->file('recibo_pago_inscripcion')->getClientOriginalName();
+                $reciboInscripcion = $request->file('recibo_pago_inscripcion')->storeAs('recibo', $name, 'upload');
+            }
+        } else {
+            $datos = [
+                'cedula' => 'required',
+                'nombre' => 'required',
+                'id_tipo_certificacion' => 'required',
+                'id_cisco' => 'required'
+            ];
+            $mensaje = ["required" => 'El :attribute es requerido'];
+            $this->validate($request, $datos, $mensaje);
+            $datosmatricula = request()->except(['_token',  'updated_at', 'nombre', 'recibo_pago_inscripcion']);
+            $reciboInscripcion =$request->input('recibo_pago_inscripcion');
+        }
+
+        if (Estudiante::where('cedula', $request->input('cedula'))->first() ==  null) {
+            $datosmatricula['password'] = $request->input('cedula');
+            Estudiante::insert($datosmatricula);
+            $est = Estudiante::where('cedula', $request->input('cedula'))->first();
+            $e = Estudiante::find($est->id);
+            $e->certificaciones()->attach($request->input('id_tipo_certificacion'), ['recibo_pago_inscripcion' => $reciboInscripcion]);
             User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('cedula'))]);
             $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
             $user->roles()->sync(Role::where('nombre', 'estudiante')->first());
+        } else {
+            $est = Estudiante::where('cedula', $request->input('cedula'))->first();
+            $e = Estudiante::find($est->id);
+            $e->certificaciones()->attach($request->input('id_tipo_certificacion'), ['recibo_pago_inscripcion' => $request->input('recibo_pago_inscripcion')]);
         }
+        Inscrito::where('cedula', $request->input('cedula'))->delete();
 
         return redirect('inscritos/listinscritos')->with('Mensaje', 'Se ha matriculado con exito');
     }
