@@ -101,7 +101,8 @@ class InscritoController extends Controller
     public function matricular(Request $request)
     {
         //dd('PdfController / store()', $request->all());
-        var_dump($request->input('nombre'));
+        //var_dump($request->input('nombre'));
+       
         $datos = [
             'recibo_pago_inscripcion' => 'required|max:10000|mimes:jpeg,png,jpg',
             'cedula' => 'required',
@@ -112,6 +113,10 @@ class InscritoController extends Controller
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $datos, $mensaje);
         $datosmatricula = request()->except(['_token',  'updated_at', 'nombre']);
+        dump($this->validate($request, $datos, $mensaje));
+        die();
+        
+        //dd($datosmatricula);
         Estudiante::insert($datosmatricula);
         Inscrito::where('cedula', $request->input('cedula'))->delete();
         if(User::where('cedula', $request->input('cedula'))->first() == null) {

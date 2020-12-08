@@ -166,12 +166,16 @@ class ProfesorController extends Controller
             'ce.valor',
             'ce.laboratorio',
             'ce.certificado',
-            'ce.carta'
+            'ce.carta',
+            'm.nombre as modulo'
         )
             ->from('curso_estudiante as ce')
             ->Join('curso as c', function ($join) use ($request) {
                 $join->on('ce.id_curso', '=', 'c.id')
                     ->Where('c.id', $request->get('id_curso'));
+            })
+            ->join('modulo as m', function ($join) {
+                $join->on('c.id_modulo', '=', 'm.id');
             })
             ->Join('estudiante as e', function ($join) {
                 $join->on('ce.ced_estudiante', '=', 'e.cedula');
@@ -189,6 +193,33 @@ class ProfesorController extends Controller
             })->get();
 
         return json_encode($estudiantes);
+    }
+
+    public function buscarCursoAsignado(Request $request)
+    {
+        $cursos = Curso::select('c.id', 'c.id_cisco', 'm.nombre as nombre_modulo', 'p.cedula', 'per.nombre as nombreper', 'c.fecha_inicio', 'c.fecha_fin', 'co.nombre', 'tc.nombre as nombre_certificacion')
+            ->from('curso as c')
+            ->join('modulo as m', function ($join) {
+                $join->on('m.id', '=', 'c.id_modulo');
+            })
+            ->join('profesor as p', function ($join) use ($request) {
+                $join->on('p.cedula', '=', 'c.ced_profesor')
+                    ->where('p.cedula', $request->get('cedula'));
+            })
+            ->join('persona as per', function ($join) {
+                $join->on('per.cedula', '=', 'p.cedula');
+            })
+            ->join('cohorte as co', function ($join) {
+                $join->on('co.id', '=', 'c.id_cohorte');
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('co.id_tipo_certificacion', '=', 'tc.id');
+            })
+            ->where('m.nombre', 'like', '%' .  $request->get('buscarCursoAsignado')  . '%')
+            ->orWhere('tc.nombre', 'like', '%' .  $request->get('buscarCursoAsignado')  . '%')
+            ->orWhere('co.nombre', 'like', '%' .  $request->get('buscarCursoAsignado')  . '%')
+            ->get();
+        return json_encode($cursos);
     }
 
     public function agregarObservacion($curso, $estudiante)

@@ -57,13 +57,16 @@ Route::post('/cursos/buscarCurso','App\Http\Controllers\CursoController@buscarCu
 //Route::post('/nuevoestudiantecurso', 'App\Http\Controllers\CursoController@createNuevoEstudianteCurso')->middleware('auth', 'role:administrador');
 Route::post('/cursos/{curso}/cursoestudiantes', 'App\Http\Controllers\CursoController@storeNuevoEstudianteCurso')->middleware('auth', 'role:administrador');
 //administradores
-Route::get('/administradores/create', 'App\Http\Controllers\AdministradorController@create')->middleware('auth', 'role:administrador');
+
+Route::resource('administradores', AdministradorController::class)->middleware(['auth', 'role:administrador']);
+
+/*Route::get('/administradores/create', 'App\Http\Controllers\AdministradorController@create')->middleware('auth', 'role:administrador');
 Route::post('/administradores', 'App\Http\Controllers\AdministradorController@store')->middleware('auth', 'role:administrador');
 Route::get('/administradores/{administradore}/edit', 'App\Http\Controllers\AdministradorController@edit')->middleware('auth', 'role:administrador');
 Route::put('/administradores/{administradore}', 'App\Http\Controllers\AdministradorController@update')->middleware('auth', 'role:administrador');
 Route::delete('/administradores/{administradore}', 'App\Http\Controllers\AdministradorController@destroy')->middleware('auth', 'role:administrador');
 Route::get('/administradores', 'App\Http\Controllers\AdministradorController@index')->middleware('auth', 'role:administrador');
-Route::post('/administradores/buscarAdmin','App\Http\Controllers\AdministradorController@buscarAdmin')->middleware('auth', 'role:administrador');
+Route::post('/administradores/buscarAdmin','App\Http\Controllers\AdministradorController@buscarAdmin')->middleware('auth', 'role:administrador');*/
 //cohortes
 Route::get('/cohortes/create', 'App\Http\Controllers\CohorteController@create')->middleware('auth', 'role:administrador');
 Route::post('/cohortes', 'App\Http\Controllers\CohorteController@store')->middleware('auth', 'role:administrador');
@@ -113,6 +116,8 @@ Route::delete('/profesores/{curso}/cursoestudiantes', 'App\Http\Controllers\Prof
 Route::delete('/profesores/{profesore}', 'App\Http\Controllers\ProfesorController@destroy')->middleware('auth', 'role:administrador');
 Route::post('/profesores/buscarProfesor','App\Http\Controllers\ProfesorController@buscarProfesor')->middleware('auth', 'role:administrador');
 Route::post('/profesores/buscarEstudianteCurso','App\Http\Controllers\ProfesorController@buscarEstudianteCurso')->middleware('auth', 'role:profesor');
+Route::post('/profesores/buscarCursoAsignado','App\Http\Controllers\ProfesorController@buscarCursoAsignado')->middleware('auth', 'role:profesor');
+
 //material de apoyo downloadfile
 Route::post('/materialapoyo', 'App\Http\Controllers\ProfesorController@createMaterialApoyo')->middleware('auth', 'role:profesor');
 Route::post('/materialapoyoupload', 'App\Http\Controllers\ProfesorController@storeMaterialApoyo')->middleware('auth', 'role:profesor');

@@ -162,6 +162,8 @@
                     var certificado = value.certificado; 
                     var carta = value.carta; 
                     var curso = value.id; 
+                    console.log("Curso " + curso);
+                    console.log(link);
                     tableRow += `<td class="col-md-auto align-content-center"><a target="_blank" href="${certificado}">
                         Certificado  ${certificado != null ?  '<i class="fas fa-check-square"></i>' : '<i class="far fa-square"></i>'} 
                         </a> </td>`;
@@ -169,18 +171,18 @@
                         Carta  ${carta != null ?  '<i class="fas fa-check-square"></i>' : '<i class="far fa-square"></i>'} 
                         </a> </td>`;
                     tableRow += `<td class="d-flex p-1"> ${profesor == "profesor" ? '<a class="btn btn-warning" data-toggle="tooltip" data-placement="bottom"'+
-                        'title="Agregar observacion" role="button" href="/profesores/${curso}/${link}/agregarobservacion"'+
-                        'style="display: inline"><i class="fas fa-comments"></i></a> </br>'+
+                        'title="Agregar observacion" role="button" href="/profesores/'+curso +'/'+link +'/agregarobservacion"'+
+                        'style="display: inline"><i class="fas fa-comments"></i> </a> </br>'+
                         '<p>⠀ </p><a class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Agregar notas"'+
-                            'role="button" href="/profesores/${curso}/${link}/agregarnota"><i class="fas fa-plus-square"></i></a>'+
+                            'role="button" href="/profesores/'+curso +'/'+link +'/agregarnota"><i class="fas fa-plus-square"></i></a>'+
                         '</br><p>⠀ </p>'+
                         '<a class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Agregar Cartificado y Carta"> <i class="fas fa-sticky-note"></i></a>'+
                         '</br><p>⠀ </p>' : ''}`;
-                    tableRow += `${AuthUser == "admin" ? '<form method="post" action="/profesores/${cruso}/cursoestudiantes"'+
+                    tableRow += `${AuthUser == "admin" ? '<form method="post" action="/profesores/'+curso+'/cursoestudiantes"'+
                         'style="display: inline">'+
                         '@csrf'+
                         '@method('DELETE')'+
-                        '<input type="hidden" value="${link}" id="cedula" name="cedula">'+
+                        '<input type="hidden" value="'+link+'" id="cedula" name="cedula">'+
                         '<button type="submit" class="btn btn-danger" onclick="return confirm(\'¿Esta seguro que desea Eliminar este estudiante del curso?\');"'+
                             'data-toggle="tooltip" title="Eliminar"> <i class="fas fa-user-times"></i></button></form>' : ''}`;
                     tableRow += ` </td></tr>`;
