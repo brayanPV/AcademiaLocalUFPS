@@ -117,6 +117,8 @@ Route::delete('/profesores/{profesore}', 'App\Http\Controllers\ProfesorControlle
 Route::post('/profesores/buscarProfesor','App\Http\Controllers\ProfesorController@buscarProfesor')->middleware('auth', 'role:administrador');
 Route::post('/profesores/buscarEstudianteCurso','App\Http\Controllers\ProfesorController@buscarEstudianteCurso')->middleware('auth', 'role:profesor');
 Route::post('/profesores/buscarCursoAsignado','App\Http\Controllers\ProfesorController@buscarCursoAsignado')->middleware('auth', 'role:profesor');
+Route::get('/profesores/{curso}/{estudiante}/agregarcertificadocarta', 'App\Http\Controllers\ProfesorController@agregarCertificadoCarta')->middleware('auth', 'role:profesor');
+Route::post('/profesores/{curso}/cursoestudiantes', 'App\Http\Controllers\ProfesorController@certificadoCartaUpdate')->middleware('auth', 'role:profesor');
 
 //material de apoyo downloadfile
 Route::post('/materialapoyo', 'App\Http\Controllers\ProfesorController@createMaterialApoyo')->middleware('auth', 'role:profesor');

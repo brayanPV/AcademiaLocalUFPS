@@ -274,6 +274,25 @@ class ProfesorController extends Controller
         return view('profesores/agregarnota', compact('estudiante'));
     }
 
+    public function agregarCertificadoCarta($curso, $estudiante){
+        $estudiante = CursoEstudiante::select('ce.id_curso', 'ce.ced_estudiante', 'ce.observaciones', 'p.nombre', 'c.id_cisco', 'm.nombre as modulo', 'ce.certificado', 'ce.carta')
+            ->from('curso_estudiante as ce')
+            ->join('curso as c', function ($join) {
+                $join->on('c.id', '=', 'ce.id_curso');
+            })
+            ->join('modulo as m', function ($join) {
+                $join->on('m.id', '=', 'c.id_modulo');
+            })
+            ->join('persona as p', function ($join) {
+                $join->on('p.cedula', '=', 'ce.ced_estudiante');
+            })
+            ->where([
+                ['id_curso', $curso],
+                ['ced_estudiante', $estudiante]
+            ])->first();
+
+        return view('profesores/agregarcertificadocarta', compact('estudiante'));
+    }
     public function observacionUpdate(Request $request, $id_curso)
     {
         $curso = DB::select('select m.nombre
@@ -317,6 +336,27 @@ class ProfesorController extends Controller
             $mensaje = ["numeric" => 'El :attribute debe ser numerico'];
             $this->validate($request, $datos, $mensaje);
         }
+    }
+
+    public function certificadoCartaUpdate(Request $request, $id_curso){
+        $datos = [
+            'certificado' => 'required|max:10000|mimes:pdf',
+            'carta' => 'required|max:10000|mimes:pdf'
+        ];
+        $Mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datos, $Mensaje);
+        $datos = request()->except(['_token', '_method', 'nombre', 'cedula', 'id_curso']);
+        if ($request->hasFile('certificado') && $request->hasFile('carta')) {
+            $certificado = $request->file('certificado')->getClientOriginalName();
+            $carta = $request->file('carta')->getClientOriginalName();
+            $datos['certificado'] = $request->file('certificado')->storeAs('certificados', $certificado, 'upload');
+            $datos['carta'] = $request->file('carta')->storeAs('certificados', $carta, 'upload');
+        }
+        CursoEstudiante::where([
+            ['id_curso', $id_curso], 
+            ['ced_estudiante', $request->input('cedula')]
+        ])->update($datos);
+        return $this->verEstudiantesCursos($id_curso);
     }
 
     public function eliminarEstudianteCurso(Request $request, $id)

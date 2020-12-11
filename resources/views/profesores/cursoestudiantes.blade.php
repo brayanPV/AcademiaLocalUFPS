@@ -80,8 +80,8 @@
                                         class="fas fa-plus-square"></i></a>
                                 </br>
                                 <p>⠀ </p>
-                                <a class="btn btn-primary" data-toggle="tooltip" data-placement="bottom"
-                                    title="Agregar Cartificado y Carta"> <i class="fas fa-sticky-note"></i></a>
+                                <a class="btn btn-primary" href="{{ url('profesores', ['curso' => $estudiante->id, 'estudiante' => $estudiante->cedula, 'agregarcertificadocarta']) }}" 
+                                    data-toggle="tooltip" data-placement="bottom" title="Agregar Cartificado y Carta"> <i class="fas fa-sticky-note"></i></a>
                                 </br>
                                 <p>⠀ </p>
                         
@@ -176,7 +176,7 @@
                         '<p>⠀ </p><a class="btn btn-success" data-toggle="tooltip" data-placement="bottom" title="Agregar notas"'+
                             'role="button" href="/profesores/'+curso +'/'+link +'/agregarnota"><i class="fas fa-plus-square"></i></a>'+
                         '</br><p>⠀ </p>'+
-                        '<a class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Agregar Cartificado y Carta"> <i class="fas fa-sticky-note"></i></a>'+
+                        '<a class="btn btn-primary" href="/profesores/'+curso +'/'+link +'/agregarcertificadocarta" data-toggle="tooltip" data-placement="bottom" title="Agregar Cartificado y Carta"> <i class="fas fa-sticky-note"></i></a>'+
                         '</br><p>⠀ </p>' : ''}`;
                     tableRow += `${AuthUser == "admin" ? '<form method="post" action="/profesores/'+curso+'/cursoestudiantes"'+
                         'style="display: inline">'+

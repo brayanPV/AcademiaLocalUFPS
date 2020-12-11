@@ -148,8 +148,8 @@
                     var link = value.cedula;
                     var inscripcion = value.recibo_pago_inscripcion;
                     var matricula = value.recibo_pago_matricula;
-                    console.log(inscripcion);
-                    console.log(matricula);
+                    //console.log(inscripcion);
+                    //console.log(matricula);
                     var tableRow = "<tr> <td class='col-md-auto'> " + value.cedula +
                         " </td>"
                     tableRow += "<td class='col-md-auto'>" + value.nombre + " </td>";
@@ -173,9 +173,7 @@
                     </td>`;
                     var certificacion = value.tipo_certificacion_id;
                     var estudiante_id = value.id;
-                    tableRow += `<td><span class='d-inline-block' tabindex='0' data-toggle='tooltip' title='Telefono: ${value.telfijo} \nId Cisco:  ${value.id_cisco} \nCodigo estudiante:  ${value.cod_estudiante}'>
-                        <button class='btn btn-primary' style='pointer-events: none;' type='button' disabled>Mas</button>
-                      </span> </td>`;
+                   
 
                     var estado = value.estado;
 
@@ -185,7 +183,9 @@
                         tableRow += "<td class='col-md-auto'>" + "Activo" + "</td>";
                     }
 
-
+                    tableRow += `<td><span class='d-inline-block' tabindex='0' data-toggle='tooltip' title='Telefono: ${value.telfijo} \nId Cisco:  ${value.id_cisco} \nCodigo estudiante:  ${value.cod_estudiante}'>
+                        <button class='btn btn-primary' style='pointer-events: none;' type='button' disabled>Mas</button>
+                      </span> </td>`;
                     tableRow += `<td class="d-flex"> <a class="btn btn-primary" role="button"
                         href="/estudiantes/${link}/edit" data-toggle="tooltip"
                         title="Editar"> <i class="fas fa-user-edit"></i> </a>
