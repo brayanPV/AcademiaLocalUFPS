@@ -147,6 +147,38 @@ class EstudianteController extends Controller
         return view('estudiantes/vernotascertificacion', compact(['est', 'est_cer', 'estudiante']));
     }
 
+    public function createNotaPrueba($id_cer_est)
+    {
+        $est_cer = DB::table('estudiante_tipo_certificacion')
+            ->select('etc.nota_prueba', 'p.nombre as estudiante', 'tc.nombre as certificacion', 'etc.id')
+            ->from('estudiante_tipo_certificacion as etc')
+            ->join('estudiante as e', function ($join) {
+                $join->on('etc.estudiante_id', '=', 'e.id');
+            })
+            ->join('persona as p', function ($join) {
+                $join->on('e.cedula', '=', 'p.cedula');
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('etc.tipo_certificacion_id', '=', 'tc.id');
+            })
+            ->where('etc.id', '=', $id_cer_est)->first();
+        return view('estudiantes/subirnotaprueba', compact('est_cer'));
+    }
+
+    public function updateNotaPrueba(Request $request, $id_cer_est)
+    {
+        $dato = [
+            'nota_prueba' => 'required|numeric|max:100',
+        ];
+        $mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $dato, $mensaje);
+        if ($request->input('nota_prueba') > 82.5) {
+            DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$request->input('nota_prueba'), $request->input('nota_prueba'), $id_cer_est]);
+        }
+        DB::update('update estudiante_tipo_certificacion set nota_prueba = ? where id = ?', [$request->input('nota_prueba'), $id_cer_est]);
+        return $this->verNotasCertificacion($id_cer_est);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

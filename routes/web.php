@@ -118,7 +118,7 @@ Route::post('/profesores/buscarProfesor','App\Http\Controllers\ProfesorControlle
 Route::post('/profesores/buscarEstudianteCurso','App\Http\Controllers\ProfesorController@buscarEstudianteCurso')->middleware('auth', 'role:profesor');
 Route::post('/profesores/buscarCursoAsignado','App\Http\Controllers\ProfesorController@buscarCursoAsignado')->middleware('auth', 'role:profesor');
 Route::get('/profesores/{curso}/{estudiante}/agregarcertificadocarta', 'App\Http\Controllers\ProfesorController@agregarCertificadoCarta')->middleware('auth', 'role:profesor');
-Route::post('/profesores/{curso}/cursoestudiantes', 'App\Http\Controllers\ProfesorController@certificadoCartaUpdate')->middleware('auth', 'role:profesor');
+Route::post('/profesores/{curso}', 'App\Http\Controllers\ProfesorController@updateNotaPrueba')->middleware('auth', 'role:profesor');
 
 //material de apoyo downloadfile
 Route::post('/materialapoyo', 'App\Http\Controllers\ProfesorController@createMaterialApoyo')->middleware('auth', 'role:profesor');
@@ -135,7 +135,10 @@ Route::patch('/estudiantes/{estudiante}', 'App\Http\Controllers\EstudianteContro
 Route::get('/estudiantes/{estudiante}/cursosasignados', 'App\Http\Controllers\EstudianteController@verCursosAsignados')->middleware('auth', 'role:estudiante');
 Route::delete('/estudiantes/{estudiante}', 'App\Http\Controllers\EstudianteController@destroy')->middleware('auth', 'role:administrador');
 Route::post('/estudiantes/buscarEstudiante','App\Http\Controllers\EstudianteController@buscarEstudiante')->middleware('auth', 'role:administrador');
-Route::get('/estudiantes/{est_cert}/vernotascertificacion', 'App\Http\Controllers\EstudianteController@verNotasCertificacion')->middleware('auth', 'role:estudiante');
+Route::get('/estudiantes/{est_cert}/vernotascertificacion', 'App\Http\Controllers\EstudianteController@verNotasCertificacion')->middleware('auth', 'role:administrador');
+Route::get('/estudiantes/{est_cert}/subirnotaprueba', 'App\Http\Controllers\EstudianteController@createNotaPrueba')->middleware('auth', 'role:administrador');
+Route::post('/estudiantes/{est_cert}', 'App\Http\Controllers\EstudianteController@updateNotaPrueba')->middleware('auth', 'role:administrador');
+
 //preinscripcion
 Route::get('/preinscripcion/create', 'App\Http\Controllers\PreinscritoController@create')->name('preinscribir');
 Route::post('/preinscripcion', 'App\Http\Controllers\PreinscritoController@store')->name('preinscribirstore');

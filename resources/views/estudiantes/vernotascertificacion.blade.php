@@ -55,7 +55,7 @@
                         <td class="col-md-auto">{{ $item->nota_prueba }}</td>
                         <td class="col-md-auto">{{ $item->nota_sustentacion }}</td>
                         <td class="col-md-auto">{{ $item->definitiva }}</td>
-                        <td class="col-md-auto"><a data-toggle="tooltip" title="Subir nota prueba" href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subirnotacertificacion') }}"> 
+                        <td class="col-md-auto"><a data-toggle="tooltip" title="Subir nota prueba" href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subirnotaprueba') }}"> 
                             <i class="fas fa-plus-square"></i></a> </td>
                     @endforeach
                 </tbody>
