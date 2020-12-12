@@ -135,6 +135,7 @@ Route::patch('/estudiantes/{estudiante}', 'App\Http\Controllers\EstudianteContro
 Route::get('/estudiantes/{estudiante}/cursosasignados', 'App\Http\Controllers\EstudianteController@verCursosAsignados')->middleware('auth', 'role:estudiante');
 Route::delete('/estudiantes/{estudiante}', 'App\Http\Controllers\EstudianteController@destroy')->middleware('auth', 'role:administrador');
 Route::post('/estudiantes/buscarEstudiante','App\Http\Controllers\EstudianteController@buscarEstudiante')->middleware('auth', 'role:administrador');
+Route::get('/estudiantes/{est_cert}/vernotascertificacion', 'App\Http\Controllers\EstudianteController@verNotasCertificacion')->middleware('auth', 'role:estudiante');
 //preinscripcion
 Route::get('/preinscripcion/create', 'App\Http\Controllers\PreinscritoController@create')->name('preinscribir');
 Route::post('/preinscripcion', 'App\Http\Controllers\PreinscritoController@store')->name('preinscribirstore');
@@ -166,7 +167,7 @@ Route::get('/gruposinvestigacion/listgruposinvestigacion', [App\Http\Controllers
 Route::get('/cohortes/listcohortes', [App\Http\Controllers\CohorteController::class, 'listCohorte'])->middleware('auth', 'role:administrador');
 Route::get('/modulos/listmodulos', [App\Http\Controllers\ModuloController::class, 'listModulo'])->middleware('auth', 'role:administrador');
 Route::get('/profesores/listprofesores', [App\Http\Controllers\ProfesorController::class, 'listProfesor'])->middleware('auth', 'role:administrador');
-Route::get('/estudiantes/listestudiantes', [App\Http\Controllers\EstudianteController::class, 'listEstudiante'])->name('listestudiantes');
+Route::get('/estudiantes/listestudiantes', [App\Http\Controllers\EstudianteController::class, 'listEstudiante'])->name('listestudiantes')->middleware('auth', 'role:administrador');
 
 
 

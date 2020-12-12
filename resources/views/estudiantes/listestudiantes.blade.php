@@ -79,8 +79,8 @@
                                     <button class="btn btn-primary" style="pointer-events: none;" type="button"
                                         disabled>Mas</button>
                                 </span> </td>
-                            <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                                    href="{{ url('/estudiantes/' . $estudiante->cedula . '/edit') }}"><i
+                            <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button" data-toggle="tooltip"
+                                title="Editar" href="{{ url('/estudiantes/' . $estudiante->cedula . '/edit') }}"><i
                                         class="fas fa-user-edit"></i> </a>
                                 <p>⠀</p>
                                 <form method="post" action="{{ url('/estudiantes/' . $estudiante->cedula) }}"
@@ -100,7 +100,9 @@
                                             data-toggle="tooltip" title="Desactivar"> <i class="fas fa-toggle-on"></i>
                                         </button>
                                     @endif
-                                </form>
+                                </form>  <p>⠀</p>
+                                <a class="btn btn-primary" role="button" data-toggle="tooltip"
+                                title="Notas de certificacion" href="{{ url('/estudiantes/' . $estudiante->est_cer_id . '/vernotascertificacion') }}"><i class="fas fa-user-graduate"></i> </a>
 
                             </td>
                         </tr>
@@ -173,8 +175,7 @@
                     </td>`;
                     var certificacion = value.tipo_certificacion_id;
                     var estudiante_id = value.id;
-                   
-
+                    var est_cer_id = value.est_cer_id;
                     var estado = value.estado;
 
                     if (estado == 0) {
@@ -197,7 +198,9 @@
                             '<input type="hidden" value="1" id="estado" name="estado"><button type="submit" class="btn btn-danger" onclick="return confirm(\'¿Esta seguro que desea activar este estudiante?\');"'+
                             'data-toggle="tooltip" title="Activar"><i class="fas fa-toggle-off"></i> </button>' : '<input type="hidden" value="0" id="estado" name="estado"><button type="submit"'+
                             'class="btn btn-success"onclick="return confirm(\'¿Esta seguro que desea Desactivar este estudiante?\');"data-toggle="tooltip" title="Desactivar"> <i class="fas fa-toggle-on">'+
-                            '</i></button>'}</form></td> </tr>`;
+                            '</i></button>'}</form> <p>⠀</p><a class="btn btn-primary" role="button" data-toggle="tooltip"'+
+                            'title="Subir notas de certificacion" href="/estudiantes/${est_cer_id}/vernotascertificacion"><i class="fas fa-user-graduate"></i></a>
+                        </td> </tr>`;
                     $('#dynamic-row').append(tableRow);
                 });
                 var t = document.getElementById('total');

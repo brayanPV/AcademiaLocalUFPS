@@ -41,7 +41,8 @@ class EstudianteController extends Controller
             'per.telcel',
             'per.direccion',
             'e.recibo_pago_inscripcion',
-            'e.recibo_pago_matricula'
+            'e.recibo_pago_matricula',
+            'ec.id as est_cer_id'
         )
             ->from('estudiante as e')
             ->join('persona as per', function ($join) {
@@ -71,7 +72,8 @@ class EstudianteController extends Controller
             'per.telcel',
             'per.direccion',
             'e.recibo_pago_inscripcion',
-            'e.recibo_pago_matricula'
+            'e.recibo_pago_matricula',
+            'etc.id as est_cer_id'
         )
             ->from('estudiante as e')
             ->join('persona as per', function ($join) {
@@ -95,6 +97,56 @@ class EstudianteController extends Controller
         return json_encode($estudiantes);
     }
 
+    public function verNotasCertificacion($id_cer_est)
+    {
+
+
+        $est = DB::select("Select m.nombre as modulo, p.nombre as profesor, ce.valor, ce.laboratorio, tc.nombre as nombre_cer
+        from curso_estudiante ce
+        inner join estudiante e
+        on ce.ced_estudiante = e.cedula
+        inner join estudiante_tipo_certificacion etc
+        on etc.estudiante_id = e.id
+        and etc.id = ?
+        inner join tipo_certificacion tc 
+        on etc.tipo_certificacion_id = tc.id
+        inner join modulo m 
+        on tc.id = m.id_tipo_certificacion
+        inner join curso c 
+        on m.id = c.id_modulo
+        and c.id = ce.id_curso
+        inner join persona p
+        on c.ced_profesor = p.cedula", [$id_cer_est]);
+
+
+        $modulos = 0;
+        $laboratorios = 0;
+        $cont = 0;
+        foreach ($est as $e) {
+            $cont++;
+            $modulos += $e->valor;
+            $laboratorios += $e->laboratorio;
+        }
+        $notaM = $modulos / $cont;
+        $notaL = $laboratorios / $cont;
+
+        DB::update('update estudiante_tipo_certificacion set nota_final_modulo = ?, nota_final_laboratorio = ? where id = ?', [$notaM, $notaL, $id_cer_est]);
+        $est_cer = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$id_cer_est]);
+
+        $estudiante =  DB::select('select p.nombre, etc.nota_final_modulo, etc.nota_final_laboratorio, etc.nota_prueba, etc.nota_sustentacion 
+        from estudiante_tipo_certificacion etc
+        inner join estudiante e 
+        on etc.estudiante_id = e.id
+        and etc.id = ?
+        inner join persona p
+        on e.cedula = p.cedula', [$id_cer_est]);
+        if ($estudiante[0]->nota_prueba != null) {
+            $definitiva = ($estudiante[0]->nota_final_modulo * 0.15) + ($estudiante[0]->nota_final_laboratorio * 0.15) + ($estudiante[0]->nota_prueba * 0.40) + ($estudiante[0]->nota_sustentacion * 0.30);
+            DB::update('update estudiante_tipo_certificacion set definitiva = ? where id = ?', [$definitiva, $id_cer_est]);
+        }
+        return view('estudiantes/vernotascertificacion', compact(['est', 'est_cer', 'estudiante']));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -110,17 +162,6 @@ class EstudianteController extends Controller
 
     public function verCursosAsignados($id)
     {
-        /* $cursos = DB::select('select m.nombre, tc.nombre as nombrec, m.url1, m.url2, c.id
-        from modulo m
-        inner join tipo_certificacion tc
-        on m.id_tipo_certificacion = tc.id
-        inner join curso c
-        on c.id_modulo = m.id
-        inner join curso_estudiante ce
-        on ce.id_curso = c.id
-        and ce.ced_estudiante = ?', [$id]);
-        return view('estudiantes/cursosasignados', compact('cursos'));*/
-
         $cursos = CursoEstudiante::select('m.nombre', 'tc.nombre as certificacion', 'm.url1', 'm.url2', 'c.id', 'ce.valor', 'ce.laboratorio', 'ce.certificado', 'ce.carta')
             ->from('curso_estudiante as ce')
             ->join('curso as c', function ($join) {

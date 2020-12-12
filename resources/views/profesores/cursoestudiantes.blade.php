@@ -8,7 +8,7 @@
             </div>
         @endif
         <div class="alert alert-primary" role="alert">
-            <h2>{{ $curso[0]->nombre }}</h2>
+            <h2>{{ $curso[0]->nombre}} {{ $curso[0]->ced_profesor}} </h2>
         </div>
         <div class="row">
         @if (Auth::user()->hasrole('administrador'))
@@ -64,11 +64,9 @@
                                 </button> @endif</a>
                         </td>
                         <td class="d-flex p-1">
-                            @if (Auth::check() && Auth::user()->hasrole('profesor') && Auth::user()->cedula == $curso[0]->ced_profesor)
-
-
-
-                                <a class="btn btn-warning" data-toggle="tooltip" data-placement="bottom"
+                            
+                            @if (Auth::user()->hasrole('profesor') && Auth::user()->cedula == $curso[0]->ced_profesor)
+                                    <a class="btn btn-warning" data-toggle="tooltip" data-placement="bottom"
                                     title="Agregar observacion" role="button"
                                     href="{{ url('profesores', ['curso' => $estudiante->id, 'estudiante' => $estudiante->cedula, 'agregarobservacion']) }}"
                                     style="display: inline"><i class="fas fa-comments"></i></a>
@@ -115,7 +113,7 @@
                 {{ $estudiantes->links('pagination::bootstrap-4') }}
             </div>
             <div class="col-1">
-                <a class="btn btn-primary" role="button" onclick="goBack()">
+                <a class="btn btn-primary" role="button" href="{{url('profesores/'. Auth::user()->cedula . '/cursosasignados')}}">
                     Volver</a>
             </div>
         </div>
@@ -131,8 +129,8 @@
         var profesor =  "{{{ (Auth::user()->hasrole('profesor') && Auth::user()->cedula == $curso[0]->ced_profesor)   ? 'profesor' : 'null' }}}";
         var id_curso = document.getElementById('id_curso').value;
         //console.log(buscarEstudianteCurso);
-        //console.log(AuthUser);
-        //console.log(profesor);
+        console.log(AuthUser);
+        console.log(profesor);
         //console.log(id_curso);
 
         $.ajax({
@@ -151,7 +149,7 @@
                 var con = 0;
                 $.each(JSON.parse(res), function(index, value) {
                     con++;
-                    console.log(res);
+                    //console.log(res);
                     var tableRow = "<tr> <td class='col-md-auto'> " + value.cedula +" </td>";
                     tableRow += `<td class='col-md-auto'> ${value.nombre != null ?  value.nombre : ''}   </td>`;
                     tableRow += `<td class='col-md-auto'> ${value.observaciones != null ?  value.observaciones : ''} </td>`;
@@ -162,8 +160,8 @@
                     var certificado = value.certificado; 
                     var carta = value.carta; 
                     var curso = value.id; 
-                    console.log("Curso " + curso);
-                    console.log(link);
+                    //console.log("Curso " + curso);
+                    //console.log(link);
                     tableRow += `<td class="col-md-auto align-content-center"><a target="_blank" href="${certificado}">
                         Certificado  ${certificado != null ?  '<i class="fas fa-check-square"></i>' : '<i class="far fa-square"></i>'} 
                         </a> </td>`;
@@ -194,12 +192,5 @@
             },
         });
     });
-
-    
 </script>
-<script>
-    function goBack() {
-      window.history.back();
-    }
-    </script>
 @endsection

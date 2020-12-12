@@ -131,6 +131,8 @@ class ProfesorController extends Controller
             })
             ->join('tipo_certificacion as tc', function ($join) {
                 $join->on('m.id_tipo_certificacion', '=', 'tc.id');
+            })->join('persona as p', function($join){
+                $join->on('c.ced_profesor', '=', 'p.cedula');
             })
             ->where('c.id', $id)->get();
 

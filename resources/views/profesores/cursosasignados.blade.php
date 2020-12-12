@@ -93,7 +93,7 @@
         var buscarCursoAsignado = $(this).val();
         var profesor = "{{{ (Auth::user()->hasrole('profesor')) ? true : false }}}";
         var cedula = "{{{ Auth::user()->cedula }}}";
-        console.log(cedula);
+        //console.log(cedula);
         $.ajax({
             method: "POST",
             url: "{{ url('profesores/buscarCursoAsignado') }}",
@@ -106,11 +106,11 @@
             success: function(res) {
                 $("#pagination").remove();
                 $('#dynamic-row').html("");
-                console.log(res);
+                //console.log(res);
                 var con = 0;
                 $.each(JSON.parse(res), function(index, value) {
                     con++;
-                    console.log(res);
+                    //console.log(res);
                     var tableRow = "<tr> <td class='col-md-auto'> " + value.id_cisco +" </td>";
                     tableRow += "<td class='col-md-auto'> " + value.nombre_modulo +" </td>";
                     tableRow += "<td class='col-md-auto'> " + value.nombre +" </td>";
