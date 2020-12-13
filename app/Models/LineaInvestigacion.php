@@ -7,5 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LineaInvestigacion extends Model
 {
+    protected $table = 'linea_investigacion';
+    public $timestamps = false;
     use HasFactory;
 }

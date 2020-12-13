@@ -25,10 +25,11 @@
                         </li>
                         <li class="list-group-item"><a href="{{ url('/gruposinvestigacion/listgruposinvestigacion') }}">Grupos de investigacion </a></li>
                         <li class="list-group-item list-group-item-action"><a href="{{ url('/inscritos/listinscritos') }}">Inscritos </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/lineas/') }}">Lineas de Investigacion </a></li>
                         <li class="list-group-item list-group-item-action"><a href="{{ url('/modulos/listmodulos') }}">Modulos </a></li>
                         <li class="list-group-item list-group-item-action"><a href="{{ url('/preinscripcion/listpreinscripcion') }}">Preinscripcion </a></li>
                         <li class="list-group-item list-group-item-action"><a href="{{ url('/profesores/listprofesores') }}">Profesores </a></li>
-                        <li class="list-group-item list-group-item-action"><a href="{{ url('/tiponotas/listtiponotas') }}">Tipo de notas </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/tesis/index') }}">Tesis </a></li>
                     </ul>
                 </div>
                 </div>

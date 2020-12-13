@@ -54,7 +54,7 @@
         class="form-control {{ $errors->has('ced_profesor') ? 'is-invalid' : '' }}">
         <option value="{{ isset($curso->cedula) }}">{{ isset($curso->nombre_profesor) ? $curso->nombre_profesor : 'Seleccione' }}</option>
         @foreach ($profesores as $profesor)
-            @if (isset($curso))
+            @if (isset($curso->cedula))
                 @if ($curso->cedula != $profesor->cedula)
                     <option value="{{ $profesor->cedula }}">{{ $profesor->nombre }} </>
                 @endif
