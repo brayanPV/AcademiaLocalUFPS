@@ -182,5 +182,7 @@ class TipoCertificacionController extends Controller
     public function destroy($id)
     {
         //
+        TipoCertificacion::destroy($id);
+        return redirect('certificaciones/listcertificaciones')->with('Mensaje', 'Certificacion eliminada con exito');
     }
 }
