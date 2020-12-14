@@ -52,13 +52,13 @@
                         <td class="col-md-auto">{{ $estudiante->valor }}</td>
                         <td class="col-md-auto">{{ $estudiante->laboratorio }}</td>
                         <td class="col-md-auto align-content-center">
-                            <a href="{{ $estudiante->certificado }}" target="_blank">Certificado <button class="btn">
+                            <a href="{{asset('storage') . '/' . $estudiante->certificado }}" target="_blank">Certificado <button class="btn">
                                     @if ($estudiante->certificado != '')<i
                                         class="fas fa-check-square"></i> @else <i class="far fa-square"></i>
                                 </button> @endif</a>
                         </td>
                         <td class="col-md-auto align-content-center">
-                            <a href="{{ $estudiante->carta }}" target="_blank">Carta <button class="btn">
+                            <a href="{{ asset('storage') . '/' . $estudiante->carta }}" target="_blank">Carta <button class="btn">
                                     @if ($estudiante->carta != '')<i
                                         class="fas fa-check-square"></i> @else <i class="far fa-square"></i>
                                 </button> @endif</a>

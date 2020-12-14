@@ -350,9 +350,9 @@ class ProfesorController extends Controller
         $datos = request()->except(['_token', '_method', 'nombre', 'cedula', 'id_curso']);
         if ($request->hasFile('certificado') && $request->hasFile('carta')) {
             $certificado = $request->file('certificado')->getClientOriginalName();
-            $carta = $request->file('carta')->getClientOriginalName();
-            $datos['certificado'] = $request->file('certificado')->storeAs('certificados', $certificado, 'upload');
-            $datos['carta'] = $request->file('carta')->storeAs('certificados', $carta, 'upload');
+            $carta = $request->file('carta')->getClientOriginalName(); //->storeAs('uploads/recibomatricula', $name, 'public');
+            $datos['certificado'] = $request->file('certificado')->storeAs('uploads/certificados', $certificado, 'public');
+            $datos['carta'] = $request->file('carta')->storeAs('uploads/certificados', $carta, 'public');
         }
         CursoEstudiante::where([
             ['id_curso', $id_curso], 
