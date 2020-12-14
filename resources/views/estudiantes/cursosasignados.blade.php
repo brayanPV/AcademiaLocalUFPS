@@ -41,8 +41,8 @@
                         </td>
                         <td class="col-md-auto">{{ $curso->valor }}</td>
                         <td class="col-md-auto">{{ $curso->laboratorio }}</td>
-                        <td class="col-md-auto"> @if($curso->certificado) <a data-toggle="tooltip" data-placement="bottom" title="Ver/Descargar" href="{{ $curso->certificado }}" class="btn btn-primary" target="_blank">  <i class="fas fa-file-download"></i></a>  @else @endif </td>
-                        <td class="col-md-auto">@if($curso->carta)<a data-toggle="tooltip" data-placement="bottom" title="Ver/Descargar" href="{{ $curso->carta }}" class="btn btn-primary" target="_blank"> <i class="fas fa-file-download"></i></a> @else  @endif </td>
+                        <td class="col-md-auto"> @if($curso->certificado) <a data-toggle="tooltip" data-placement="bottom" title="Ver/Descargar" href="{{ asset('storage') . '/' . $curso->certificado }}" class="btn btn-primary" target="_blank">  <i class="fas fa-file-download"></i></a>  @else @endif </td>
+                        <td class="col-md-auto">@if($curso->carta)<a data-toggle="tooltip" data-placement="bottom" title="Ver/Descargar" href="{{ asset('storage') . '/' . $curso->carta }}" class="btn btn-primary" target="_blank"> <i class="fas fa-file-download"></i></a> @else  @endif </td>
                     </tr>
                 @empty
                     <h2>No tiene cursos asignados </h2>
