@@ -76,9 +76,8 @@
         <div class="form-group">
             <label for="recibo_pago_inscripcion"> {{ 'Archivo' }}</label>
             @if ($inscritos->recibo_pago_inscripcion != '')
-                <img class="img-thumbnail img-fluid" src="/Users/stive/Documents/uploads/recibo/eps.png">
                 <img class="img-thumbnail img-fluid"
-                    src="{{ Storage::disk('upload')->path($inscritos->recibo_pago_inscripcion) }}" width="250">
+                    src="{{ asset('storage') . '/' .$inscritos->recibo_pago_inscripcion }}" width="250">
             @endif
             <input class="form-control {{ $errors->has('recibo_pago_inscripcion') ? 'is-invalid' : '' }}" type="file"
                 name="recibo_pago_inscripcion" id="recibo_pago_inscripcion"

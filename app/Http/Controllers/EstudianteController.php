@@ -40,8 +40,8 @@ class EstudianteController extends Controller
             'e.cod_estudiante',
             'per.telcel',
             'per.direccion',
-            'e.recibo_pago_inscripcion',
-            'e.recibo_pago_matricula',
+            'ec.recibo_pago_inscripcion',
+            'ec.recibo_pago_matricula',
             'ec.id as est_cer_id'
         )
             ->from('estudiante as e')
@@ -71,8 +71,8 @@ class EstudianteController extends Controller
             'e.cod_estudiante',
             'per.telcel',
             'per.direccion',
-            'e.recibo_pago_inscripcion',
-            'e.recibo_pago_matricula',
+            'etc.recibo_pago_inscripcion',
+            'etc.recibo_pago_matricula',
             'etc.id as est_cer_id'
         )
             ->from('estudiante as e')

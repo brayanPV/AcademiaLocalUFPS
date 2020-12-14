@@ -159,7 +159,7 @@
                         " </td>";
                     tableRow += "<td class='col-md-auto'>" + value.correo + " </td>";
                     tableRow += "<td class='col-md-auto'>" + value.telcel + " </td>";
-                    tableRow += `<td class="col-3">
+                    tableRow +=  `<td class="col-3">
                         <div class="row border-0">
                             <div class="border-0">
                                 <a href="/estudiantes/${link}/uploadreciboinscripcion">

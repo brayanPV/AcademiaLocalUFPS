@@ -82,14 +82,24 @@ class InscritoController extends Controller
     public function upload(Request $request, $id)
     {
         $datos = [
-            'recibo_pago_inscripcion' => 'required|max:10000|mimes:jpeg,png,jpg'
+            'recibo_pago_inscripcion' => 'max:10000|mimes:jpeg,png,jpg'
         ];
         $Mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $datos, $Mensaje);
         $datos = request()->except(['_token', '_method', 'nombre', 'direccion', 'telfijo', 'telcel', 'correo', 'semestre', 'certificacion']);
         if ($request->hasFile('recibo_pago_inscripcion')) {
+            $inscrito = Inscrito::where('cedula', '=', $request->input('cedula'))->first();
+            if ($inscrito->recibo_pago_inscripcion != null) {
+                Storage::delete('public/' . $inscrito->recibo_pago_inscripcion);
+            }
             $name = $request->file('recibo_pago_inscripcion')->getClientOriginalName();
-            $datos['recibo_pago_inscripcion'] = $request->file('recibo_pago_inscripcion')->storeAs('recibo', $name, 'upload');
+            $datos['recibo_pago_inscripcion'] = $request->file('recibo_pago_inscripcion')->storeAs('uploads/reciboinscripcion', $name, 'public');
+        } else {
+            $inscrito = Inscrito::where('cedula', '=', $request->input('cedula'))->first();
+            if ($inscrito->recibo_pago_inscripcion != null) {
+                Storage::delete('public/' . $inscrito->recibo_pago_inscripcion);
+                $datos['recibo_pago_inscripcion'] = "";
+            }
         }
         Inscrito::where('cedula', $id)->update($datos);
         return redirect('inscritos/listinscritos')->with('Mensaje', 'Se ha subido el recibo de pago con exito');
@@ -138,7 +148,7 @@ class InscritoController extends Controller
             $datosmatricula = request()->except(['_token',  'updated_at', 'nombre']);
             if ($request->hasFile('recibo_pago_inscripcion')) {
                 $name = $request->file('recibo_pago_inscripcion')->getClientOriginalName();
-                $reciboInscripcion = $request->file('recibo_pago_inscripcion')->storeAs('recibo', $name, 'upload');
+                $reciboInscripcion = $request->file('recibo_pago_inscripcion')->storeAs('uploads/reciboinscripcion', $name, 'public');
             }
         } else {
             $datos = [
