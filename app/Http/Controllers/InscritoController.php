@@ -40,6 +40,29 @@ class InscritoController extends Controller
         return view('inscritos/listinscritos', compact('inscritos'));
     }
 
+    public function buscarInscrito(Request $request)
+    {
+        $inscritos = Inscrito::select('i.cedula', 'p.nombre', 'i.semestre', 'tc.nombre as nombre_certificacion', 'p.correo', 'p.telcel', 'p.telfijo', 'p.direccion', 'i.recibo_pago_inscripcion')
+            ->from('inscrito as i')
+            ->join('persona as p', function ($join) {
+                $join->on('i.cedula', '=', 'p.cedula');
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('i.certificacion', '=', 'tc.id');
+            })
+            ->where('i.estado', '=', 'INSCRITO')
+            ->where(function ($query) use ($request) {
+                if (is_numeric($request->get('buscarInscrito'))) {
+                    return $query->where('p.cedula', 'like', '%' . $request->get('buscarInscrito') . '%');
+                } else {
+                    return $query->where('p.nombre', 'like', '%' . $request->get('buscarInscrito') . '%')
+                        ->orWhere('p.correo', 'like', '%' . $request->get('buscarInscrito') . '%')
+                        ->orWhere('tc.nombre', 'like', '%' . $request->get('buscarInscrito') . '%');
+                }
+            })->get();
+
+        return json_encode($inscritos);
+    }
 
     public function viewUpload($id)
     {
@@ -127,7 +150,7 @@ class InscritoController extends Controller
             $mensaje = ["required" => 'El :attribute es requerido'];
             $this->validate($request, $datos, $mensaje);
             $datosmatricula = request()->except(['_token',  'updated_at', 'nombre', 'recibo_pago_inscripcion']);
-            $reciboInscripcion =$request->input('recibo_pago_inscripcion');
+            $reciboInscripcion = $request->input('recibo_pago_inscripcion');
         }
 
         if (Estudiante::where('cedula', $request->input('cedula'))->first() ==  null) {
@@ -178,7 +201,6 @@ class InscritoController extends Controller
             'telfijo' => 'required',
             'telcel' => 'required',
             'correo' => 'required',
-            'semestre' => 'required',
             'certificacion' => 'required'
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
@@ -220,6 +242,29 @@ class InscritoController extends Controller
     public function edit($id)
     {
         //
+        $certificaciones = TipoCertificacion::get();
+        $inscritos = Inscrito::select(
+            'i.cedula',
+            'i.semestre',
+            'i.certificacion',
+            'i.estado',
+            'p.nombre as nombre',
+            'tc.nombre as nombre_tc',
+            'tc.id',
+            'p.direccion',
+            'p.telfijo',
+            'p.telcel',
+            'p.correo'
+        )
+            ->from('inscrito as i')
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('i.certificacion', '=', 'tc.id');
+            })
+            ->join('persona as p', function ($join) use ($id) {
+                $join->on('i.cedula', '=', 'p.cedula')
+                    ->where('i.cedula', '=', $id);
+            })->first();
+        return view('inscritos/edit', compact(['certificaciones', 'inscritos']));
     }
 
     /**
@@ -232,6 +277,24 @@ class InscritoController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $datos = [
+            'cedula' => 'required',
+            'nombre' => 'required',
+            'direccion' => 'required',
+            'telfijo' => 'required',
+            'telcel' => 'required',
+            'correo' => 'required',
+            'certificacion' => 'required'
+        ];
+        $mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datos, $mensaje);
+        $datosPersona = request()->except(['_token', '_method', 'updated_at', 'certificacion', 'semestre']);
+        Persona::where('cedula', $request->input('cedula'))->update($datosPersona);
+
+        $datosInscrito = request()->except(['_token', '_method', 'updated_at', 'nombre', 'correo', 'direccion', 'telfijo', 'telcel']);
+        Inscrito::where('cedula', $request->input('cedula'))->update($datosInscrito);
+
+        return redirect('inscritos/listinscritos')->with('Mensaje', 'Se ha editado con exito');
     }
 
     /**
@@ -243,5 +306,16 @@ class InscritoController extends Controller
     public function destroy($id)
     {
         //
+        $mensaje = "";
+        if (User::where('cedula', '=', $id)->first() == null) {
+            Inscrito::where('cedula', '=', $id)->delete();
+            Persona::where('cedula', '=', $id)->delete();
+            $mensaje = "No habia nadie matriculado en el sistema con esta cedula";
+        } else {
+            Inscrito::where('cedula', '=', $id)->delete();
+            $mensaje = "Habia otro usuario en el sistema con esta cedula";
+        }
+
+        return redirect('inscritos/listinscritos')->with('Mensaje', 'Se ha eliminado con exito ' . $mensaje);
     }
 }

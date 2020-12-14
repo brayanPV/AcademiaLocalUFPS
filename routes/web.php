@@ -154,14 +154,17 @@ Route::post('/preinscripcion/buscarPreinscrito','App\Http\Controllers\Preinscrit
 Route::put('/preinscripcion/{preinscripcion}', 'App\Http\Controllers\PreinscritoController@inscribir')->middleware('auth', 'role:administrador');
 Route::delete('/preinscripcion/{preinscripcion}', 'App\Http\Controllers\PreinscritoController@destroy')->middleware('auth', 'role:administrador');
 //inscrito 
-Route::get('/inscritos/create', 'App\Http\Controllers\InscritoController@create')->middleware('auth', 'role:administrador');
-Route::post('/inscritos', 'App\Http\Controllers\InscritoController@store')->middleware('auth', 'role:administrador');
-Route::get('/inscritos/listinscritos', 'App\Http\Controllers\InscritoController@listInscritos')->middleware('auth', 'role:administrador');
-Route::get('/inscritos/{inscrito}/uploadrecibo', 'App\Http\Controllers\InscritoController@viewUpload')->middleware('auth', 'role:administrador');
-Route::put('/inscritos/{inscrito}', 'App\Http\Controllers\InscritoController@upload')->middleware('auth', 'role:administrador');
-Route::get('/inscritos/{inscrito}/matricular', 'App\Http\Controllers\InscritoController@viewMatricular')->middleware('auth', 'role:administrador');
-Route::get('/inscritos/{inscrito}/edit', 'App\Http\Controllers\InscritoController@edit')->middleware('auth', 'role:administrador');
-Route::post('/matricularestudiante', 'App\Http\Controllers\InscritoController@matricular')->middleware('auth', 'role:administrador');
+Route::get('/inscritos/create', 'App\Http\Controllers\InscritoController@create')->middleware(['auth', 'role:administrador']);
+Route::post('/inscritos', 'App\Http\Controllers\InscritoController@store')->middleware(['auth', 'role:administrador']);
+Route::get('/inscritos/listinscritos', 'App\Http\Controllers\InscritoController@listInscritos')->middleware(['auth', 'role:administrador']);
+Route::get('/inscritos/{inscrito}/uploadrecibo', 'App\Http\Controllers\InscritoController@viewUpload')->middleware(['auth', 'role:administrador']);
+Route::put('/inscritos/{inscrito}', 'App\Http\Controllers\InscritoController@upload')->middleware(['auth', 'role:administrador']);
+Route::get('/inscritos/{inscrito}/matricular', 'App\Http\Controllers\InscritoController@viewMatricular')->middleware(['auth', 'role:administrador']);
+Route::get('/inscritos/{inscrito}/edit', 'App\Http\Controllers\InscritoController@edit')->middleware(['auth', 'role:administrador']);
+Route::patch('/inscritos/{inscrito}', 'App\Http\Controllers\InscritoController@update')->middleware(['auth', 'role:administrador']);
+Route::delete('/inscritos/{inscrito}', 'App\Http\Controllers\InscritoController@destroy')->middleware(['auth', 'role:administrador']);
+Route::post('/matricularestudiante', 'App\Http\Controllers\InscritoController@matricular')->middleware(['auth', 'role:administrador']);
+Route::post('/inscritos/buscarInscrito','App\Http\Controllers\InscritoController@buscarInscrito')->middleware(['auth', 'role:administrador']);
 
 //Lineas investigacion
 Route::post('/lineas/buscarLinea','App\Http\Controllers\LineaInvestigacionController@buscarLinea')->middleware('auth', 'role:administrador');

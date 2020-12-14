@@ -87,7 +87,6 @@ class PreinscritoController extends Controller
             'telfijo' => 'required',
             'telcel' => 'required',
             'correo' => 'required',
-            'semestre' => 'required',
             'certificacion' => 'required'
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
@@ -156,7 +155,6 @@ class PreinscritoController extends Controller
             'telfijo' => 'required',
             'telcel' => 'required',
             'correo' => 'required',
-            'semestre' => 'required',
             'certificacion' => 'required'
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];

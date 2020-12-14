@@ -100,15 +100,15 @@
 @section('scripts')
 <script>
     $('body').on('keyup', '#buscar', function() {
-        var buscarPreinscrito = $(this).val();
-        console.log(buscarPreinscrito);
+        var buscarInscrito = $(this).val();
+        console.log(buscarInscrito);
         $.ajax({
             method: "POST",
-            url: "{{ url('preinscripcion/buscarPreinscrito') }}",
+            url: "{{ url('inscritos/buscarInscrito') }}",
             dateType: "json",
             data: {
                 "_token": "{{ csrf_token() }}",
-                buscarPreinscrito: buscarPreinscrito,
+                buscarInscrito: buscarInscrito,
             },
             success: function(res) {
                 $("#pagination").remove();
@@ -130,23 +130,18 @@
                         <button class="btn btn-primary" style="pointer-events: none;" type="button"
                             disabled>Mas</button>
                     </span></td>`;
-                    tableRow += `<td class="d-flex"><a href="/preinscripcion/${link}/edit " class="btn btn-primary" id="editar" role="button">
+                    tableRow += `<td class="d-flex"><a href="/inscritos/${link}/edit " class="btn btn-primary" id="editar" role="button">
                             <i class="fas fa-user-edit"></i></a>`
                     tableRow += `<p> ⠀ </p>
-                            <form action="/preinscripcion/${link}" method = "post">
+                            <form action="/inscritos/${link}" method = "post">
                             @csrf
                             @method('DELETE') <button type = "submit" class = "btn btn-danger" onclick =
                             'return confirm("¿Esta seguro que desea eliminar esta persona?");' >
                             <i class = "fas fa-user-times"> </i> </button > </form>
                             <p>⠀</p>
-                            <form method="post" action="/preinscripcion/${link}"
-                                style="display: inline">
-                                @csrf
-                                @method('PUT')
-                                <button data-toggle="tooltip" title="Inscribir" type="submit" class="btn btn-success"
-                                    onclick="return confirm('¿Esta seguro que desea inscribir esta persona?');"><i class="fas fa-check-square"></i>
-                                </button>
-                            </form> </td > </tr>`;
+                            <a data-toggle="tooltip" href="/inscritos/${link}/matricular"
+                                title="Matricular" role="button" class="btn btn-success"><i
+                                    class="fas fa-check-square"></i></a>`;
                     $('#dynamic-row').append(tableRow);
                 });
                 var t = document.getElementById('total');

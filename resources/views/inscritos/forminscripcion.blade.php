@@ -38,9 +38,17 @@
     <div class="form-group">
         <label class="control-label" for="semestre"> {{ 'Semestre' }}</label>
         <select name="semestre" id="semestre" class="form-control {{ $errors->has('semestre') ? 'is-invalid' : '' }}">
-            <option value="0">No pertenezco a la UFPS</option>
+            <option value="{{ isset($inscritos->semestre) }}">
+                {{ isset($inscritos->semestre) ? $inscritos->semestre : 'No pertenezco a la ufps' }}
+            </option>
             @for ($i = 1; $i < 11; $i++)
-                <option value="{{ $i }}"> {{ $i }}</option>
+                @if (isset($inscritos->semestre))
+                    @if ($inscritos->semestre != $i)
+                        <option value="{{ $i }}"> {{ $i }}</option>
+                    @endif
+                @else
+                    <option value="{{ $i }}">{{ $i }} </>
+                @endif
             @endfor
             <option value="11">Ya termine materias</option>
         </select>
@@ -48,9 +56,17 @@
             <label class="control-label" for="certificacion"> {{ 'Certificacion' }}</label>
             <select name="certificacion" id="certificacion"
                 class="form-control {{ $errors->has('certificacion') ? 'is-invalid' : '' }}">
-                <option value="">Seleccione</option>
+                <option value="{{ isset($inscritos->certificacion) }}">
+                    {{ isset($inscritos->certificacion) ? $inscritos->nombre_tc : 'Seleccione' }}
+                </option>
                 @foreach ($certificaciones as $certificacion)
-                    <option value="{{ $certificacion->id }}">{{ $certificacion->nombre }} </>
+                    @if (isset($inscritos->certificacion))
+                        @if ($inscritos->certificacion != $certificacion->id)
+                            <option value="{{ $certificacion->id }}">{{ $certificacion->nombre }} </>
+                        @endif
+                    @else
+                        <option value="{{ $certificacion->id }}">{{ $certificacion->nombre }} </>
+                    @endif
                 @endforeach
 
             </select>
@@ -59,10 +75,10 @@
     @else
         <div class="form-group">
             <label for="recibo_pago_inscripcion"> {{ 'Archivo' }}</label>
-            @if ($inscritos->recibo_pago_inscripcion != "") 
-            <img class="img-thumbnail img-fluid" src="/Users/stive/Documents/uploads/recibo/eps.png"> 
-                <img class="img-thumbnail img-fluid" src="{{ Storage::disk('upload')->path($inscritos->recibo_pago_inscripcion) }}"
-                    width="250">
+            @if ($inscritos->recibo_pago_inscripcion != '')
+                <img class="img-thumbnail img-fluid" src="/Users/stive/Documents/uploads/recibo/eps.png">
+                <img class="img-thumbnail img-fluid"
+                    src="{{ Storage::disk('upload')->path($inscritos->recibo_pago_inscripcion) }}" width="250">
             @endif
             <input class="form-control {{ $errors->has('recibo_pago_inscripcion') ? 'is-invalid' : '' }}" type="file"
                 name="recibo_pago_inscripcion" id="recibo_pago_inscripcion"
