@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
 
 class EstudianteController extends Controller
 {
@@ -95,6 +95,110 @@ class EstudianteController extends Controller
             })->get();
 
         return json_encode($estudiantes);
+    }
+
+
+    public function viewUploadInscripcion($id)
+    {
+        $estudiantes = Estudiante::select('e.cedula', 'p.nombre', 'etc.recibo_pago_inscripcion', 'tc.nombre as certificacion', 'etc.id')
+            ->from('estudiante as e')
+            ->join('persona as p', function ($join) use ($id) {
+                $join->on('e.cedula', '=', 'p.cedula')
+                    ->where('e.cedula', $id);
+            })
+            ->join('estudiante_tipo_certificacion as etc', function ($join) {
+                $join->on('e.id', '=', 'etc.estudiante_id');
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('etc.tipo_certificacion_id', '=', 'tc.id');
+            })->first();
+        //$visibility = Storage::disk('upload')->getVisibility($inscritos->recibo_pago_inscripcion);    
+        return view('estudiantes/uploadreciboinscripcion', compact('estudiantes'));
+    }
+
+    public function updateInscripcion(Request $request)
+    {
+        $datos = [
+            'recibo_pago_inscripcion' => 'max:10000|mimes:jpeg,png,jpg'
+        ];
+        $Mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datos, $Mensaje);
+        $datosEst = request()->except(['_token', '_method', 'nombre', 'id', 'recibo_pago_matricula', 'tipo_certificacion_id']);
+        //dump($request->hasFile('recibo_pago_inscripcion'));
+        //die();
+        if ($request->hasFile('recibo_pago_inscripcion')) {
+            $est = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$request->input('id')]);
+            if ($est[0]->recibo_pago_inscripcion != null) {
+                if (str_contains($est[0]->recibo_pago_inscripcion, "uploads/reciboinscripcion")) {
+                    Storage::delete('public/' . $est[0]->recibo_pago_inscripcion);
+                }
+            }
+            $name = $request->file('recibo_pago_inscripcion')->getClientOriginalName();
+            $recibo = $request->file('recibo_pago_inscripcion')->storeAs('uploads/reciboinscripcion', $name, 'public');
+        } else {
+            $est = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$request->input('id')]);
+            if ($est[0]->recibo_pago_inscripcion != null) {
+                if (str_contains($est[0]->recibo_pago_inscripcion, "uploads/reciboinscripcion")) {
+                    Storage::delete('public/' . $est[0]->recibo_pago_inscripcion);
+                }
+            }
+            $recibo = $request->input('recibo_pago_inscripcion');
+        }
+
+        DB::update('update estudiante_tipo_certificacion set recibo_pago_inscripcion = ? where id = ?', [$recibo, $request->input('id')]);
+
+        return redirect('estudiantes/listestudiantes')->with('Mensaje', 'Se ha editado el recibo de inscripcion con exito');
+    }
+
+    public function updatematricula(Request $request)
+    {
+        $datos = [
+            'recibo_pago_matricula' => 'max:10000|mimes:jpeg,png,jpg'
+        ];
+        $Mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datos, $Mensaje);
+        $datosEst = request()->except(['_token', '_method', 'nombre', 'id', 'recibo_pago_inscripcion', 'tipo_certificacion_id']);
+
+        if ($request->hasFile('recibo_pago_matricula')) {
+            $est = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$request->input('id')]);
+            if ($est[0]->recibo_pago_matricula != null) {
+                if (str_contains($est[0]->recibo_pago_matricula, "uploads/recibomatricula")) {
+                    Storage::delete('public/' . $est[0]->recibo_pago_matricula);
+                }
+            }
+            $name = $request->file('recibo_pago_matricula')->getClientOriginalName();
+            $recibo = $request->file('recibo_pago_matricula')->storeAs('uploads/recibomatricula', $name, 'public');
+        } else {
+            $est = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$request->input('id')]);
+            if ($est[0]->recibo_pago_matricula != null) {
+                if (str_contains($est[0]->recibo_pago_matricula, "uploads/recibomatricula")) {
+                    Storage::delete('public/' . $est[0]->recibo_pago_matricula);
+                }
+            }
+            $recibo = $request->input('recibo_pago_matricula');
+        }
+
+        DB::update('update estudiante_tipo_certificacion set recibo_pago_matricula = ? where id = ?', [$recibo, $request->input('id')]);
+
+        return redirect('estudiantes/listestudiantes')->with('Mensaje', 'Se ha editado el recibo de matricula con exito');
+    }
+
+    public function viewUploadMatricula($id)
+    {
+        $estudiantes = Estudiante::select('e.cedula', 'p.nombre', 'etc.recibo_pago_matricula', 'etc.id', 'tc.nombre as certificacion')
+            ->from('estudiante as e')
+            ->join('persona as p', function ($join) use ($id) {
+                $join->on('e.cedula', '=', 'p.cedula')
+                    ->where('e.cedula', $id);
+            })
+            ->join('estudiante_tipo_certificacion as etc', function ($join) {
+                $join->on('e.id', '=', 'etc.estudiante_id');
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('etc.tipo_certificacion_id', '=', 'tc.id');
+            })->first();
+        //$visibility = Storage::disk('upload')->getVisibility($inscritos->recibo_pago_inscripcion);    
+        return view('estudiantes/uploadrecibomatricula', compact('estudiantes'));
     }
 
     public function verNotasCertificacion($id_cer_est)

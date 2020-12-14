@@ -143,6 +143,10 @@ Route::post('/estudiantes/buscarEstudiante','App\Http\Controllers\EstudianteCont
 Route::get('/estudiantes/{est_cert}/vernotascertificacion', 'App\Http\Controllers\EstudianteController@verNotasCertificacion')->middleware('auth', 'role:administrador');
 Route::get('/estudiantes/{est_cert}/subirnotaprueba', 'App\Http\Controllers\EstudianteController@createNotaPrueba')->middleware('auth', 'role:administrador');
 Route::post('/estudiantes/{est_cert}', 'App\Http\Controllers\EstudianteController@updateNotaPrueba')->middleware('auth', 'role:administrador');
+Route::get('/estudiantes/{estudiante}/uploadreciboinscripcion', 'App\Http\Controllers\EstudianteController@viewUploadInscripcion')->middleware('auth', 'role:administrador');
+Route::patch('/estudiantes/{estudiante}/inscripcion', 'App\Http\Controllers\EstudianteController@updateInscripcion')->middleware(['auth', 'role:administrador']);
+Route::get('/estudiantes/{estudiante}/uploadrecibomatricula', 'App\Http\Controllers\EstudianteController@viewUploadMatricula')->middleware('auth', 'role:administrador');
+Route::put('/estudiantes/{estudiante}/matricula', 'App\Http\Controllers\EstudianteController@updateMatricula')->middleware(['auth', 'role:administrador']);
 
 //preinscripcion
 Route::get('/preinscripcion/create', 'App\Http\Controllers\PreinscritoController@create')->name('preinscribir');

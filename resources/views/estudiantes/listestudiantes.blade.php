@@ -167,7 +167,7 @@
                                     </button></a>
                             </div>
                             <div class="border-0">
-                                <a href="{{ url('/estudiantes/' . $estudiante->cedula . '/uploadrecibomatricula') }}">
+                                <a href="/estudiantes/${link}/uploadrecibomatricula">
                                     Matricula⠀ <button class="btn"> ${matricula != null ? ' <i class="fas fa-check-square"></i>' : '<i class="far fa-square"></i>'}</button>
                                 </a>
                             </div>
