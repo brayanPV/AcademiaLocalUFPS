@@ -7,21 +7,22 @@
                 {{ Session::get('Mensaje') }}
             </div>
         @endif
-        
+
         <div class="alert alert-primary" role="alert">
-            <h2><a href="{{ url('tesis/')}}">Gestion de Tesis </a></h2>
+            <h2><a href="{{ url('tesis/') }}">Gestion de Tesis </a></h2>
         </div>
-            
+
         <div class="row">
             <div class="col">
-                  <a class="btn btn-success" href="{{ url('/tesis/create') }}"><i class="fas fa-plus-circle"></i> Agregar Tesis</a>
+                <a class="btn btn-success" href="{{ url('/tesis/create') }}"><i class="fas fa-plus-circle"></i> Agregar
+                    Tesis</a>
             </div>
             <br>
             <div class="col">
-                    <input type="text" class="form-control" id="buscar" name="buscar"
-                        placeholder="Buscar por codigo biblioteca, titulo, director, estudiante o jurado" aria-label="Recipient's username"
-                        aria-describedby="basic-addon2">
-            </div>  
+                <input type="text" class="form-control" id="buscar" name="buscar"
+                    placeholder="Buscar por codigo biblioteca, titulo, director, estudiante o jurado"
+                    aria-label="Recipient's username" aria-describedby="basic-addon2">
+            </div>
         </div>
     </div>
     <div class="container">
@@ -38,7 +39,7 @@
                     <th>Jurado</th>
                     <th>Fecha</th>
                     <th>Accion</th>
-                   
+
                 </tr>
             </thead>
             <tbody id="dynamic-row">
@@ -54,19 +55,25 @@
                         <td class="col-md-auto">{{ $tesi->nombre_jurado }}</td>
                         <td class="col-md-auto">{{ $tesi->fecha }}</td>
                         <td class="d-flex justify-content-center"> <a class="btn btn-primary" role="button"
-                            href="{{ url('/tesis/' . $tesi->id . '/edit') }}"><i class="fas fa-edit"></i></a>
-                        <p>⠀</p>
-                        <form method="post" action="{{ url('/tesis/' . $tesi->id) }}" style="display: inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger"
-                                onclick="return confirm('¿Esta seguro que desea eliminar esta tesis?');"><i
-                                    class="fas fa-trash"></i></button>
-                        </form>
-                        <p>⠀</p>
-                        <a class="btn btn-info" href="{{ url('/tesis/' . $tesi->id . '/asignarestudiante') }}"
-                            style="display: inline"><i class="fas fa-users"></i></a>
-                    </td>
+                                href="{{ url('/tesis/' . $tesi->id . '/edit') }}"><i class="fas fa-edit"></i></a>
+                            <p>⠀</p>
+                            <form method="post" action="{{ url('/tesis/' . $tesi->id) }}" style="display: inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger"
+                                    onclick="return confirm('¿Esta seguro que desea eliminar esta tesis?');"><i
+                                        class="fas fa-trash"></i></button>
+                            </form>
+                            <p>⠀</p>
+                            <a class="btn btn-info" href="{{ url('/tesis/' . $tesi->id . '/asignarestudiante') }}"
+                                style="display: inline"><i class="fas fa-users"></i></a>
+                            <p>⠀</p>
+                            @if ($tesi->est_cer != null)
+                                <a class="btn btn-success"
+                                    href="{{ url('tesis/' . $tesi->id . '/agregarnota') }}"
+                                    style="display: inline"><i class="fas fa-plus-square"></i></a>
+                            @endif
+                        </td>
                     </tr>
                 @empty
                     <h2>No hay nada por mostrar </h2>
@@ -95,7 +102,7 @@
 <script>
     $('body').on('keyup', '#buscar', function() {
         var buscarTesis = $(this).val();
-       $.ajax({
+        $.ajax({
             method: "POST",
             url: "{{ url('tesis/buscarTesis') }}",
             dateType: "json",
@@ -109,7 +116,7 @@
                 var con = 0;
                 $.each(JSON.parse(res), function(index, value) {
                     con++;
-                    console.log(res);
+                    // console.log(res);
                     var tableRow = "<tr><td class='col-md-auto'>" + value.cod_biblioteca +
                         " </td>";
                     tableRow += "<td class='col-md-auto'>" + value.titulo + " </td>";
@@ -117,11 +124,13 @@
                     tableRow += "<td class='col-md-auto'>" + value.estudiante + " </td>";
                     tableRow += "<td class='col-md-auto'>" + value.linea + "</td>";
                     tableRow += "<td class='col-md-auto'>" + value.estado + " </td>";
-                    tableRow += "<td class='col-md-auto'>" + value.nombre_director + "</td>";
+                    tableRow += "<td class='col-md-auto'>" + value.nombre_director +
+                        "</td>";
                     tableRow += "<td class='col-md-auto'>" + value.nombre_jurado + " </td>";
                     tableRow += "<td class='col-md-auto'>" + value.fecha + " </td>";
                     var link = value.id;
-                    
+                    var cer = value.est_cer;
+                    //console.log(cer);
                     tableRow += `<td class="d-flex justify-content-center"><a href="/tesis/${link}/edit " class="btn btn-primary" id="editar" role="button">
                             <i class="fas fa-edit"></i></a>`
                     tableRow += `<p> ⠀ </p>
@@ -130,9 +139,15 @@
                             @method('DELETE') <button type = "submit" class = "btn btn-danger" onclick =
                             'return confirm("¿Esta seguro que desea eliminar esta tesis?");' >
                             <i class="fas fa-trash"></i></button > </form><p>⠀</p>
-                            <a class="btn btn-info p-1" href="/tesis/${link}/asignarestudiantes"
-                                style="display: inline"><i class="fas fa-users"></i></a> </td ></tr>`;
-                    
+                            <a class="btn btn-info" href="/tesis/${link}/asignarestudiante"
+                            style="display: inline"><i class="fas fa-users"></i></a>
+                            <p>⠀</p>`
+                    if (cer != null) {
+                        tableRow +=
+                            `<a class="btn btn-success" href="tesis/${link}/${cer}/agregarnota"><i class="fas fa-plus-square"></i></a>`;
+                    }
+                    tableRow += `</td ></tr>`;
+
                     $('#dynamic-row').append(tableRow);
                 });
                 var t = document.getElementById('total');

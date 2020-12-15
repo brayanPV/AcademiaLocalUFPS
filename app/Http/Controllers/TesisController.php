@@ -33,7 +33,8 @@ class TesisController extends Controller
             'd.nombre as nombre_director',
             't.jurado',
             'j.nombre as nombre_jurado',
-            'a.nombre as estudiante'
+            'a.nombre as estudiante',
+            'etc.id as est_cer'
         ) //d.nombre as director','j.nombre as jurado')
             ->from('tesis as t')
             ->join('tipo_tesis as ti', function ($join) {
@@ -228,7 +229,8 @@ class TesisController extends Controller
             'd.nombre as nombre_director',
             't.jurado',
             'j.nombre as nombre_jurado',
-            'a.nombre as estudiante'
+            'a.nombre as estudiante',
+            'etc.id as est_cer'
         )
             ->from('tesis as t')
             ->join('tipo_tesis as ti', function ($join) {
@@ -258,6 +260,48 @@ class TesisController extends Controller
             ->orWhere('a.nombre', 'like', '%' . $request->get('buscarTesis') . '%')->get();
 
         return json_encode($tesis);
+    }
+
+    public function viewAgregarNota($id)
+    {
+        $tesis = Tesis::select(
+            't.id',
+            't.cod_biblioteca',
+            't.fecha',
+            't.titulo',
+            'a.nombre as estudiante',
+            'etc.id as est_cer',
+            'tc.nombre',
+            'etc.nota_sustentacion'
+        )
+            ->from('tesis as t')
+            ->join('estudiante_tipo_certificacion as etc', function ($join) {
+                $join->on('t.id', '=', 'etc.tesis_id');
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('etc.tipo_certificacion_id', '=', 'tc.id');
+            })
+            ->join('estudiante as e', function ($join) {
+                $join->on('etc.estudiante_id', '=', 'e.id');
+            })
+            ->join('persona as a', function ($join) {
+                $join->on('e.cedula', '=', 'a.cedula');
+            })->where('t.id', '=', $id)->first();
+        return view('tesis/agregarnota', compact('tesis'));
+    }
+
+    public function notaUpdate(Request $request, $id){
+
+        $datos = [
+            'nota_sustentacion' => 'required|numeric|max:100'
+        ];
+        $Mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datos, $Mensaje);
+        
+        DB::update('update estudiante_tipo_certificacion set nota_sustentacion = ? where id = ?', [$request->input('nota_sustentacion') ,$request->input('est_cer')]);
+        return redirect('tesis/')->with('Mensaje', 'Nota añadida con exito');
+        
+
     }
 
     /**
