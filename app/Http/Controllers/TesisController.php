@@ -290,7 +290,8 @@ class TesisController extends Controller
         return view('tesis/agregarnota', compact('tesis'));
     }
 
-    public function notaUpdate(Request $request, $id){
+    public function notaUpdate(Request $request, $id)
+    {
 
         $datos = [
             'nota_sustentacion' => 'required|numeric|max:100'

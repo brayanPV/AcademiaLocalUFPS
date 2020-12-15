@@ -186,10 +186,7 @@ Route::get('/tesis/{id}/agregarnota', 'App\Http\Controllers\TesisController@view
 Route::post('/tesis/{id}/agregarnota', 'App\Http\Controllers\TesisController@notaUpdate')->middleware(['auth', 'role:administrador']);
 Route::resource('tesis', TesisController::class)->middleware(['auth', 'role:administrador']);
 
-//Route::get('tesis/create', 'App\Http\Controllers\TesisController@create')->middleware(['auth', 'role:administrador']);
 
-//Route::get('/estudiantes/{estudiante}/edit', 'App\Http\Controllers\InscritoController@edit')->middleware('auth','role:administrador');
-//Route::patch('/estudiantes', 'App\Http\Controllers\InscritoController@update')->middleware('auth','role:administrador');
 //listados cardCertificacion
 Route::get('/certificaciones/listcertificaciones', 'App\Http\Controllers\TipoCertificacionController@listTipoCertificacion');
 Route::get('/certificaciones/card', 'App\Http\Controllers\TipoCertificacionController@cardCertificacion');
