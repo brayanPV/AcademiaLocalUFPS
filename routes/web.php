@@ -15,6 +15,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InscritoController;
 use App\Http\Controllers\LineaInvestigacionController;
 use App\Http\Controllers\PreinscritoController;
+use App\Http\Controllers\TesisController;
 use App\Http\Middleware\CheckRole;
 
 /*
@@ -149,6 +150,8 @@ Route::get('/estudiantes/{estudiante}/uploadreciboinscripcion', 'App\Http\Contro
 Route::patch('/estudiantes/{estudiante}/inscripcion', 'App\Http\Controllers\EstudianteController@updateInscripcion')->middleware(['auth', 'role:administrador']);
 Route::get('/estudiantes/{estudiante}/uploadrecibomatricula', 'App\Http\Controllers\EstudianteController@viewUploadMatricula')->middleware('auth', 'role:administrador');
 Route::put('/estudiantes/{estudiante}/matricula', 'App\Http\Controllers\EstudianteController@updateMatricula')->middleware(['auth', 'role:administrador']);
+Route::get('/estudiantes/{estudiante}/subircertificadofinal', 'App\Http\Controllers\EstudianteController@viewCertificadoFinal')->middleware(['auth', 'role:administrador']);
+Route::post('/estudiantes/{estudiante}/certificado', 'App\Http\Controllers\EstudianteController@updateCertificado')->middleware(['auth', 'role:administrador']);
 
 //preinscripcion
 Route::get('/preinscripcion/create', 'App\Http\Controllers\PreinscritoController@create')->name('preinscribir');
@@ -175,8 +178,11 @@ Route::post('/inscritos/buscarInscrito','App\Http\Controllers\InscritoController
 //Lineas investigacion
 Route::post('/lineas/buscarLinea','App\Http\Controllers\LineaInvestigacionController@buscarLinea')->middleware('auth', 'role:administrador');
 Route::resource('lineas', LineaInvestigacionController::class)->middleware(['auth', 'role:administrador']);
-//Tesis
-Route::get('tesis/index', 'App\Http\Controllers\TesisController@index')->middleware(['auth', 'role:administrador']);
+//Tesis asignarEstudianteUpdate
+Route::get('tesis/{id}/asignarestudiante', 'App\Http\Controllers\TesisController@viewAsignarEstudiante')->middleware(['auth', 'role:administrador']);
+Route::put('tesis/{id}/', 'App\Http\Controllers\TesisController@asignarEstudianteUpdate')->middleware(['auth', 'role:administrador']);
+Route::resource('tesis', TesisController::class)->middleware(['auth', 'role:administrador']);
+//Route::get('tesis/create', 'App\Http\Controllers\TesisController@create')->middleware(['auth', 'role:administrador']);
 
 //Route::get('/estudiantes/{estudiante}/edit', 'App\Http\Controllers\InscritoController@edit')->middleware('auth','role:administrador');
 //Route::patch('/estudiantes', 'App\Http\Controllers\InscritoController@update')->middleware('auth','role:administrador');

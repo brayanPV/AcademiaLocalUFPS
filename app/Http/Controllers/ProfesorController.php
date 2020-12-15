@@ -131,7 +131,7 @@ class ProfesorController extends Controller
             })
             ->join('tipo_certificacion as tc', function ($join) {
                 $join->on('m.id_tipo_certificacion', '=', 'tc.id');
-            })->join('persona as p', function($join){
+            })->join('persona as p', function ($join) {
                 $join->on('c.ced_profesor', '=', 'p.cedula');
             })
             ->where('c.id', $id)->get();
@@ -276,7 +276,8 @@ class ProfesorController extends Controller
         return view('profesores/agregarnota', compact('estudiante'));
     }
 
-    public function agregarCertificadoCarta($curso, $estudiante){
+    public function agregarCertificadoCarta($curso, $estudiante)
+    {
         $estudiante = CursoEstudiante::select('ce.id_curso', 'ce.ced_estudiante', 'ce.observaciones', 'p.nombre', 'c.id_cisco', 'm.nombre as modulo', 'ce.certificado', 'ce.carta')
             ->from('curso_estudiante as ce')
             ->join('curso as c', function ($join) {
@@ -317,18 +318,21 @@ class ProfesorController extends Controller
                 ['id_curso', $id_curso],
                 ['ced_estudiante', $request->input('cedula')]
             ])->update(['valor' => $request->input('valor'), 'laboratorio'  => $request->input('laboratorio')]);
+
             return $this->verEstudiantesCursos($id_curso);
         } else if ($request->input('valor') != 0) {
             CursoEstudiante::where([
                 ['id_curso', $id_curso],
                 ['ced_estudiante', $request->input('cedula')]
             ])->update(['valor' => $request->input('valor')]);
+
             return $this->verEstudiantesCursos($id_curso);
         } else if ($request->input('laboratorio') != 0) {
             CursoEstudiante::where([
                 ['id_curso', $id_curso],
                 ['ced_estudiante', $request->input('cedula')]
             ])->update(['laboratorio' => $request->input('laboratorio')]);
+
             return $this->verEstudiantesCursos($id_curso);
         } else {
             $datos = [
@@ -340,7 +344,8 @@ class ProfesorController extends Controller
         }
     }
 
-    public function certificadoCartaUpdate(Request $request, $id_curso){
+    public function certificadoCartaUpdate(Request $request, $id_curso)
+    {
         $datos = [
             'certificado' => 'required|max:10000|mimes:pdf',
             'carta' => 'required|max:10000|mimes:pdf'
@@ -355,7 +360,7 @@ class ProfesorController extends Controller
             $datos['carta'] = $request->file('carta')->storeAs('uploads/certificados', $carta, 'public');
         }
         CursoEstudiante::where([
-            ['id_curso', $id_curso], 
+            ['id_curso', $id_curso],
             ['ced_estudiante', $request->input('cedula')]
         ])->update($datos);
         return $this->verEstudiantesCursos($id_curso);

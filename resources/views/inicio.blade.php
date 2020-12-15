@@ -29,7 +29,7 @@
                         <li class="list-group-item list-group-item-action"><a href="{{ url('/modulos/listmodulos') }}">Modulos </a></li>
                         <li class="list-group-item list-group-item-action"><a href="{{ url('/preinscripcion/listpreinscripcion') }}">Preinscripcion </a></li>
                         <li class="list-group-item list-group-item-action"><a href="{{ url('/profesores/listprofesores') }}">Profesores </a></li>
-                        <li class="list-group-item list-group-item-action"><a href="{{ url('/tesis/index') }}">Tesis </a></li>
+                        <li class="list-group-item list-group-item-action"><a href="{{ url('/tesis/') }}">Tesis </a></li>
                     </ul>
                 </div>
                 </div>

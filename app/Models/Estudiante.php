@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Estudiante extends Model
 {
@@ -15,7 +16,7 @@ class Estudiante extends Model
     public function certificaciones()
     {
         return $this->belongsToMany(TipoCertificacion::class, 'estudiante_tipo_certificacion')
-        ->withPivot('recibo_pago_inscripcion', 'recibo_pago_matricula', 'certificado_final_notas');
+        ->withPivot('recibo_pago_inscripcion', 'recibo_pago_matricula', 'certificado_final_notas', 'tesis_id');
     }
 
     public function hasCertificacion($certificacion)
@@ -41,4 +42,6 @@ class Estudiante extends Model
         }
         return false;
     }
+
+    
 }

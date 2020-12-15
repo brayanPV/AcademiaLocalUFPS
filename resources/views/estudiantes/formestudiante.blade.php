@@ -1,8 +1,9 @@
 <div class="form-group">
     <label for="cedula"> {{ 'Cedula' }}</label>
     <input class="form-control {{ $errors->has('cedula') ? 'is-invalid' : '' }}" type="number" name="cedula" id="cedula"
-        value="{{ isset($estudiantes->cedula) ? $estudiantes->cedula : old('cedula') }}" {{ $Modo == 'Crear' ?: 'readonly' }}>
-    
+        value="{{ isset($estudiantes->cedula) ? $estudiantes->cedula : old('cedula') }}"
+        {{ $Modo == 'Crear' ?: 'readonly' }}>
+
     {!! $errors->first('cedula', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="form-group">
@@ -37,8 +38,8 @@
 </div>
 <div class="form-group">
     <label for="cod_estudiante"> {{ 'Codigo Estudiante' }}</label>
-    <input class="form-control {{ $errors->has('cod_estudiante') ? 'is-invalid' : '' }}" type="text" name="cod_estudiante"
-        id="cod_estudiante"
+    <input class="form-control {{ $errors->has('cod_estudiante') ? 'is-invalid' : '' }}" type="text"
+        name="cod_estudiante" id="cod_estudiante"
         value="{{ isset($estudiantes->cod_estudiante) ? $estudiantes->cod_estudiante : old('cod_estudiante') }}">
     {!! $errors->first('cod_estudiante', '<div class="invalid-feedback">:message</div>') !!}
 </div>
@@ -50,17 +51,19 @@
 </div>
 <div class="form-group">
     <label for="Certificacion" class="control-label"> {{ 'Certificacion ' }}</label>
-    @if($Modo == 'Crear')
-    <select name="id_tipo_certificacion" id="id_tipo_certificacion" class="form-control {{ $errors->has('id_tipo_certificacion') ? 'is-invalid' : '' }}">
-        <option value="">Seleccione</option>
-        @foreach ($tipoCertificacion as $tipo)
-            <option value="{{ $tipo->id }}">{{ $tipo->nombre }} </>
-        @endforeach
-        {!! $errors->first('id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
-    </select>
-    @else 
-    <input type="hidden" id="id_tipo_certificacion" name="id_tipo_certificacion" class="form-control" value="{{$estudiantes->id_tipo_certificacion}}" readonly>
-   <input type="text" class="form-control" value="{{ $tipoCertificacion->nombre}}" readonly>
+    @if ($Modo == 'Crear')
+        <select name="id_tipo_certificacion" id="id_tipo_certificacion"
+            class="form-control {{ $errors->has('id_tipo_certificacion') ? 'is-invalid' : '' }}">
+            <option value="">Seleccione</option>
+            @foreach ($tipoCertificacion as $tipo)
+                <option value="{{ $tipo->id }}">{{ $tipo->nombre }} </>
+            @endforeach
+            {!! $errors->first('id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
+        </select>
+    @else
+        <input type="hidden" id="id_tipo_certificacion" name="id_tipo_certificacion" class="form-control"
+            value="{{ $estudiantes->id_tipo_certificacion }}" readonly>
+        <input type="text" class="form-control" value="{{ $tipoCertificacion->nombre }}" readonly>
 
     @endif
 </div>
@@ -74,3 +77,4 @@
         <a class="btn btn-secondary" inl href="{{ url('estudiantes/listestudiantes') }}">Volver</a>
     </div>
 </div>
+

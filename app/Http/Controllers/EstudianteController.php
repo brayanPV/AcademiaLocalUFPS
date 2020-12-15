@@ -251,6 +251,68 @@ class EstudianteController extends Controller
         return view('estudiantes/vernotascertificacion', compact(['est', 'est_cer', 'estudiante']));
     }
 
+    public function viewCertificadoFinal($id_cer_est)
+    {
+
+        $est = CursoEstudiante::select('m.nombre as modulo', 'p.nombre as estudiante', 'tc.nombre as nombre_cer', 'etc.id', 'etc.certificado_final_notas')
+            ->from('curso_estudiante as ce')
+            ->join('estudiante as e', function ($join) {
+                $join->on('ce.ced_estudiante', '=', 'e.cedula');
+            })
+            ->join('estudiante_tipo_certificacion as etc', function ($join) use ($id_cer_est) {
+                $join->on('etc.estudiante_id', '=', 'e.id')
+                    ->where('etc.id', '=', $id_cer_est);
+            })
+            ->join('tipo_certificacion as tc', function ($join) {
+                $join->on('etc.tipo_certificacion_id', '=', 'tc.id');
+            })
+            ->join('modulo as m', function ($join) {
+                $join->on('tc.id', '=', 'm.id_tipo_certificacion');
+            })
+            ->join('curso as c', function ($join) {
+                $join->on('m.id', '=', 'c.id_modulo');
+            })
+            ->join('persona as p', function ($join) {
+                $join->on('e.cedula', '=', 'p.cedula');
+            })->first();
+
+        return view('estudiantes/subircertificadofinal', compact('est'));
+    }
+
+    public function updateCertificado(Request $request)
+    {
+        $datos = [
+            'certificado_final_notas' => 'required|max:10000|mimes:pdf',
+        ];
+        $Mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datos, $Mensaje);
+        $datos = request()->except(['_token', '_method', 'nombre', 'cedula', 'tipo_certificacion_id']);
+
+        if ($request->hasFile('certificado_final_notas')) {
+            $est = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$request->input('id')]);
+            if ($est[0]->certificado_final_notas != null) {
+                if (str_contains($est[0]->certificado_final_notas, "uploads/certificadofinal")) {
+                    Storage::delete('public/' . $est[0]->certificado_final_notas);
+                }
+            }
+            $name = $request->file('certificado_final_notas')->getClientOriginalName();
+            $certificado = $request->file('certificado_final_notas')->storeAs('uploads/certificadofinal', $name, 'public');
+        } else {
+            $est = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$request->input('id')]);
+            if ($est[0]->certificado_final_notas != null) {
+                if (str_contains($est[0]->certificado_final_notas, "uploads/certificadofinal")) {
+                    Storage::delete('public/' . $est[0]->certificado_final_notas);
+                }
+            }
+            $certificado = $request->input('certificado_final_notas');
+        }
+
+        //dump($certificado, $request->input('id'));
+        //die();
+        DB::update('update estudiante_tipo_certificacion set certificado_final_notas = ? where id = ?', [$certificado, $request->input('id')]);
+        return $this->verNotasCertificacion($request->input('id'));
+    }
+
     public function createNotaPrueba($id_cer_est)
     {
         $est_cer = DB::table('estudiante_tipo_certificacion')
@@ -276,6 +338,14 @@ class EstudianteController extends Controller
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $dato, $mensaje);
+
+        $aux = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$id_cer_est]);
+        $estudiante = Estudiante::find($aux[0]->estudiante_id);
+
+        if($estudiante->cod_estudiante == null){
+            DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$request->input('nota_prueba'), $request->input('nota_prueba'), $id_cer_est]);
+        }
+
         if ($request->input('nota_prueba') > 82.5) {
             DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$request->input('nota_prueba'), $request->input('nota_prueba'), $id_cer_est]);
         }

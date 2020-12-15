@@ -41,7 +41,7 @@
         class="form-control {{ $errors->has('id_cohorte') ? 'is-invalid' : '' }}">
         @if ($Modo == 'Editar')
             @foreach ($cohortes as $cohorte)
-                <option value="{{ $cohorte->id }}" {{ old('certificaciones') == $cohorte->id ? 'selected' : '' }}>
+                <option value="{{ $cohorte->id }}" {{ old('id_cohorte') == $cohorte->id ? 'selected' : '' }}>
                     {{ $cohorte->nombre }} </>
             @endforeach
         @endif
@@ -52,7 +52,7 @@
     <label class="control-label" for="ced_profesor"> {{ 'Profesor' }}</label>
     <select name="ced_profesor" id="ced_profesor"
         class="form-control {{ $errors->has('ced_profesor') ? 'is-invalid' : '' }}">
-        <option value="{{ isset($curso->cedula) }}">{{ isset($curso->nombre_profesor) ? $curso->nombre_profesor : 'Seleccione' }}</option>
+        <option value="{{ isset($curso->cedula) ? $curso->cedula : 0 }}">{{ isset($curso->nombre_profesor) ? $curso->nombre_profesor : 'Seleccione' }}</option>
         @foreach ($profesores as $profesor)
             @if (isset($curso->cedula))
                 @if ($curso->cedula != $profesor->cedula)

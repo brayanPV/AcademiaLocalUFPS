@@ -45,6 +45,7 @@
                         <th>Prueba</th>
                         <th>Sustentacion</th>
                         <th>Definitiva</th>
+                        <th>Certificado</th>
                         <th>Accion</th>
                     </tr>
                 </thead>
@@ -55,8 +56,13 @@
                         <td class="col-md-auto">{{ $item->nota_prueba }}</td>
                         <td class="col-md-auto">{{ $item->nota_sustentacion }}</td>
                         <td class="col-md-auto">{{ $item->definitiva }}</td>
-                        <td class="col-md-auto"><a data-toggle="tooltip" title="Subir nota prueba" href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subirnotaprueba') }}"> 
-                            <i class="fas fa-plus-square"></i></a> </td>
+                        <td class="col-md-auto"> <a href="{{asset('storage') . '/' . $item->certificado_final_notas }}" target="_blank">Certificado <button class="btn">
+                            @if ($item->certificado_final_notas != '')<i
+                                class="fas fa-check-square"></i> @else <i class="far fa-square"></i>
+                        </button> @endif</a> </td>
+                        <td class="d-flex"><a class="btn btn-primary" data-toggle="tooltip" title="Subir nota prueba" href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subirnotaprueba') }}"> 
+                            <i class="fas fa-plus-square"></i></a> <p>⠀ </p> <a class="btn btn-success" data-toggle="tooltip" title="Subir Certificado Final" href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subircertificadofinal') }}"> 
+                                <i class="fas fa-file-upload"></i></a> </td>
                     @endforeach
                 </tbody>
             </table>
@@ -64,7 +70,7 @@
 
                 <div class="col-1">
                     <a class="btn btn-primary"
-                        href="{{ Auth::check() ? url('/inicio/' . Auth::user()->id) : url('/') }}">inicio</a>
+                        href="{{ url('/estudiantes/listestudiantes') }}">Volver</a>
                 </div>
             </div>
         </div>

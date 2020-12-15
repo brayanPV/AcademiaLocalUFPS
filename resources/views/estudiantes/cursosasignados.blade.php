@@ -27,7 +27,7 @@
                     <tr>
                         <td class="col-md-auto">{{ $curso->nombre }}</td>
                         <td class="col-md-auto">{{ $curso->certificacion }}</td>
-                        <td class="col-md-auto"> <a target="_blank" href="{{ $curso->url1 }}" class="btn btn-primary"> <i class="fas fa-eye"></i>Ver</a> <a  class="btn btn-secondary" target="_blank" href="{{ $curso->url2 }}"><i class="fas fa-eye"></i>Ver</a></td>
+                        <td class="d-flex"> <a target="_blank" href="{{ $curso->url1 }}" class="btn btn-primary"> <i class="fas fa-eye"></i>Ver</a><p>⠀</p><a  class="btn btn-secondary" target="_blank" href="{{ $curso->url2 }}"><i class="fas fa-eye"></i>Ver</a></td>
                         <td class="col-md-auto">
                             <form method="post" action="{{ url('/materialapoyo/listmaterial') }}" class="form">
                                 @csrf
