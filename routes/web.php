@@ -179,8 +179,9 @@ Route::post('/inscritos/buscarInscrito','App\Http\Controllers\InscritoController
 Route::post('/lineas/buscarLinea','App\Http\Controllers\LineaInvestigacionController@buscarLinea')->middleware('auth', 'role:administrador');
 Route::resource('lineas', LineaInvestigacionController::class)->middleware(['auth', 'role:administrador']);
 //Tesis asignarEstudianteUpdate
-Route::get('tesis/{id}/asignarestudiante', 'App\Http\Controllers\TesisController@viewAsignarEstudiante')->middleware(['auth', 'role:administrador']);
-Route::put('tesis/{id}/', 'App\Http\Controllers\TesisController@asignarEstudianteUpdate')->middleware(['auth', 'role:administrador']);
+Route::get('/tesis/{id}/asignarestudiante', 'App\Http\Controllers\TesisController@viewAsignarEstudiante')->middleware(['auth', 'role:administrador']);
+Route::put('/tesis/{id}/', 'App\Http\Controllers\TesisController@asignarEstudianteUpdate')->middleware(['auth', 'role:administrador']);
+Route::post('/tesis/buscarTesis','App\Http\Controllers\TesisController@buscarTesis')->middleware(['auth', 'role:administrador']);
 Route::resource('tesis', TesisController::class)->middleware(['auth', 'role:administrador']);
 //Route::get('tesis/create', 'App\Http\Controllers\TesisController@create')->middleware(['auth', 'role:administrador']);
 

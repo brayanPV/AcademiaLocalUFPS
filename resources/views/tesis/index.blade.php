@@ -19,7 +19,7 @@
             <br>
             <div class="col">
                     <input type="text" class="form-control" id="buscar" name="buscar"
-                        placeholder="Buscar por codigo biblioteca, titulo, director o jurado" aria-label="Recipient's username"
+                        placeholder="Buscar por codigo biblioteca, titulo, director, estudiante o jurado" aria-label="Recipient's username"
                         aria-describedby="basic-addon2">
             </div>  
         </div>
@@ -94,17 +94,14 @@
 
 <script>
     $('body').on('keyup', '#buscar', function() {
-        var buscarCurso = $(this).val();
-        var AuthUser = "{{{ (Auth::user()) ? Auth::user() : null }}}";
-        //console.log(AuthUser);
-        //console.log(buscarCurso);
-        $.ajax({
+        var buscarTesis = $(this).val();
+       $.ajax({
             method: "POST",
-            url: "{{ url('cursos/buscarCurso') }}",
+            url: "{{ url('tesis/buscarTesis') }}",
             dateType: "json",
             data: {
                 "_token": "{{ csrf_token() }}",
-                buscarCurso: buscarCurso,
+                buscarTesis: buscarTesis,
             },
             success: function(res) {
                 $("#pagination").remove();
@@ -112,29 +109,30 @@
                 var con = 0;
                 $.each(JSON.parse(res), function(index, value) {
                     con++;
-                    var tableRow = "<tr><td class='col-md-auto'>" + value.id_cisco +
+                    console.log(res);
+                    var tableRow = "<tr><td class='col-md-auto'>" + value.cod_biblioteca +
                         " </td>";
-                    tableRow += "<td class='col-md-auto'>" + value.nombre_modulo + " </td>";
-                    tableRow += "<td class='col-md-auto'>" + value.nombreper + " </td>";
-                    tableRow += "<td class='col-md-auto'>" + value.fecha_inicio + " </td>";
-                    tableRow += "<td class='col-md-auto'>" + value.fecha_fin + "</td>";
-                    tableRow += "<td class='col-md-auto'>" + value.nombre + " </td>";
+                    tableRow += "<td class='col-md-auto'>" + value.titulo + " </td>";
+                    tableRow += "<td class='col-md-auto'>" + value.tipo + " </td>";
+                    tableRow += "<td class='col-md-auto'>" + value.estudiante + " </td>";
+                    tableRow += "<td class='col-md-auto'>" + value.linea + "</td>";
+                    tableRow += "<td class='col-md-auto'>" + value.estado + " </td>";
+                    tableRow += "<td class='col-md-auto'>" + value.nombre_director + "</td>";
+                    tableRow += "<td class='col-md-auto'>" + value.nombre_jurado + " </td>";
+                    tableRow += "<td class='col-md-auto'>" + value.fecha + " </td>";
                     var link = value.id;
-                    if(AuthUser!=""){
-                    tableRow += `<td class="d-flex justify-content-center"><a href="/cursos/${link}/edit " class="btn btn-primary" id="editar" role="button">
-                            <i class="fas fa-edit"></i> Editar </a>`
+                    
+                    tableRow += `<td class="d-flex justify-content-center"><a href="/tesis/${link}/edit " class="btn btn-primary" id="editar" role="button">
+                            <i class="fas fa-edit"></i></a>`
                     tableRow += `<p> ⠀ </p>
-                            <form action="/cursos/${link}" method = "post">
+                            <form action="/tesis/${link}" method = "post">
                             @csrf
                             @method('DELETE') <button type = "submit" class = "btn btn-danger" onclick =
-                            'return confirm("¿Esta seguro que desea eliminar este curso?");' >
-                            <i class="fas fa-trash"></i> Borrar </button > </form><p>⠀</p>
-                            <a class="btn btn-info p-1" href="/profesores/${link}/cursoestudiantes"
-                                style="display: inline"><i class="fas fa-users"></i> Estudiantes </a> </td ></tr>`;
-                    }
-                    else{
-                        tableRow +="</tr>";
-                    } 
+                            'return confirm("¿Esta seguro que desea eliminar esta tesis?");' >
+                            <i class="fas fa-trash"></i></button > </form><p>⠀</p>
+                            <a class="btn btn-info p-1" href="/tesis/${link}/asignarestudiantes"
+                                style="display: inline"><i class="fas fa-users"></i></a> </td ></tr>`;
+                    
                     $('#dynamic-row').append(tableRow);
                 });
                 var t = document.getElementById('total');

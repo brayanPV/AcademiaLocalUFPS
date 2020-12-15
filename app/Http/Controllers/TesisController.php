@@ -56,7 +56,7 @@ class TesisController extends Controller
             })
             ->leftJoin('persona as j', function ($join) {
                 $join->on('t.jurado', '=', 'j.cedula');
-            })->paginate(10);//(10);
+            })->paginate(10); //(10);
         return view('tesis/index', compact('tesis'));
     }
 
@@ -75,7 +75,7 @@ class TesisController extends Controller
             ->from('profesor as p')
             ->join('persona as per', function ($join) {
                 $join->on('p.cedula', '=', 'per.cedula');
-            }) ->where('p.estado', '=', 1)->get();
+            })->where('p.estado', '=', 1)->get();
         return view('tesis/create', compact(['lineas', 'tipos', 'profesores', 'tesis']));
     }
 
@@ -194,21 +194,70 @@ class TesisController extends Controller
         return redirect('tesis/')->with('Mensaje', 'Tesis editada con exito');
     }
 
-    public function viewAsignarEstudiante($id){
+    public function viewAsignarEstudiante($id)
+    {
         $tesis = Tesis::find($id);
         return view('tesis/asignarestudiante', compact('tesis'));
     }
 
-    public function asignarEstudianteUpdate(Request $request, $id){
-        $datos =[
+    public function asignarEstudianteUpdate(Request $request, $id)
+    {
+        $datos = [
             'estudiante_tipo_certificacion' => 'required|integer|not_in:0'
         ];
         $Mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $datos, $Mensaje);
-        $datostesis = request()->except(['_token', '_method', 'titulo', 'cod_biblioteca','buscar']);
+        $datostesis = request()->except(['_token', '_method', 'titulo', 'cod_biblioteca', 'buscar']);
         $est = DB::update('update estudiante_tipo_certificacion set tesis_id = ? where id = ?', [$id, $request->input('estudiante_tipo_certificacion')]);
         return redirect('tesis/')->with('Mensaje', 'estudiante asignado con exito');
-       
+    }
+
+    public function buscarTesis(Request $request)
+    {
+        $tesis = Tesis::select(
+            't.id',
+            't.cod_biblioteca',
+            't.fecha',
+            't.titulo',
+            't.id_tipo_tesis',
+            'ti.nombre as tipo',
+            't.id_linea_inv',
+            'l.nombre as linea',
+            't.estado',
+            't.director',
+            'd.nombre as nombre_director',
+            't.jurado',
+            'j.nombre as nombre_jurado',
+            'a.nombre as estudiante'
+        )
+            ->from('tesis as t')
+            ->join('tipo_tesis as ti', function ($join) {
+                $join->on('t.id_tipo_tesis', '=', 'ti.id');
+            })
+            ->join('linea_investigacion as l', function ($join) {
+                $join->on('t.id_linea_inv', '=', 'l.id');
+            })
+            ->leftJoin('estudiante_tipo_certificacion as etc', function ($join) {
+                $join->on('t.id', '=', 'etc.tesis_id');
+            })
+            ->leftJoin('estudiante as e', function ($join) {
+                $join->on('etc.estudiante_id', '=', 'e.id');
+            })
+            ->leftJoin('persona as a', function ($join) {
+                $join->on('e.cedula', '=', 'a.cedula');
+            })
+            ->leftJoin('persona as d', function ($join) {
+                $join->on('t.director', '=', 'd.cedula');
+            })
+            ->leftJoin('persona as j', function ($join) {
+                $join->on('t.jurado', '=', 'j.cedula');
+            })->where('t.titulo', 'like', '%' . $request->get('buscarTesis') . '%')
+            ->orWhere('j.nombre', 'like', '%' . $request->get('buscarTesis') . '%')
+            ->orWhere('t.cod_biblioteca', 'like', '%' . $request->get('buscarTesis') . '%')
+            ->orWhere('d.nombre', 'like', '%' . $request->get('buscarTesis') . '%')
+            ->orWhere('a.nombre', 'like', '%' . $request->get('buscarTesis') . '%')->get();
+
+        return json_encode($tesis);
     }
 
     /**
