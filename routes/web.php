@@ -184,6 +184,11 @@ Route::resource('tesis', TesisController::class)->middleware(['auth', 'role:admi
 //usuarios
 Route::get('/usuarios/changepassword', 'App\Http\Controllers\UserController@viewChangePassword')->middleware('auth');
 Route::post('/usuarios', 'App\Http\Controllers\UserController@updatePassword')->middleware('auth');
+
+//contacto
+Route::get('/contacto/contac', 'App\Http\Controllers\ContactoController@viewContacto');
+Route::post('/contacto', 'App\Http\Controllers\ContactoController@store');
+
 //listados
 Route::get('/certificaciones/listcertificaciones', 'App\Http\Controllers\TipoCertificacionController@listTipoCertificacion');
 Route::get('/certificaciones/card', 'App\Http\Controllers\TipoCertificacionController@cardCertificacion');

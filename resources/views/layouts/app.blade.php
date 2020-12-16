@@ -70,7 +70,7 @@
                                     @endif
                                 </li>
                                 <li>
-                                    <a class="navbar-brand" href="{{ url('/soporte') }}">Soporte </a>
+                                    <a class="navbar-brand" href="{{ url('/contacto/contac') }}">Contacto </a>
                                 </li>
                                 <li>
                                     <a class="navbar-brand" href="{{ url('/nosotros') }}">Nosotros </a>
@@ -161,11 +161,11 @@
             <div class="row">
                 <div class="col">
                     <ul style="list-style-type: none;">
-                        <li class="text-center"> <a class="btn text-light" role="button" href="../contac"> Contacto</a>
+                        <li class="text-center"> <a class="btn text-light" role="button" href="{{url('contacto/contac')}}"> Contacto</a>
                         </li>
                         <li class="text-center"> <a class="btn text-light" role="button" href="#"> Nosotros</a></li>
                         <li class="text-center"> <a class="btn text-light" role="button" href="#"> Eventos</a></li>
-                        <li class="text-center"> <a class="btn text-light" role="button" href="../soporte"> Soporte</a>
+                        <li class="text-center"> <a class="btn text-light" role="button" href=""> Soporte</a>
                         </li>
                     </ul>
                 </div>
