@@ -201,6 +201,21 @@ class EstudianteController extends Controller
         return view('estudiantes/uploadrecibomatricula', compact('estudiantes'));
     }
 
+    public function verCertificaciones($id){
+
+        $estudiantes = Estudiante::select('t.nombre as nombre_cer', 'etc.recibo_pago_inscripcion', 'etc.recibo_pago_matricula', 'etc.nota_final_modulo', 'etc.nota_final_laboratorio',
+        'etc.nota_sustentacion', 'etc.nota_prueba', 'etc.definitiva', 'etc.certificado_final_notas')
+        ->from('estudiante as e')
+        ->join('estudiante_tipo_certificacion as etc', function($join){
+            $join->on('e.id', '=', 'etc.estudiante_id');
+        })
+        ->join('tipo_certificacion as t', function($join){
+            $join->on('t.id', '=', 'etc.tipo_certificacion_id');
+        })->where('e.cedula', '=', $id)->get();
+        
+        return view('estudiantes/miscertificaciones', compact('estudiantes'));
+    }
+
     public function verNotasCertificacion($id_cer_est)
     {
 
@@ -369,7 +384,7 @@ class EstudianteController extends Controller
 
     public function verCursosAsignados($id)
     {
-        $cursos = CursoEstudiante::select('m.nombre', 'tc.nombre as certificacion', 'm.url1', 'm.url2', 'c.id', 'ce.valor', 'ce.laboratorio', 'ce.certificado', 'ce.carta')
+        $cursos = CursoEstudiante::select('m.nombre', 'tc.nombre as certificacion', 'm.url1', 'm.url2', 'c.id', 'ce.valor', 'ce.laboratorio', 'ce.certificado', 'ce.carta', 'e.cedula')
             ->from('curso_estudiante as ce')
             ->join('curso as c', function ($join) {
                 $join->on('ce.id_curso', '=', 'c.id');

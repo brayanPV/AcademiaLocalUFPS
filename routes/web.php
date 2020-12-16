@@ -61,7 +61,6 @@ Route::post('/cursos/{curso}/cursoestudiantes', 'App\Http\Controllers\CursoContr
 //administradores
 Route::post('/administradores/buscarAdmin','App\Http\Controllers\AdministradorController@buscarAdmin')->middleware('auth', 'role:administrador');
 Route::resource('administradores', AdministradorController::class)->middleware(['auth', 'role:administrador']);
-
 /*Route::get('/administradores/create', 'App\Http\Controllers\AdministradorController@create')->middleware('auth', 'role:administrador');
 Route::post('/administradores', 'App\Http\Controllers\AdministradorController@store')->middleware('auth', 'role:administrador');
 Route::get('/administradores/{administradore}/edit', 'App\Http\Controllers\AdministradorController@edit')->middleware('auth', 'role:administrador');
@@ -120,7 +119,6 @@ Route::post('/profesores/buscarEstudianteCurso', 'App\Http\Controllers\ProfesorC
 Route::post('/profesores/buscarCursoAsignado', 'App\Http\Controllers\ProfesorController@buscarCursoAsignado')->middleware('auth', 'role:profesor');
 Route::get('/profesores/{curso}/{estudiante}/agregarcertificadocarta', 'App\Http\Controllers\ProfesorController@agregarCertificadoCarta')->middleware('auth', 'role:profesor');
 Route::post('/profesores/{curso}/cursoestudiantes', 'App\Http\Controllers\ProfesorController@certificadoCartaUpdate')->middleware('auth', 'role:profesor');
-//
 Route::post('/profesores/{curso}', 'App\Http\Controllers\ProfesorController@updateNotaPrueba')->middleware('auth', 'role:profesor');
 
 //material de apoyo 
@@ -132,11 +130,12 @@ Route::patch('/materialapoyo/{material}', 'App\Http\Controllers\ProfesorControll
 Route::get('/materialapoyo/{mat}', 'App\Http\Controllers\ProfesorController@downloadFile')->middleware('auth', 'role:profesor');
 Route::delete('/materialapoyo/{mat}', 'App\Http\Controllers\ProfesorController@destroyArchivoCurso')->middleware('auth', 'role:profesor');
 //estudiantes
-Route::get('/estudiantes/create', 'App\Http\Controllers\EstudianteController@create')->middleware('auth', 'role:administrador');
-Route::post('/estudiantes', 'App\Http\Controllers\EstudianteController@store')->middleware('auth', 'role:administrador');
-Route::get('/estudiantes/{estudiante}/edit', 'App\Http\Controllers\EstudianteController@edit')->middleware('auth', 'role:administrador');
-Route::patch('/estudiantes/{estudiante}', 'App\Http\Controllers\EstudianteController@update')->middleware('auth', 'role:administrador');
-Route::get('/estudiantes/{estudiante}/cursosasignados', 'App\Http\Controllers\EstudianteController@verCursosAsignados')->middleware('auth', 'role:estudiante');
+Route::get('/estudiantes/create', 'App\Http\Controllers\EstudianteController@create')->middleware(['auth', 'role:administrador']);
+Route::post('/estudiantes', 'App\Http\Controllers\EstudianteController@store')->middleware(['auth', 'role:administrador']);
+Route::get('/estudiantes/{estudiante}/edit', 'App\Http\Controllers\EstudianteController@edit')->middleware(['auth', 'role:administrador']);
+Route::patch('/estudiantes/{estudiante}', 'App\Http\Controllers\EstudianteController@update')->middleware(['auth', 'role:administrador']);
+Route::get('/estudiantes/{estudiante}/miscertificaciones', 'App\Http\Controllers\EstudianteController@verCertificaciones')->middleware(['auth', 'role:estudiante']);
+Route::get('/estudiantes/{estudiante}/cursosasignados', 'App\Http\Controllers\EstudianteController@verCursosAsignados')->middleware(['auth', 'role:estudiante']);
 Route::delete('/estudiantes/{estudiante}', 'App\Http\Controllers\EstudianteController@destroy')->middleware('auth', 'role:administrador');
 Route::post('/estudiantes/buscarEstudiante', 'App\Http\Controllers\EstudianteController@buscarEstudiante')->middleware('auth', 'role:administrador');
 Route::get('/estudiantes/{est_cert}/vernotascertificacion', 'App\Http\Controllers\EstudianteController@verNotasCertificacion')->middleware('auth', 'role:administrador');
@@ -182,29 +181,22 @@ Route::get('/tesis/{id}/agregarnota', 'App\Http\Controllers\TesisController@view
 Route::post('/tesis/{id}/agregarnota', 'App\Http\Controllers\TesisController@notaUpdate')->middleware(['auth', 'role:administrador']);
 Route::resource('tesis', TesisController::class)->middleware(['auth', 'role:administrador']);
 
-
-//listados cardCertificacion
+//usuarios
+Route::get('/usuarios/changepassword', 'App\Http\Controllers\UserController@viewChangePassword')->middleware('auth');
+Route::post('/usuarios', 'App\Http\Controllers\UserController@updatePassword')->middleware('auth');
+//listados
 Route::get('/certificaciones/listcertificaciones', 'App\Http\Controllers\TipoCertificacionController@listTipoCertificacion');
 Route::get('/certificaciones/card', 'App\Http\Controllers\TipoCertificacionController@cardCertificacion');
 Route::get('/cursos/listcursos', [App\Http\Controllers\CursoController::class, 'listCursos'])->name("listcursos");
 Route::get('/anuncios/listanuncio', [App\Http\Controllers\AnuncioController::class, 'anunciosprincipales'])->middleware('auth', 'role:administrador');
-//oute::get('/tiponotas/listtiponotas', [App\Http\Controllers\TipoNotaController::class, 'listTipoNotas'])->middleware('auth', 'role:administrador');
 Route::get('/gruposinvestigacion/listgruposinvestigacion', [App\Http\Controllers\GrupoInvestigacionController::class, 'listGrupoInvestigacion'])->middleware('auth', 'role:administrador');
 Route::get('/cohortes/listcohortes', [App\Http\Controllers\CohorteController::class, 'listCohorte'])->middleware('auth', 'role:administrador');
-
 Route::get('/profesores/listprofesores', [App\Http\Controllers\ProfesorController::class, 'listProfesor'])->middleware('auth', 'role:administrador');
 Route::get('/estudiantes/listestudiantes', [App\Http\Controllers\EstudianteController::class, 'listEstudiante'])->name('listestudiantes')->middleware('auth', 'role:administrador');
 
 
 
-//Route::get('anuncios/listanuncio', [AnuncioController::class, 'anunciosprincipales'])->name('listanuncios');
-//Route::get('anuncios/listanuncio', 'AnuncioController@anunciosprincipales');
 
 
-
-//Route::get('cursos', CursoController::class);
 Auth::routes(['reset' => false, 'register' => false]);
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Auth::routes();
-//Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

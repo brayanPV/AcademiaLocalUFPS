@@ -59,6 +59,9 @@
                   </h5>
                   <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                     <li class="list-group-item list-group-item-action"><a
+                        href="{{ url('/estudiantes/' . Auth::user()->cedula . '/miscertificaciones') }}">Mis Certificaciones </a>
+                </li>
+                    <li class="list-group-item list-group-item-action"><a
                             href="{{ url('/estudiantes/' . Auth::user()->cedula . '/cursosasignados') }}">Mis cursos </a>
                     </li>
                 </div>

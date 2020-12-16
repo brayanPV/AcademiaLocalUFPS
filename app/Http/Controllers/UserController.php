@@ -4,9 +4,33 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+
+
+    public function viewChangePassword()
+    {
+        return view('usuarios/cambiarcontraseña');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $this->validate($request, [
+            'old_password' => 'required',
+            'password' => 'required|confirmed|min:6|max:32',
+        ]);
+        if (Hash::check($request->input('old_password'), Auth::user()->password)) {
+            $user = Auth::user(); // Obtenga la instancia del usuario en sesión
+            User::where('id', '=', $user->id)->update(['password' =>  Hash::make($request->input('password'))]);
+            return redirect()->back()->with('Success', 'Contraseña actualizada');
+        } else {
+            return redirect('usuarios/changepassword')->with('Error', 'Por favor verifica tus datos');
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *

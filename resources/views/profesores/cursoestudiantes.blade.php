@@ -8,7 +8,7 @@
             </div>
         @endif
         <div class="alert alert-primary" role="alert">
-            <h2>{{ $curso[0]->nombre}} {{ $curso[0]->ced_profesor}} </h2>
+            <h2>{{ $curso[0]->nombre}} </h2>
         </div>
         <div class="row">
         @if (Auth::user()->hasrole('administrador'))

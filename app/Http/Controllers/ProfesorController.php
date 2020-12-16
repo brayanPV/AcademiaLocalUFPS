@@ -60,7 +60,7 @@ class ProfesorController extends Controller
             ->join('tipo_certificacion as tc', function ($join) {
                 $join->on('co.id_tipo_certificacion', '=', 'tc.id');
             })
-            ->orderBy('id_cisco', 'asc')->paginate(5);
+            ->orderBy('id_cisco', 'asc')->paginate(10);
         return view('profesores/cursosasignados', compact('cursos'));
     }
 

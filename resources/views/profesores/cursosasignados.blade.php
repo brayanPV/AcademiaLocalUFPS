@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    
+    @if(Auth::user()->cedula == $cursos[0]->cedula)
     <div class="container">
         <div class="alert alert-primary" role="alert">
             <h2><a href="{{ url('/profesores/' . Auth::user()->cedula . '/cursosasignados') }}">Cursos Asignados</a></h2>
@@ -73,7 +73,14 @@
             </div>
         </div>
     </div>
-
+    @else 
+    <div class="container">
+        <div class="alert alert-danger">
+    <a class="btn btn-primary"
+                    href="{{ Auth::check() ? url('/inicio/' . Auth::user()->id) : url('/') }}">inicio</a>  
+        </div>
+    </div>
+    @endif
 
 @endsection
 
@@ -114,18 +121,9 @@
                 var id = value.id;
                     if(profesor){
                         tableRow += `<td class="d-flex justify-content-center">
-                            <form method="post" action="/materialapoyo/listmaterial" class="form">
-                                @csrf
-                                <input class="form-control" type="hidden" name="id" id="id" value="${id}">
-                                <div class="input-group" id="submit-group" >
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-book"></i> Material
-                                    </button>
-                                </div>
-                            </form> 
-                            <p> ⠀ </p>
-
-                            <a class="btn btn-info p-1" href="/profesores/${id}/cursoestudiantes"
+                            <a class="btn btn-success p-1" href="/materialapoyo/${id}/listmaterial"
+                                style="display: inline"><i class="fas fa-book"></i> Material </a>
+                             <p> ⠀ </p> <a class="btn btn-info p-1" href="/profesores/${id}/cursoestudiantes"
                                 style="display: inline"><i class="fas fa-users"></i> Estudiantes </a>
 
                         </td>`

@@ -121,6 +121,9 @@
                                             <a class="dropdown-item" target="_blank" href="http://giret.ufps.edu.co/cisco/descargas/">
                                                 {{ __('Descargas') }}
                                             </a>
+                                            <a class="dropdown-item" href="{{ url('/usuarios/changepassword/') }}">
+                                                {{ __('Cambiar contraseña') }}
+                                            </a>
                                             <a class="dropdown-item" href="{{ route('logout') }}"
                                                 onclick="event.preventDefault();
                                                                                                                      document.getElementById('logout-form').submit();">
