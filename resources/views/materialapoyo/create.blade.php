@@ -14,7 +14,7 @@
                     <h2>Crear Archivo</h2>
                 </div>
                 <div class="card-body">
-                    <form action="{{ url('/materialapoyoupload') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ url('/materialapoyo') }}" method="post" enctype="multipart/form-data">
                         @csrf
                         @include('materialapoyo.formmaterial', ['Modo'=>'Crear'])
                     </form>

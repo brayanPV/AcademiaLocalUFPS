@@ -43,16 +43,8 @@
                         <td class="col-md-auto">{{ $curso->nombre_certificacion }}</td>
                         @if (Auth::check() && Auth::user()->hasrole('profesor'))
                             <td class="d-flex justify-content-center">
-                                <form method="post" action="{{ url('/materialapoyo/listmaterial') }}" class="form">
-                                    @csrf
-                                    <input class="form-control" type="hidden" name="id" id="id" value="{{ $curso->id }}">
-                                    <div class="input-group" id="submit-group" >
-                                        <button type="submit" class="btn btn-success">
-                                            <i class="fas fa-book"></i> Material
-                                        </button>
-                                    </div>
-                                </form>
-
+                                <a class="btn btn-success p-1" href="{{ url('/materialapoyo/' . $curso->id . '/listmaterial') }}"
+                                    style="display: inline"><i class="fas fa-book"></i> Material </a>
 
                                 <p> ⠀ </p>
 
@@ -80,8 +72,6 @@
                     href="{{ Auth::check() ? url('/inicio/' . Auth::user()->id) : url('/') }}">inicio</a>
             </div>
         </div>
-
-        <a class="btn btn-primary" href="{{ url('/inicio/' . Auth::user()->id) }}"> Volver</a>
     </div>
 
 

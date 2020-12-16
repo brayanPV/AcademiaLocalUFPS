@@ -350,7 +350,8 @@ class EstudianteController extends Controller
             DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$request->input('nota_prueba'), $request->input('nota_prueba'), $id_cer_est]);
         }
         DB::update('update estudiante_tipo_certificacion set nota_prueba = ? where id = ?', [$request->input('nota_prueba'), $id_cer_est]);
-        return $this->verNotasCertificacion($id_cer_est);
+        return redirect()->action([EstudianteController::class, 'verNotasCertificacion'], ['est_cert' => $id_cer_est]);
+        
     }
 
     /**

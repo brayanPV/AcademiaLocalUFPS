@@ -59,7 +59,7 @@ Route::post('/cursos/buscarCurso', 'App\Http\Controllers\CursoController@buscarC
 //Route::post('/nuevoestudiantecurso', 'App\Http\Controllers\CursoController@createNuevoEstudianteCurso')->middleware('auth', 'role:administrador');
 Route::post('/cursos/{curso}/cursoestudiantes', 'App\Http\Controllers\CursoController@storeNuevoEstudianteCurso')->middleware('auth', 'role:administrador');
 //administradores
-
+Route::post('/administradores/buscarAdmin','App\Http\Controllers\AdministradorController@buscarAdmin')->middleware('auth', 'role:administrador');
 Route::resource('administradores', AdministradorController::class)->middleware(['auth', 'role:administrador']);
 
 /*Route::get('/administradores/create', 'App\Http\Controllers\AdministradorController@create')->middleware('auth', 'role:administrador');
@@ -68,7 +68,7 @@ Route::get('/administradores/{administradore}/edit', 'App\Http\Controllers\Admin
 Route::put('/administradores/{administradore}', 'App\Http\Controllers\AdministradorController@update')->middleware('auth', 'role:administrador');
 Route::delete('/administradores/{administradore}', 'App\Http\Controllers\AdministradorController@destroy')->middleware('auth', 'role:administrador');
 Route::get('/administradores', 'App\Http\Controllers\AdministradorController@index')->middleware('auth', 'role:administrador');
-Route::post('/administradores/buscarAdmin','App\Http\Controllers\AdministradorController@buscarAdmin')->middleware('auth', 'role:administrador');*/
+*/
 //cohortes
 Route::get('/cohortes/create', 'App\Http\Controllers\CohorteController@create')->middleware('auth', 'role:administrador');
 Route::post('/cohortes', 'App\Http\Controllers\CohorteController@store')->middleware('auth', 'role:administrador');
@@ -83,13 +83,8 @@ Route::get('/anuncios/{anuncio}/edit', 'App\Http\Controllers\AnuncioController@e
 Route::patch('/anuncios/{anuncio}', 'App\Http\Controllers\AnuncioController@update')->middleware('auth', 'role:administrador');
 Route::delete('/anuncios/{anuncio}', 'App\Http\Controllers\AnuncioController@destroy')->middleware('auth', 'role:administrador');
 Route::post('/anuncios/buscarAnuncio', 'App\Http\Controllers\AnuncioController@buscarAnuncio')->middleware('auth', 'role:administrador');
-//tiponotas
-/*Route::get('/tiponotas/create', 'App\Http\Controllers\TipoNotaController@create')->middleware('auth', 'role:administrador');
-Route::post('/tiponotas', 'App\Http\Controllers\TipoNotaController@store')->middleware('auth', 'role:administrador');
-Route::get('/tiponotas/{tiponota}/edit', 'App\Http\Controllers\TipoNotaController@edit')->middleware('auth', 'role:administrador');
-Route::patch('/tiponotas/{tiponota}', 'App\Http\Controllers\TipoNotaController@update')->middleware('auth', 'role:administrador');
-Route::delete('/tiponotas/{tiponota}', 'App\Http\Controllers\TipoNotaController@destroy')->middleware('auth', 'role:administrador');*/
-//gruposinvestigacion
+
+//grupos de investigacion
 Route::get('/gruposinvestigacion/create', 'App\Http\Controllers\GrupoInvestigacionController@create')->middleware('auth', 'role:administrador');
 Route::post('/gruposinvestigacion', 'App\Http\Controllers\GrupoInvestigacionController@store')->middleware('auth', 'role:administrador');
 Route::get('/gruposinvestigacion/{gruposinvestigacio}/edit', 'App\Http\Controllers\GrupoInvestigacionController@edit')->middleware('auth', 'role:administrador');
@@ -105,7 +100,7 @@ Route::post('/modulos', 'App\Http\Controllers\ModuloController@store')->middlewa
 Route::get('/modulos/{modulo}/edit', 'App\Http\Controllers\ModuloController@edit')->middleware('auth', 'role:administrador');
 Route::patch('/modulos/{modulo}', 'App\Http\Controllers\ModuloController@update')->middleware('auth', 'role:administrador');
 Route::delete('/modulos/{modulo}', 'App\Http\Controllers\ModuloController@destroy')->middleware('auth', 'role:administrador');
-Route::post('/modulos/buscarModulo','App\Http\Controllers\ModuloController@buscarModulo')->middleware('auth', 'role:administrador');*/
+*/
 
 //profesores  verMaterialApoyo materialapoyo/listmaterial
 Route::get('/profesores/create', 'App\Http\Controllers\ProfesorController@create')->middleware('auth', 'role:administrador');
@@ -128,13 +123,14 @@ Route::post('/profesores/{curso}/cursoestudiantes', 'App\Http\Controllers\Profes
 //
 Route::post('/profesores/{curso}', 'App\Http\Controllers\ProfesorController@updateNotaPrueba')->middleware('auth', 'role:profesor');
 
-//material de apoyo downloadfile
-Route::post('/materialapoyo', 'App\Http\Controllers\ProfesorController@createMaterialApoyo')->middleware('auth', 'role:profesor');
-Route::post('/materialapoyoupload', 'App\Http\Controllers\ProfesorController@storeMaterialApoyo')->middleware('auth', 'role:profesor');
-Route::post('/materialapoyo/listmaterial', 'App\Http\Controllers\ProfesorController@verMaterialApoyo')->middleware('auth', 'role:estudiante, profesor');
+//material de apoyo 
+Route::get('/materialapoyo/{id_curso}/create', 'App\Http\Controllers\ProfesorController@createMaterialApoyo')->middleware('auth', 'role:profesor');
+Route::post('/materialapoyo', 'App\Http\Controllers\ProfesorController@storeMaterialApoyo')->middleware('auth', 'role:profesor');
+Route::get('/materialapoyo/{id}/listmaterial', 'App\Http\Controllers\ProfesorController@verMaterialApoyo')->middleware('auth', 'role:estudiante, profesor');
 Route::get('/materialapoyo/{material}/edit', 'App\Http\Controllers\ProfesorController@editMaterialApoyo')->middleware('auth', 'role:profesor');
 Route::patch('/materialapoyo/{material}', 'App\Http\Controllers\ProfesorController@updateMaterialApoyo')->middleware('auth', 'role:profesor');
 Route::get('/materialapoyo/{mat}', 'App\Http\Controllers\ProfesorController@downloadFile')->middleware('auth', 'role:profesor');
+Route::delete('/materialapoyo/{mat}', 'App\Http\Controllers\ProfesorController@destroyArchivoCurso')->middleware('auth', 'role:profesor');
 //estudiantes
 Route::get('/estudiantes/create', 'App\Http\Controllers\EstudianteController@create')->middleware('auth', 'role:administrador');
 Route::post('/estudiantes', 'App\Http\Controllers\EstudianteController@store')->middleware('auth', 'role:administrador');

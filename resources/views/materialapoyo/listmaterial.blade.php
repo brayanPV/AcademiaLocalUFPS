@@ -6,13 +6,8 @@
             <h2>Archivos</h2>
         </div>
         @if (Auth::check() && Auth::user()->hasrole('profesor'))
-        <form method="post" action="{{ url('/materialapoyo') }}" style="display: inline">
-            @csrf
-            <input type="hidden" id="id" name="id" value="{{ $curso->id }}">
-            <button type="submit" class="btn btn-success">
-                <i class="fas fa-plus-circle"></i> Agregar
-            </button>
-        </form>
+            <a class="btn btn-success" href="{{ url('/materialapoyo/' . $curso->id . '/create') }}"><i
+                    class="fas fa-plus-circle"></i> Agregar </a>
         @endif
     </div>
     <div class="container">
@@ -33,25 +28,22 @@
                         <td class="col-md-auto">{{ $mat->nombre }}</td>
                         <td class="col-md-auto">{{ $mat->descripcion }}</td>
                         <td class="col-md-auto">
-                            
-                            <a href="{{ url('/materialapoyo/' . $mat->url) }}" target="_blank" class="btn btn-success">
+
+                            <a href="{{ asset('storage') . '/' . $mat->url }}" target="_blank" class="btn btn-success">
                                 <i class="fa fa-download"></i> Descargar
-                            </a></td>
+                            </a>
+                        </td>
                         @if (Auth::check() && Auth::user()->hasrole('profesor'))
                             <td class="d-flex">
+                                <a class="btn btn-primary" href="{{ url('/materialapoyo/' . $mat->id . '/edit') }}"><i
+                                        class="fas fa-edit"></i> Editar </a>
 
-                                <form method="get" action="{{ url('/materialapoyo/' . $mat->id . '/edit') }}" class="form">
-                                    <input class="form-control" type="hidden" name="id_curso" id="id_curso" value="{{ $curso->id }}">
-                                    <div class="input-group" id="submit-group">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="fas fa-edit"></i> Editar
-                                        </button>
-                                    </div>
-                                </form>
                                 <p>⠀</p>
                                 <form method="post" action="{{ url('/materialapoyo/' . $mat->id) }}" style="display: inline">
                                     @csrf
                                     @method('DELETE')
+                                    <input class="form-control" type="hidden" name="id_curso" id="id_curso"
+                                        value="{{ $mat->id_curso }}">
                                     <button type="submit" class="btn btn-danger"
                                         onclick="return confirm('¿Esta seguro que desea eliminar este archivo?');"><i
                                             class="fas fa-trash"></i> Eliminar
@@ -68,16 +60,17 @@
                 @endforelse
             </tbody>
         </table>
-        <button  class="btn btn-primary" onclick="goBack()"> <i
-            class="fas fa-arrow-left"></i>Volver</button>
+        <div class="row">
+            <h5 id="total">Total de estudiantes: {{ $material->total() }} </h5>
+            <div class="col-10" id="pagination">
+                {{ $material->links('pagination::bootstrap-4') }}
+            </div>
+            <div class="col-2">
+                <a class="btn btn-primary float-right"
+                    href="{{ url('profesores/' . $curso->ced_profesor . '/cursosasignados') }}"> <i
+                        class="fas fa-arrow-left"></i>Volver</a>
+            </div>
+        </div>
 
-        <script>
-        function goBack() {
-          window.history.back();
-        }
-        </script> 
-       
     </div>
-
-
 @endsection

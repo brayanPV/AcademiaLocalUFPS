@@ -14,7 +14,7 @@
     <label for="url"> {{ 'Archivo' }}</label>
     <input class="form-control {{ $errors->has('url') ? 'is-invalid' : '' }}" type="file" name="url" id="url"
         value="{{ isset($material->url) ? $material->url : old('url') }}">
-    <input type="hidden" id="id_curso" name="id_curso" value="{{ $curso->id }}">
+    <input type="hidden" id="id_curso" name="id_curso" value="{{ isset($curso) ? $curso->id : $material->id_curso }}">
     {!! $errors->first('url', '<div class="invalid-feedback">:message</div>') !!}
 </div>
 <div class="row">
@@ -23,13 +23,11 @@
             value="{{ $Modo == 'Crear' ? 'Agregar material' : 'Editar material' }}">
     </div>
     <div class="col-3">
-        <button class="btn btn-secondary" onclick="goBack()">Volver</button>
-
-        <script>
-            function goBack() {
-                window.history.back();
-            }
-
-        </script>
+        @if (isset($curso)){
+            <a class="btn btn-secondary" href="{{ url('materialapoyo/' . $curso->id . '/listmaterial') }}">Volver</a>
+        else
+        <a class="btn btn-secondary" href="{{ url('materialapoyo/' . $material->id_curso . '/listmaterial') }}">Volver</a>
+        @endif
+        
     </div>
 </div>

@@ -73,18 +73,21 @@ class ProfesorController extends Controller
         return view('materialapoyo/listmaterial', compact(['material', 'curso']));
     }
 
-    public function verMaterialApoyo(Request $request)
+    public function verMaterialApoyo($id)
     {
         $material = ArchivoCurso::select('a.nombre', 'a.url', 'a.descripcion', 'a.id', 'a.id_curso')
             ->from('archivo_curso as a')
-            ->where('a.id_curso', $request->input('id'))->get();
-        $curso = Curso::where('id', $request->input('id'))->first();
+            ->join('curso as c', function ($join) use ($id) {
+                $join->on('a.id_curso', '=', 'c.id')
+                    ->where('c.id', '=', $id);
+            })->paginate(10);
+        $curso = Curso::where('id', $id)->first();
         return view('materialapoyo/listmaterial', compact(['material', 'curso']));
     }
 
-    public function createMaterialApoyo(Request $request)
+    public function createMaterialApoyo($id)
     {
-        $curso = Curso::findOrFail($request->input('id'));
+        $curso = Curso::findOrFail($id);
         return view('materialapoyo/create', compact('curso'));
     }
 
@@ -98,28 +101,57 @@ class ProfesorController extends Controller
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $datos, $mensaje);
         $datos = request()->except(['_token', '_method']);
+
         if ($request->hasFile('url')) {
             $name = $request->file('url')->getClientOriginalName();
-            $datos['url'] = $request->file('url')->storeAs('/', $name, 'upload');
+            $datos['url'] = $request->file('url')->storeAs('uploads/material', $name, 'public');
         }
         ArchivoCurso::insert($datos);
-        return $this->showMaterial($request->input('id_curso'));
-        //return redirect('materialapoyo/listmaterial');
+
+        return redirect()->action([ProfesorController::class, 'verMaterialApoyo'], ['id' => $request->input('id_curso')]);
     }
 
-    public function downloadFile($id)
+
+    public function editMaterialApoyo($id)
     {
-        $path = 'C:\Users\stive\Documents\uploads';
-        var_dump($path);
-        $file = $path . '/' . $id;
-        return response()->download($file);
+        $material = ArchivoCurso::select('ac.id', 'ac.nombre', 'ac.url', 'ac.descripcion', 'ac.id_curso')
+            ->from('archivo_curso as ac')
+            ->join('curso as c', function ($join) {
+                $join->on('ac.id_curso', '=', 'c.id');
+            })->where('ac.id', '=', $id)->first();
+
+        return view('materialapoyo/edit', compact(['material']));
     }
 
-    public function editMaterialApoyo(Request $request, $id)
+    public function updateMaterialApoyo(Request $request, $id)
     {
-        $material = ArchivoCurso::findOrFail($id);
-        $curso = Curso::findOrFail($request->input('id_curso'));
-        return view('materialapoyo/edit', compact(['material', 'curso']));
+        $datos = [
+            'nombre' => 'required|string',
+            'url' => 'required|file|mimes:zip,rar,png,jpg,jpeg,pptx,pdf,docx,doc,pkt',
+        ];
+        $mensaje = ["required" => 'El :attribute es requerido'];
+        $this->validate($request, $datos, $mensaje);
+        $datos = request()->except(['_token', '_method']);
+
+        if ($request->hasFile('url')) {
+            $archivo = ArchivoCurso::find($id);
+            if (str_contains($archivo->url, "uploads/material")) {
+                Storage::delete('public/' . $archivo->url);
+            }
+
+            $name = $request->file('url')->getClientOriginalName();
+            //$datos['id'] = $id;
+            $datos['url'] = $request->file('url')->storeAs('uploads/material', $name, 'public');
+        }
+        
+        ArchivoCurso::where('id', '=',  $id)->update($datos);
+
+        return redirect()->action([ProfesorController::class, 'verMaterialApoyo'], ['id' => $request->input('id_curso')]);
+    }
+
+    public function destroyArchivoCurso(Request $request,$id){
+        ArchivoCurso::destroy($id);
+        return redirect()->action([ProfesorController::class, 'verMaterialApoyo'], ['id' => $request->input('id_curso')]);
     }
 
     public function verEstudiantesCursos($id)
