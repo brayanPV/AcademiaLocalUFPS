@@ -7,6 +7,7 @@
         </div>
     </div>
     <div class="container">
+       @if(isset($cursos[0]->cedula)) 
         @if(Auth::user()->cedula == $cursos[0]->cedula)
         <table class="table table-hover">
             <thead>
@@ -65,6 +66,7 @@
             </tbody>
         </table>
         @endif
+    @endif
         <a class="btn btn-primary" href="{{ url('/inicio/' . Auth::user()->id) }}"> Volver</a>
     </div>
 

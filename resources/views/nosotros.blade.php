@@ -193,7 +193,7 @@
                                     </div>
                                     <div class="card-body">
                                         <h5 class="card-title"></h5>
-                                        <p class="card-text">CUALQUIER DUDA COMUNICARSE AL 5776655 EXT 277 - ESCRIBIR AL CORREO ciscoal@ufps.edu.co</p>
+                                        <p class="card-text">CUALQUIER DUDA COMUNICARSE AL 5776655 EXT 277 - ESCRIBIR AL CORREO ciscoal@ufps.edu.cogt</p>
                                         <a href="{{ url('contacto/contac') }}" class="btn btn-primary">Contectenos</a>
                                     </div>
                                 </div>
