@@ -23,7 +23,7 @@ class ContactoController extends Controller
             'nombre.required' => __('Necesito tu nombre'),
             
         ]);
-        Mail::to('juliancamilopl@ufps.edu.co')->queue(new MessageReceived($mensaje));
+        Mail::to('ciscoal@ufps.edu.co')->queue(new MessageReceived($mensaje));
 
         return redirect('contacto/contac')->with('Mensaje', 'Mensaje enviado con exito');
     }

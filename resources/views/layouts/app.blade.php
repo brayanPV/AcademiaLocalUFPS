@@ -163,9 +163,9 @@
                     <ul style="list-style-type: none;">
                         <li class="text-center"> <a class="btn text-light" role="button" href="{{url('contacto/contac')}}"> Contacto</a>
                         </li>
-                        <li class="text-center"> <a class="btn text-light" role="button" href="#"> Nosotros</a></li>
-                        <li class="text-center"> <a class="btn text-light" role="button" href="#"> Eventos</a></li>
-                        <li class="text-center"> <a class="btn text-light" role="button" href=""> Soporte</a>
+                        <li class="text-center"> <a class="btn text-light" role="button" href="{{url('nosotros')}}"> Nosotros</a></li>
+                        <li class="text-center"> <a class="btn text-light" role="button" href="{{url('eventos')}}"> Eventos</a></li>
+                        <li class="text-center"> <a class="btn text-light" role="button" href="{{url('soporte')}}"> Soporte</a>
                         </li>
                     </ul>
                 </div>
