@@ -37,7 +37,7 @@
         <input class="form-control {{ $errors->has('id_tipo_certificacion') ? 'is-invalid' : '' }}" type="hidden"
             name="id_tipo_certificacion" id="id_tipo_certificacion"
             value="{{ isset($cohortes->id_tipo_certificacion) ? $cohortes->id_tipo_certificacion : old('id_tipo_certificacion') }}">
-            <label class="form-control">{{$cohortes->nombre}} </label>
+            <label class="form-control">{{$cohortes->nombre_cer}} </label>
     @endif
     {!! $errors->first('Id_tipo_certificacion', '<div class="invalid-feedback">:message</div>') !!}
 </div>

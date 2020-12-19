@@ -122,9 +122,12 @@
                     tableRow += "<td class='col-md-auto'>" + value.nombre_certificacion +
                         " </td>";
                     tableRow += "<td class='col-md-auto'>" + value.correo + " </td>";
-                    tableRow += "<td class='col-md-auto'>" + value.recibo_pago_inscripcion +
-                        " </td>";
                     var link = value.cedula;
+                    var pago = value.recibo_pago_inscripcion;
+                    tableRow += `<td class='col-md-auto'><a href="/inscritos/${link}/uploadrecibo">Inscripcion <button
+                            class="btn"> ${pago != null ? '<i class="fas fa-check-square"></i>' : '<i class="far fa-square"></i>'}  
+                        </button> @endif</a> </td>`;
+                    
                     tableRow += `<td><span tabindex="0" data-toggle="tooltip"
                         title="Telefono: ${value.telfijo} \Celular: ${value.telcel} \nDireccion:  ${value.direccion} \nSemestre:  ${value.semestre} ">
                         <button class="btn btn-primary" style="pointer-events: none;" type="button"

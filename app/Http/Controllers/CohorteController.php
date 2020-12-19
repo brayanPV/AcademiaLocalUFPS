@@ -99,7 +99,7 @@ class CohorteController extends Controller
     {
         //
         //$cohortes = Cohorte::findOrFail($id);
-        $cohortes = Cohorte::select('c.id', 'c.id_cisco', 'c.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'c.id_tipo_certificacion', 'tc.nombre')
+        $cohortes = Cohorte::select('c.id', 'c.id_cisco', 'c.nombre', 'c.fecha_inicio', 'c.fecha_fin', 'c.id_tipo_certificacion', 'tc.nombre as nombre_cer')
             ->from('cohorte as c')
             ->join('tipo_certificacion as tc', function ($join) {
                 $join->on('c.id_tipo_certificacion', '=', 'tc.id');

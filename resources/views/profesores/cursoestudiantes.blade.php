@@ -113,8 +113,8 @@
                 {{ $estudiantes->links('pagination::bootstrap-4') }}
             </div>
             <div class="col-1">
-                <a class="btn btn-primary" role="button" href="{{url('profesores/'. Auth::user()->cedula . '/cursosasignados')}}">
-                    Volver</a>
+                <button  class="btn btn-primary" role="button" onclick="goBack();">
+                    Volver</button>
             </div>
         </div>
     </div>
@@ -192,5 +192,9 @@
             },
         });
     });
+
+    function goBack() {
+        window.history.back();
+      }
 </script>
 @endsection

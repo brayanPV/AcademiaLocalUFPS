@@ -542,7 +542,6 @@ class ProfesorController extends Controller
         if ($est == 0) {
             if ($user->hasRole('administrador')) {
                 $user->roles()->sync([1, 3]);
-                var_dump("ES ADMIN");
             } else {
                 $user->roles()->sync([3]);
             }

@@ -237,7 +237,6 @@ class EstudianteController extends Controller
         inner join persona p
         on c.ced_profesor = p.cedula", [$id_cer_est]);
 
-
         $modulos = 0;
         $laboratorios = 0;
         $cont = 0;
@@ -359,10 +358,13 @@ class EstudianteController extends Controller
 
         if($estudiante->cod_estudiante == null){
             DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$request->input('nota_prueba'), $request->input('nota_prueba'), $id_cer_est]);
+            return redirect()->action([EstudianteController::class, 'verNotasCertificacion'], ['est_cert' => $id_cer_est]);
         }
 
         if ($request->input('nota_prueba') > 82.5) {
             DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$request->input('nota_prueba'), $request->input('nota_prueba'), $id_cer_est]);
+        }else{
+            
         }
         DB::update('update estudiante_tipo_certificacion set nota_prueba = ? where id = ?', [$request->input('nota_prueba'), $id_cer_est]);
         return redirect()->action([EstudianteController::class, 'verNotasCertificacion'], ['est_cert' => $id_cer_est]);

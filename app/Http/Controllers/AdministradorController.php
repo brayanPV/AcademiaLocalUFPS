@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Administrador;
+use App\Models\Estudiante;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Persona;
@@ -37,28 +38,28 @@ class AdministradorController extends Controller
 
     public function buscarAdmin(Request $request)
     {
-            $request->get('buscarAdmin');
-            $administradores = User::select('u.id', 'u.cedula', 'p.nombre', 'p.telfijo', 'p.telcel', 'p.correo', 'p.direccion')
-                ->from('users as u')
-                ->join('persona as p', function ($join) use ($request) {
-                    $join->on('u.cedula', '=', 'p.cedula')
-                    ->where(function ($query) use ($request){
-                        if(is_numeric($request->get('buscarAdmin'))){
+        $request->get('buscarAdmin');
+        $administradores = User::select('u.id', 'u.cedula', 'p.nombre', 'p.telfijo', 'p.telcel', 'p.correo', 'p.direccion')
+            ->from('users as u')
+            ->join('persona as p', function ($join) use ($request) {
+                $join->on('u.cedula', '=', 'p.cedula')
+                    ->where(function ($query) use ($request) {
+                        if (is_numeric($request->get('buscarAdmin'))) {
                             return $query->where('p.cedula', 'like', '%' . $request->get('buscarAdmin') . '%');
-                        }else{
+                        } else {
                             return $query->where('p.nombre', 'like', '%' . $request->get('buscarAdmin') . '%')
-                            ->orWhere('p.correo', 'like', '%' . $request->get('buscarAdmin') . '%');
+                                ->orWhere('p.correo', 'like', '%' . $request->get('buscarAdmin') . '%');
                         }
                     });
-                })
-                ->join('role_user as ru', function ($join) {
-                    $join->on('u.id', '=', 'ru.user_id');
-                })
-                ->join('roles as r', function ($join) {
-                    $join->on('ru.role_id', '=', 'r.id')
-                        ->where('r.nombre', '=', 'administrador');
-                })->get();
-       
+            })
+            ->join('role_user as ru', function ($join) {
+                $join->on('u.id', '=', 'ru.user_id');
+            })
+            ->join('roles as r', function ($join) {
+                $join->on('ru.role_id', '=', 'r.id')
+                    ->where('r.nombre', '=', 'administrador');
+            })->get();
+
         return json_encode($administradores);
     }
 
@@ -100,12 +101,20 @@ class AdministradorController extends Controller
             $mensajep = ' esta persona ya existia en el sistema';
         }
         if (User::where('cedula', $request->input('cedula'))->first() != null) {
-            return redirect('administradores/create')->with('Mensaje', 'Este administrador ya existe en el sistema, verfique sus datos');
+            $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
+            $user->roles()->sync([1, 2, 3]);
+            return redirect('administradores/')->with('Mensaje', 'Administrador agregado con exito'  . $mensajep);
+            // return redirect('administradores/create')->with('Mensaje', 'Este administrador ya existe en el sistema, verfique sus datos');
         }
         $this->validate($request, $datosPer, $mensaje);
         //$datosAdmin = request()->except(['_token', '_method', 'updated_at', 'nombre', 'direccion', 'telfijo', 'telcel', 'password_confirmation', 'correo']);
         User::insert(['cedula' => $request->input('cedula'), 'password' => Hash::make($request->input('password'))]);
-        Profesor::insert(['cedula' => $request->input('cedula')]);
+        if (Profesor::where('cedula', '=', $request->input('cedula'))->first() == null) {
+            Profesor::insert(['cedula' => $request->input('cedula')]);
+        }
+        if (Estudiante::where('cedula', '=', $request->input('cedula'))->first() == null) {
+            Estudiante::insert(['cedula' => $request->input('cedula')]);
+        }
         $user = User::where('cedula', $request->input('cedula'))->firstOrFail();
         $user->roles()->sync([1, 2, 3]);
         return redirect('administradores/')->with('Mensaje', 'Administrador agregado con exito'  . $mensajep);
@@ -169,7 +178,17 @@ class AdministradorController extends Controller
     public function destroy($id)
     {
         //
-        User::destroy($id);
+        $user =  User::find($id);
+        if ($user->hasRole('profesor') and $user->hasRole('estudiante')) {
+            $user->roles()->sync([2, 3]);
+        } elseif ($user->hasRole('profesor')) {
+            $user->roles()->sync([2]);
+        } elseif ($user->hasRole('estudiante')) {
+            $user->roles()->sync([3]);
+        } else {
+            User::destroy($id);
+        }
+
         return redirect('administradores/')->with('Mensaje', 'Administrador eliminado con exito');
     }
 }
