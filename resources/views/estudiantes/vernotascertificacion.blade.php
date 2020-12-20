@@ -19,7 +19,7 @@
                         <th>Profesor</th>
                         <th>Nota modulo</th>
                         <th>Nota laboratorio</th>
-                        
+
                     </tr>
                 </thead>
                 <tbody>
@@ -42,8 +42,8 @@
                     <tr>
                         <th>Modulos</th>
                         <th>Laboratorios</th>
-                        <th>Prueba</th>
-                        <th>Sustentacion</th>
+                        <th>Certificacion</th>
+                        <th>Trabajo Final</th>
                         <th>Definitiva</th>
                         <th>Certificado</th>
                         <th>Accion</th>
@@ -56,21 +56,31 @@
                         <td class="col-md-auto">{{ $item->nota_prueba }}</td>
                         <td class="col-md-auto">{{ $item->nota_sustentacion }}</td>
                         <td class="col-md-auto">{{ $item->definitiva }}</td>
-                        <td class="col-md-auto"> <a href="{{asset('storage') . '/' . $item->certificado_final_notas }}" target="_blank">Certificado <button class="btn">
-                            @if ($item->certificado_final_notas != '')<i
-                                class="fas fa-check-square"></i> @else <i class="far fa-square"></i>
-                        </button> @endif</a> </td>
-                        <td class="d-flex"><a class="btn btn-primary" data-toggle="tooltip" title="Subir nota prueba" href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subirnotaprueba') }}"> 
-                            <i class="fas fa-plus-square"></i></a> <p>⠀ </p> <a class="btn btn-success" data-toggle="tooltip" title="Subir Certificado Final" href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subircertificadofinal') }}"> 
-                                <i class="fas fa-file-upload"></i></a> </td>
+                        <td class="col-md-auto"> <a href="{{ asset('storage') . '/' . $item->certificado_final_notas }}"
+                                target="_blank">Certificado <button class="btn">
+                                    @if ($item->certificado_final_notas != '')<i
+                                        class="fas fa-check-square"></i> @else <i class="far fa-square"></i>
+                                </button>
+                    @endif</a> </td>
+                    <td class="d-flex"><a class="btn btn-primary" data-toggle="tooltip" title="Subir nota prueba"
+                            href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subirnotaprueba') }}">
+                            <i class="fas fa-plus-square"></i></a>
+                        <p>⠀ </p> <a class="btn btn-success" data-toggle="tooltip" title="Subir Certificado Final"
+                            href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subircertificadofinal') }}">
+                            <i class="fas fa-file-upload"></i></a>
+                    <p>⠀ </p> <a class="btn btn-danger" data-toggle="tooltip" title="Ver Informe"
+                        href="{{ url('/estudiantes/' . $est_cer[0]->id . '/informe_nota_final') }}">
+                        <i class="fas fa-file-pdf"></i></a>
+                        <p>⠀ </p> <a class="btn btn-danger" data-toggle="tooltip" title="Ver Informe"
+                        href="{{ url('/estudiantes/' . $est_cer[0]->id . '/pdf') }}">
+                        <i class="fas fa-file-pdf"></i></a> </td>
                     @endforeach
                 </tbody>
             </table>
             <div class="row">
 
                 <div class="col-1">
-                    <a class="btn btn-primary"
-                        href="{{ url('/estudiantes/listestudiantes') }}">Volver</a>
+                    <a class="btn btn-primary" href="{{ url('/estudiantes/listestudiantes') }}">Volver</a>
                 </div>
             </div>
         </div>

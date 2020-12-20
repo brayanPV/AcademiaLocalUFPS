@@ -8,7 +8,7 @@
                     {{ $est_cer->certificacion }}
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">AGREGAR CERTIFICADO Y CARTA</h5>
+                    <h5 class="card-title">AGREGAR NOTA DE LA CERTIFICACION</h5>
                     <form action="{{ url('/estudiantes/'. $est_cer->id) }}" method="post"
                         enctype="multipart/form-data">
                         @csrf
@@ -16,9 +16,9 @@
                            <label class="form-control" type="text" name="estudiante" id="estudiante">{{ $est_cer->estudiante }}</label>
                         </div>
                         <div class="form-group">
-                           <label class="form-group" type="text">Ingrese la nota de la prueba</label>
+                           <label class="form-group" type="text">Ingrese la nota de la certificacion</label>
                            <input class="form-control {{ $errors->has('nota_prueba') ? 'is-invalid' : '' }}" type="number"
-                                name="nota_prueba" id="nota_prueba" max="100"
+                                name="nota_prueba" id="nota_prueba" max="1000"
                                 value="{{ isset($est_cer->nota_prueba) ? $est_cer->nota_prueba : old('nota_prueba') }}">
                             {!! $errors->first('certificado', '<div class="invalid-feedback">:message</div>') !!}
 

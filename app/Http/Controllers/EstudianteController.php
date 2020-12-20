@@ -12,6 +12,8 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade as PDF;
+use App;
 
 class EstudianteController extends Controller
 {
@@ -201,18 +203,28 @@ class EstudianteController extends Controller
         return view('estudiantes/uploadrecibomatricula', compact('estudiantes'));
     }
 
-    public function verCertificaciones($id){
+    public function verCertificaciones($id)
+    {
 
-        $estudiantes = Estudiante::select('t.nombre as nombre_cer', 'etc.recibo_pago_inscripcion', 'etc.recibo_pago_matricula', 'etc.nota_final_modulo', 'etc.nota_final_laboratorio',
-        'etc.nota_sustentacion', 'etc.nota_prueba', 'etc.definitiva', 'etc.certificado_final_notas')
-        ->from('estudiante as e')
-        ->join('estudiante_tipo_certificacion as etc', function($join){
-            $join->on('e.id', '=', 'etc.estudiante_id');
-        })
-        ->join('tipo_certificacion as t', function($join){
-            $join->on('t.id', '=', 'etc.tipo_certificacion_id');
-        })->where('e.cedula', '=', $id)->get();
-        
+        $estudiantes = Estudiante::select(
+            't.nombre as nombre_cer',
+            'etc.recibo_pago_inscripcion',
+            'etc.recibo_pago_matricula',
+            'etc.nota_final_modulo',
+            'etc.nota_final_laboratorio',
+            'etc.nota_sustentacion',
+            'etc.nota_prueba',
+            'etc.definitiva',
+            'etc.certificado_final_notas'
+        )
+            ->from('estudiante as e')
+            ->join('estudiante_tipo_certificacion as etc', function ($join) {
+                $join->on('e.id', '=', 'etc.estudiante_id');
+            })
+            ->join('tipo_certificacion as t', function ($join) {
+                $join->on('t.id', '=', 'etc.tipo_certificacion_id');
+            })->where('e.cedula', '=', $id)->get();
+
         return view('estudiantes/miscertificaciones', compact('estudiantes'));
     }
 
@@ -220,7 +232,7 @@ class EstudianteController extends Controller
     {
 
 
-        $est = DB::select("Select m.nombre as modulo, p.nombre as profesor, ce.valor, ce.laboratorio, tc.nombre as nombre_cer
+        $est = DB::select("Select m.nombre as modulo, p.nombre as profesor, ce.valor, ce.laboratorio, tc.nombre as nombre_cer, e.cod_estudiante
         from curso_estudiante ce
         inner join estudiante e
         on ce.ced_estudiante = e.cedula
@@ -245,6 +257,10 @@ class EstudianteController extends Controller
             $modulos += $e->valor;
             $laboratorios += $e->laboratorio;
         }
+
+        if ($cont == 0) {
+            return redirect('estudiantes/listestudiantes')->with('Mensaje', "Este estudiante no tiene cursos matriculados, por favor agregar uno primero");
+        }
         $notaM = $modulos / $cont;
         $notaL = $laboratorios / $cont;
 
@@ -260,15 +276,57 @@ class EstudianteController extends Controller
         on e.cedula = p.cedula', [$id_cer_est]);
         if ($estudiante[0]->nota_prueba != null) {
             $definitiva = ($estudiante[0]->nota_final_modulo * 0.15) + ($estudiante[0]->nota_final_laboratorio * 0.15) + ($estudiante[0]->nota_prueba * 0.40) + ($estudiante[0]->nota_sustentacion * 0.30);
+            $definitiva = number_format($definitiva, 1);
             DB::update('update estudiante_tipo_certificacion set definitiva = ? where id = ?', [$definitiva, $id_cer_est]);
         }
         return view('estudiantes/vernotascertificacion', compact(['est', 'est_cer', 'estudiante']));
     }
 
+    public function verInformeFinal($id){
+        $est = Estudiante::select('p.nombre', 't.nombre as nombre_cer', 'e.cedula', 'etc.nota_final_modulo', 'etc.nota_final_laboratorio', 'etc.nota_prueba', 'etc.nota_sustentacion', 'etc.definitiva')
+        ->from('estudiante as e')
+        ->join('persona as p', function($join){
+            $join->on('p.cedula', '=', 'e.cedula');
+        })
+        ->join('estudiante_tipo_certificacion as etc', function($join) use($id){
+            $join->on('etc.estudiante_id', '=', 'e.id')
+            ->where('etc.id', '=', $id);
+        })
+        ->join('tipo_certificacion as t', function($join){
+            $join->on('etc.tipo_certificacion_id', '=', 't.id');
+        })->first();
+
+        return view('estudiantes/informe_nota_final', compact('est'));
+        
+    }
+
+    public function crearPDF($id){
+        $est = Estudiante::select('p.nombre', 't.nombre as nombre_cer', 'e.cedula', 'etc.nota_final_modulo', 'etc.nota_final_laboratorio', 'etc.nota_prueba', 'etc.nota_sustentacion', 'etc.definitiva')
+        ->from('estudiante as e')
+        ->join('persona as p', function($join){
+            $join->on('p.cedula', '=', 'e.cedula');
+        })
+        ->join('estudiante_tipo_certificacion as etc', function($join) use($id){
+            $join->on('etc.estudiante_id', '=', 'e.id')
+            ->where('etc.id', '=', $id);
+        })
+        ->join('tipo_certificacion as t', function($join){
+            $join->on('etc.tipo_certificacion_id', '=', 't.id');
+        })->first();
+
+        
+        $pdf = PDF::loadView('estudiantes/informe_nota_final', compact('est'));
+        dump($pdf);
+        die();
+        // download PDF file with download method
+        return $pdf->stream();
+
+    }
+
     public function viewCertificadoFinal($id_cer_est)
     {
 
-        $est = CursoEstudiante::select('m.nombre as modulo', 'p.nombre as estudiante', 'tc.nombre as nombre_cer', 'etc.id', 'etc.certificado_final_notas')
+        $est = CursoEstudiante::select('m.nombre as modulo', 'p.nombre as estudiante', 'tc.nombre as nombre_cer', 'etc.id', 'etc.certificado_final_notas', 'e.cod_estudiante')
             ->from('curso_estudiante as ce')
             ->join('estudiante as e', function ($join) {
                 $join->on('ce.ced_estudiante', '=', 'e.cedula');
@@ -297,20 +355,30 @@ class EstudianteController extends Controller
     {
         $datos = [
             'certificado_final_notas' => 'required|max:10000|mimes:pdf',
+            'terminacion_materias' => 'required|max:10000|mimes:pdf'
         ];
         $Mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $datos, $Mensaje);
         $datos = request()->except(['_token', '_method', 'nombre', 'cedula', 'tipo_certificacion_id']);
 
-        if ($request->hasFile('certificado_final_notas')) {
+        if ($request->hasFile('certificado_final_notas') && $request->hasFile('terminacion_materias')) {
             $est = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$request->input('id')]);
             if ($est[0]->certificado_final_notas != null) {
                 if (str_contains($est[0]->certificado_final_notas, "uploads/certificadofinal")) {
                     Storage::delete('public/' . $est[0]->certificado_final_notas);
                 }
             }
+            if ($est[0]->terminacion_materias != null) {
+                if (str_contains($est[0]->terminacion_materias, "uploads/terminacionmaterias")) {
+                    Storage::delete('public/' . $est[0]->terminacion_materias);
+                }
+            }
+
+
             $name = $request->file('certificado_final_notas')->getClientOriginalName();
             $certificado = $request->file('certificado_final_notas')->storeAs('uploads/certificadofinal', $name, 'public');
+            $nombre = $request->file('terminacion_materias')->getClientOriginalName();
+            $terminacion = $request->file('terminacion_materias')->storeAs('uploads/terminacionmaterias', $nombre, 'public');
         } else {
             $est = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$request->input('id')]);
             if ($est[0]->certificado_final_notas != null) {
@@ -318,19 +386,25 @@ class EstudianteController extends Controller
                     Storage::delete('public/' . $est[0]->certificado_final_notas);
                 }
             }
+            if ($est[0]->terminacion_materias != null) {
+                if (str_contains($est[0]->terminacion_materias, "uploads/terminacionmaterias")) {
+                    Storage::delete('public/' . $est[0]->terminacion_materias);
+                }
+            }
             $certificado = $request->input('certificado_final_notas');
+            $terminacion = $request->input('terminacion_materias');
         }
 
         //dump($certificado, $request->input('id'));
         //die();
-        DB::update('update estudiante_tipo_certificacion set certificado_final_notas = ? where id = ?', [$certificado, $request->input('id')]);
+        DB::update('update estudiante_tipo_certificacion set certificado_final_notas = ?, terminacion_materias = ? where id = ?', [$certificado, $terminacion, $request->input('id')]);
         return $this->verNotasCertificacion($request->input('id'));
     }
 
     public function createNotaPrueba($id_cer_est)
     {
         $est_cer = DB::table('estudiante_tipo_certificacion')
-            ->select('etc.nota_prueba', 'p.nombre as estudiante', 'tc.nombre as certificacion', 'etc.id')
+            ->select('etc.nota_prueba', 'p.nombre as estudiante', 'tc.nombre as certificacion', 'etc.id', 'e.cod_estudiante')
             ->from('estudiante_tipo_certificacion as etc')
             ->join('estudiante as e', function ($join) {
                 $join->on('etc.estudiante_id', '=', 'e.id');
@@ -348,27 +422,26 @@ class EstudianteController extends Controller
     public function updateNotaPrueba(Request $request, $id_cer_est)
     {
         $dato = [
-            'nota_prueba' => 'required|numeric|max:100',
+            'nota_prueba' => 'required|numeric|max:1000',
         ];
         $mensaje = ["required" => 'El :attribute es requerido'];
         $this->validate($request, $dato, $mensaje);
 
         $aux = DB::select('select * from estudiante_tipo_certificacion where id = ?', [$id_cer_est]);
         $estudiante = Estudiante::find($aux[0]->estudiante_id);
-
-        if($estudiante->cod_estudiante == null){
-            DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$request->input('nota_prueba'), $request->input('nota_prueba'), $id_cer_est]);
+        $nota = $request->input('nota_prueba') / 10;
+        if ($estudiante->cod_estudiante == null) {
+            DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$nota, $nota, $id_cer_est]);
             return redirect()->action([EstudianteController::class, 'verNotasCertificacion'], ['est_cert' => $id_cer_est]);
         }
 
-        if ($request->input('nota_prueba') > 82.5) {
-            DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$request->input('nota_prueba'), $request->input('nota_prueba'), $id_cer_est]);
-        }else{
-            
+        if ($nota > 82.5) {
+            DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$nota, $nota, $id_cer_est]);
+        } else {
+            DB::update('update estudiante_tipo_certificacion set nota_prueba = ?, nota_sustentacion = ? where id = ?', [$nota, 0, $id_cer_est]);
         }
         DB::update('update estudiante_tipo_certificacion set nota_prueba = ? where id = ?', [$request->input('nota_prueba'), $id_cer_est]);
         return redirect()->action([EstudianteController::class, 'verNotasCertificacion'], ['est_cert' => $id_cer_est]);
-        
     }
 
     /**

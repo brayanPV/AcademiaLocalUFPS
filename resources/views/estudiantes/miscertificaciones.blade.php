@@ -17,8 +17,8 @@
                     <th>Recibo Matricula</th>
                     <th>Nota Final Modulos</th>
                     <th>Nota Final Laboratorios</th>
-                    <th>Nota Prueba</th>
-                    <th>Nota Sustentacion</th>
+                    <th>Nota Certificacion</th>
+                    <th>Nota Trabajo Final</th>
                     <th>Definitiva</th>
                     <th>Certificado</th>
                 </tr>

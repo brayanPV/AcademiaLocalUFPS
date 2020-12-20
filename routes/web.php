@@ -147,6 +147,8 @@ Route::get('/estudiantes/{estudiante}/uploadrecibomatricula', 'App\Http\Controll
 Route::put('/estudiantes/{estudiante}/matricula', 'App\Http\Controllers\EstudianteController@updateMatricula')->middleware(['auth', 'role:administrador']);
 Route::get('/estudiantes/{estudiante}/subircertificadofinal', 'App\Http\Controllers\EstudianteController@viewCertificadoFinal')->middleware(['auth', 'role:administrador']);
 Route::post('/estudiantes/{estudiante}/certificado', 'App\Http\Controllers\EstudianteController@updateCertificado')->middleware(['auth', 'role:administrador']);
+Route::get('estudiantes/{id}/informe_nota_final', 'App\Http\Controllers\EstudianteController@verInformeFinal')->middleware(['auth', 'role:administrador']);
+Route::get('estudiantes/{id}/pdf', 'App\Http\Controllers\EstudianteController@crearPDF')->middleware(['auth', 'role:administrador']);
 
 //preinscripcion
 Route::get('/preinscripcion/create', 'App\Http\Controllers\PreinscritoController@create')->name('preinscribir');
