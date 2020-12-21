@@ -38,10 +38,13 @@ class LoginController extends Controller
     public function authenticate(Request $request)
     {
         $credentials = $request->only('cedula', 'password');
-
+        dump($credentials);
+        die();
         if (Auth::attempt($credentials)) {
+            dump("buena");
+            die();
             // Authentication passed...
-            var_dump("buena hp");
+            //var_dump("buena hp");
             return redirect()->intended('/');
         }
     }

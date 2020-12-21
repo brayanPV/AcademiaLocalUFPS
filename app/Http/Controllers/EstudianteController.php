@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade as PDF;
 use App;
+use Illuminate\Support\Facades\Mail;
 
 class EstudianteController extends Controller
 {
@@ -282,45 +283,76 @@ class EstudianteController extends Controller
         return view('estudiantes/vernotascertificacion', compact(['est', 'est_cer', 'estudiante']));
     }
 
-    public function verInformeFinal($id){
+    public function verInformeFinal($id)
+    {
         $est = Estudiante::select('p.nombre', 't.nombre as nombre_cer', 'e.cedula', 'etc.nota_final_modulo', 'etc.nota_final_laboratorio', 'etc.nota_prueba', 'etc.nota_sustentacion', 'etc.definitiva')
-        ->from('estudiante as e')
-        ->join('persona as p', function($join){
-            $join->on('p.cedula', '=', 'e.cedula');
-        })
-        ->join('estudiante_tipo_certificacion as etc', function($join) use($id){
-            $join->on('etc.estudiante_id', '=', 'e.id')
-            ->where('etc.id', '=', $id);
-        })
-        ->join('tipo_certificacion as t', function($join){
-            $join->on('etc.tipo_certificacion_id', '=', 't.id');
-        })->first();
+            ->from('estudiante as e')
+            ->join('persona as p', function ($join) {
+                $join->on('p.cedula', '=', 'e.cedula');
+            })
+            ->join('estudiante_tipo_certificacion as etc', function ($join) use ($id) {
+                $join->on('etc.estudiante_id', '=', 'e.id')
+                    ->where('etc.id', '=', $id);
+            })
+            ->join('tipo_certificacion as t', function ($join) {
+                $join->on('etc.tipo_certificacion_id', '=', 't.id');
+            })->first();
 
         return view('estudiantes/informe_nota_final', compact('est'));
-        
     }
 
-    public function crearPDF($id){
-        $est = Estudiante::select('p.nombre', 't.nombre as nombre_cer', 'e.cedula', 'etc.nota_final_modulo', 'etc.nota_final_laboratorio', 'etc.nota_prueba', 'etc.nota_sustentacion', 'etc.definitiva')
-        ->from('estudiante as e')
-        ->join('persona as p', function($join){
-            $join->on('p.cedula', '=', 'e.cedula');
-        })
-        ->join('estudiante_tipo_certificacion as etc', function($join) use($id){
-            $join->on('etc.estudiante_id', '=', 'e.id')
-            ->where('etc.id', '=', $id);
-        })
-        ->join('tipo_certificacion as t', function($join){
-            $join->on('etc.tipo_certificacion_id', '=', 't.id');
-        })->first();
-
-        
+    public function crearPDF($id)
+    {
+        $est = Estudiante::select(
+            'p.nombre',
+            't.nombre as nombre_cer',
+            'e.cedula',
+            'etc.nota_final_modulo',
+            'etc.nota_final_laboratorio',
+            'etc.nota_prueba',
+            'etc.nota_sustentacion',
+            'etc.definitiva',
+            'p.correo',
+            'etc.id'
+        )
+            ->from('estudiante as e')
+            ->join('persona as p', function ($join) {
+                $join->on('p.cedula', '=', 'e.cedula');
+            })
+            ->join('estudiante_tipo_certificacion as etc', function ($join) use ($id) {
+                $join->on('etc.estudiante_id', '=', 'e.id')
+                    ->where('etc.id', '=', $id);
+            })
+            ->join('tipo_certificacion as t', function ($join) {
+                $join->on('etc.tipo_certificacion_id', '=', 't.id');
+            })->first();
+        $data["nombre"] = $est->nombre;
+        $data["nombre_cer"] = $est->nombre_cer;
+        $data["cedula"] = $est->cedula;
+        $data["nota_final_modulo"] = $est->nota_final_modulo;
+        $data["nota_final_laboratorio"] = $est->nota_final_laboratorio;
+        $data["nota_prueba"] = $est->nota_prueba;
+        $data["nota_sustentacion"] = $est->nota_sustentacion;
+        $data["definitiva"] = $est->definitiva;
+        $data["email"] = $est->correo;
         $pdf = PDF::loadView('estudiantes/informe_nota_final', compact('est'));
-        dump($pdf);
-        die();
-        // download PDF file with download method
-        return $pdf->stream();
 
+        /*   Mail::send('etc.tipo_certificacion_id', $est, function ($message) use ($est, $pdf) {
+            $message->to("brayanstivenpv@ufps.edu.co", "brayanstivenpv@ufps.edu.co")
+                ->subject($est["nombre"])
+                ->attachData($pdf->output(), "text.pdf");
+        });*/
+
+        Mail::send('estudiantes/enviarinforme', $data, function ($message) use ($data, $pdf) {
+            $message->to('brayanstivenpv@ufps.edu.co', $data["email"])
+                ->subject("infome final")
+                ->attachData($pdf->output(), "informe final ".$data["nombre"] .".pdf");
+        });
+
+       // dd('Mail sent successfully');
+
+       // return $pdf->stream();
+        return redirect()->action([EstudianteController::class, 'verNotasCertificacion'], ['est_cert' => $est->id])->with('Mensaje', 'Email enviado con exito');
     }
 
     public function viewCertificadoFinal($id_cer_est)
@@ -398,7 +430,8 @@ class EstudianteController extends Controller
         //dump($certificado, $request->input('id'));
         //die();
         DB::update('update estudiante_tipo_certificacion set certificado_final_notas = ?, terminacion_materias = ? where id = ?', [$certificado, $terminacion, $request->input('id')]);
-        return $this->verNotasCertificacion($request->input('id'));
+        return redirect()->action([EstudianteController::class, 'verNotasCertificacion'], ['est_cert' => $request->input('id')])->with('Mensaje', 'Documentos subidos con exito');
+       // return $this->verNotasCertificacion($request->input('id'));
     }
 
     public function createNotaPrueba($id_cer_est)

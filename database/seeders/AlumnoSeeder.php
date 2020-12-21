@@ -16,7 +16,7 @@ class AlumnoSeeder extends Seeder
     public function run()
     {
         //
-        $estudiantes = Estudiante::get();
+       /* $estudiantes = Estudiante::get();
         foreach ($estudiantes as $estudiante) {
             Alumno::insert([
                 'cedula' => $estudiante->cedula,
@@ -29,6 +29,6 @@ class AlumnoSeeder extends Seeder
                 'password' => $estudiante->password,
                 'id_tipo_certificacion' => $estudiante->id_tipo_certificacion
             ]);
-        }
+        }*/
     }
 }

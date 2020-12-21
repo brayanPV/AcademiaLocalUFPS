@@ -46,7 +46,8 @@
                         <th>Trabajo Final</th>
                         <th>Definitiva</th>
                         <th>Certificado</th>
-                        <th>Accion</th>
+                        <th>Terminacion de materias </th>
+                        <th class="text-center">Accion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,6 +63,12 @@
                                         class="fas fa-check-square"></i> @else <i class="far fa-square"></i>
                                 </button>
                     @endif</a> </td>
+                    <td class="col-md-auto"> <a href="{{ asset('storage') . '/' . $item->terminacion_materias }}"
+                        target="_blank">Terminacion de Materias <button class="btn">
+                            @if ($item->terminacion_materias != '')<i
+                                class="fas fa-check-square"></i> @else <i class="far fa-square"></i>
+                        </button>
+            @endif</a> </td>
                     <td class="d-flex"><a class="btn btn-primary" data-toggle="tooltip" title="Subir nota prueba"
                             href="{{ url('/estudiantes/' . $est_cer[0]->id . '/subirnotaprueba') }}">
                             <i class="fas fa-plus-square"></i></a>
@@ -71,9 +78,9 @@
                     <p>⠀ </p> <a class="btn btn-danger" data-toggle="tooltip" title="Ver Informe"
                         href="{{ url('/estudiantes/' . $est_cer[0]->id . '/informe_nota_final') }}">
                         <i class="fas fa-file-pdf"></i></a>
-                        <p>⠀ </p> <a class="btn btn-danger" data-toggle="tooltip" title="Ver Informe"
+                        <p>⠀ </p> <a class="btn btn-danger" data-toggle="tooltip" title="Enviar Informe"
                         href="{{ url('/estudiantes/' . $est_cer[0]->id . '/pdf') }}">
-                        <i class="fas fa-file-pdf"></i></a> </td>
+                        <i class="fas fa-paper-plane"></i></a> </td>
                     @endforeach
                 </tbody>
             </table>

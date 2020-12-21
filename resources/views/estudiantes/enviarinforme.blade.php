@@ -36,7 +36,7 @@
     <div class="container">
         <h3>Informe final</h3>
         <br>
-        <p>Informe del estudiante {{ $est->nombre }} con cedula {{ $est->cedula}} que cursa la certificacion {{ $est->nombre_cer }}
+        <p>Informe del estudiante {{$nombre }} con cedula {{$cedula}} que cursa la certificacion {{$nombre_cer }}
         </p>
         <table id="estudiante">
             <thead>
@@ -49,11 +49,11 @@
                 </tr>
             </thead>
             <tr>
-                <td>{{ $est->nota_final_modulo }} </td>
-                <td>{{ $est->nota_final_laboratorio }} </td>
-                <td>{{ $est->nota_prueba }} </td>
-                <td>{{ $est->nota_sustentacion }} </td>
-                <td>{{ $est->definitiva }} </td>
+                <td>{{ $nota_final_modulo }} </td>
+                <td>{{ $nota_final_laboratorio }} </td>
+                <td>{{ $nota_prueba }} </td>
+                <td>{{ $nota_sustentacion }} </td>
+                <td>{{ $definitiva }} </td>
             </tr>
             <tbody> </tbody>
         </table>

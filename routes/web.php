@@ -207,8 +207,6 @@ Route::get('/estudiantes/listestudiantes', [App\Http\Controllers\EstudianteContr
 
 
 
-
-
 Auth::routes(['reset' => false, 'register' => false]);
 
 
